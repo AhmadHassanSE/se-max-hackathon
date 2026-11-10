@@ -1,4 +1,4 @@
-"""Grounded summaries for the selected stories only, with Claude.
+"""Grounded summaries for the selected stories only, with Groq.
 
 - Runs after grouping and ranking, so only the ~10 stories that make the paper are sent.
 - Stories go in batches (default 5 per call) and results are cached per story, so a regenerated paper
@@ -18,8 +18,8 @@ from pathlib import Path
 
 from .grounding import check
 
-PROMPT_VERSION = "v1"
-MODEL = os.environ.get("SUBAH_MODEL", "claude-opus-5-5")
+PROMPT_VERSION = "v2"
+MODEL = os.environ.get("SUBAH_MODEL", "openai/gpt-oss-120b")
 BATCH_SIZE = int(os.environ.get("SUBAH_AI_BATCH", "5"))
 MAX_CALLS = int(os.environ.get("SUBAH_MAX_AI_CALLS", "3"))
 CACHE_PATH = Path(__file__).resolve().parent.parent / "data" / "cache" / "summaries.json"
@@ -29,7 +29,7 @@ SYSTEM = """You write short summaries for Subah, a morning news paper read in Pa
 Each story comes with the headlines and feed descriptions published by several outlets about the same event.
 For each story write a neutral headline (at most 14 words) and a summary of one or two sentences (at most 55 words) in English, then the same headline and summary in Urdu.
 
-Use only facts stated in that story's sources. Do not add background, causes, consequences, predictions, advice or opinion, and nothing you know from elsewhere, even if you are confident it is true. Copy numbers, names and places exactly as the sources give them. If the sources disagree, say that reports differ. If the sources are thin, a summary that restates the main headline is fine.
+Use only facts stated in that story's sources. Do not add background, causes, consequences, predictions, advice or opinion, and nothing you know from elsewhere, even if you are confident it is true. Copy numbers, names and places exactly as the sources give them: in English, spell every name the way an English source spells it, do not turn a place into an adjective (write "Turkiye", not "Turkish"), and leave out any name that appears only in an Urdu source. If the sources disagree, say that reports differ. If the sources are thin, a summary that restates the main headline is fine.
 The Urdu must say exactly what the English says, with no added facts.
 In used_sources, list the ids of the sources your summary relies on."""
 
@@ -65,49 +65,70 @@ class AIUnavailable(Exception):
 def ai_configured() -> tuple[bool, str]:
     if os.environ.get("SUBAH_AI", "on").lower() in ("off", "0", "false"):
         return False, "AI turned off (SUBAH_AI=off)"
-    if not (os.environ.get("ANTHROPIC_API_KEY") or os.environ.get("ANTHROPIC_AUTH_TOKEN")):
-        return False, "no API key set on the server"
+    if not os.environ.get("GROQ_API_KEY"):
+        return False, "no GROQ_API_KEY set on the server"
     return True, "ok"
 
 
-class ClaudeClient:
-    """Thin wrapper so tests can swap in a fake with the same .complete(payload) method."""
+class GroqClient:
+    """Groq's OpenAI-compatible chat API over httpx. Tests swap in a fake with the same .complete(payload)."""
 
-    def __init__(self, model: str = MODEL):
-        import anthropic
+    URL = "https://api.groq.com/openai/v1/chat/completions"
 
-        self._anthropic = anthropic
-        self.client = anthropic.Anthropic(max_retries=2, timeout=90.0)
-        self.model = model
+    def __init__(self, model: str | None = None):
+        import httpx
+
+        self._httpx = httpx
+        self.model = model or MODEL
+        self.key = os.environ["GROQ_API_KEY"]
+
+    def _body(self, payload: str, structured: bool) -> dict:
+        body = {
+            "model": self.model,
+            "temperature": 0.2,
+            "max_completion_tokens": 8000,
+            "messages": [
+                {"role": "system", "content": SYSTEM},
+                {"role": "user", "content": payload},
+            ],
+        }
+        if self.model.startswith("openai/gpt-oss"):
+            body["reasoning_effort"] = "low"
+        if structured:
+            body["response_format"] = {"type": "json_schema", "json_schema": {"name": "subah_summaries", "schema": SCHEMA, "strict": True}}
+        else:
+            body["response_format"] = {"type": "json_object"}
+        return body
 
     def complete(self, payload: str) -> str:
-        a = self._anthropic
-        try:
-            resp = self.client.beta.messages.create(
-                model=self.model,
-                max_tokens=16000,
-                betas=["server-side-fallback-2026-07-01"],
-                fallbacks="default",
-                output_config={"effort": "low", "format": {"type": "json_schema", "schema": SCHEMA}},
-                system=SYSTEM,
-                messages=[{"role": "user", "content": payload}],
-            )
-        except a.RateLimitError as exc:
-            raise AIUnavailable("rate limited or out of quota") from exc
-        except a.AuthenticationError as exc:
-            raise AIUnavailable("API key rejected") from exc
-        except a.APIStatusError as exc:
-            raise AIUnavailable(f"API error {exc.status_code}") from exc
-        except a.APIConnectionError as exc:
-            raise AIUnavailable("could not reach the API") from exc
-        if resp.stop_reason == "refusal":
-            raise AIUnavailable("the model declined this batch")
-        if resp.stop_reason == "max_tokens":
-            raise AIUnavailable("response was cut off")
-        text = next((b.text for b in resp.content if b.type == "text"), "")
-        if not text:
-            raise AIUnavailable("empty response")
-        return text
+        httpx = self._httpx
+        headers = {"Authorization": f"Bearer {self.key}", "Content-Type": "application/json"}
+        last = None
+        for structured in (True, False):  # strict schema first; plain JSON mode if the model does not support it
+            try:
+                resp = httpx.post(self.URL, headers=headers, json=self._body(payload, structured), timeout=90.0)
+            except httpx.TimeoutException as exc:
+                raise AIUnavailable("the AI took too long to answer") from exc
+            except httpx.HTTPError as exc:
+                raise AIUnavailable("could not reach the AI service") from exc
+            if resp.status_code == 429:
+                raise AIUnavailable("rate limited or out of free quota")
+            if resp.status_code in (401, 403):
+                raise AIUnavailable("API key rejected")
+            if resp.status_code == 400 and structured:
+                last = resp
+                continue
+            if resp.status_code >= 400:
+                raise AIUnavailable(f"AI service error {resp.status_code}")
+            data = resp.json()
+            choice = (data.get("choices") or [{}])[0]
+            if choice.get("finish_reason") == "length":
+                raise AIUnavailable("response was cut off")
+            text = (choice.get("message") or {}).get("content") or ""
+            if not text.strip():
+                raise AIUnavailable("empty response")
+            return text
+        raise AIUnavailable(f"AI service error {last.status_code if last is not None else 'unknown'}")
 
 
 def _signature(item: dict) -> str:
@@ -176,7 +197,7 @@ def summarize(items: list[dict], client=None, cache_path: Path | None = CACHE_PA
 
     if todo and client is None:
         try:
-            client = ClaudeClient()
+            client = GroqClient()
         except Exception as exc:  # SDK missing or misconfigured
             run.note = f"AI client unavailable: {type(exc).__name__}"
             client = None

@@ -55,6 +55,8 @@ or, with the virtual environment active, `python -m pytest server/tests -q`. The
 | Feeds answering | `python -m server.tools.check_feeds` on 2026-11-10 | 15 of 20 feeds; 3 returned HTTP 404 and 2 were unreadable, now paused and listed on the sources page |
 | Generate-now time | `edition.stats.timings_ms`, 300 reports | 63 s on a cold start (model loading and embedding), 2.2 s warm; the server warms up at start and holds requests until it is ready. Paper page end to end with the live replay: 16 s warm |
 | AI calls per paper | `edition.ai.calls` with batches of 5 | 2 for 10 stories, 0 when cached |
+| Model choice | Same 10 real stories, grounding check pass rate | openai/gpt-oss-120b: 7 of 10, then 9 of 10 after a prompt fix on name spelling, about 8 s; qwen/qwen3.8-27b: could not run a full paper, its free-tier limit is 8,000 tokens a minute |
+| Grounding check on real AI output | Rejections read by hand | All rejections were real: names written in a spelling no source used ("Turkish" for "Turkiye"; English spellings of names found only in Urdu sources) |
 
 ## Defect log
 
@@ -69,7 +71,6 @@ or, with the virtual environment active, `python -m pytest server/tests -q`. The
 
 ## Known untested areas
 
-- Real Claude API calls: no key was available during the build, so the live summary path is covered only through fake clients. Run one live paper with a key before the demo.
 - Urdu wording of AI summaries: needs a review by an Urdu speaker.
 - Grouping on several real days: tuned on one day of feeds plus the fixed set.
 - Screen readers: keyboard and focus were checked by hand; no screen-reader pass yet.

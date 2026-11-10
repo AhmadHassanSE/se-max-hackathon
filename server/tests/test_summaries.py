@@ -120,8 +120,7 @@ def assert_complete_paper(ed):
 
 
 def test_paper_generates_without_ai(monkeypatch, collection):
-    monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
-    monkeypatch.delenv("ANTHROPIC_AUTH_TOKEN", raising=False)
+    monkeypatch.delenv("GROQ_API_KEY", raising=False)
     ed = build_edition(PROFILE, collection=collection, cache_path=None)
     assert_complete_paper(ed)
     assert ed["ai"]["enabled"] is False

@@ -9,9 +9,9 @@ client = TestClient(app)
 
 
 def test_health_has_no_secrets(monkeypatch):
-    monkeypatch.setenv("ANTHROPIC_API_KEY", "sk-test-not-a-real-key")
+    monkeypatch.setenv("GROQ_API_KEY", "gsk_test_not_a_real_key")
     body = client.get("/api/health").text
-    assert "sk-test" not in body
+    assert "gsk_test" not in body
     assert json.loads(body)["ai"]["enabled"] is True
 
 
@@ -23,7 +23,7 @@ def test_outlet_list_is_published():
 
 
 def test_generate_now_from_fixtures(monkeypatch):
-    monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
+    monkeypatch.delenv("GROQ_API_KEY", raising=False)
     r = client.post("/api/generate", json={"profile": {"city": "lahore", "topics": ["weather"], "lang": "ur"}, "source": "fixtures"})
     assert r.status_code == 200
     ed = r.json()
@@ -45,7 +45,7 @@ def test_server_files_are_not_served():
 
 
 def test_candidate_pool_for_picking(monkeypatch):
-    monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
+    monkeypatch.delenv("GROQ_API_KEY", raising=False)
     r = client.post("/api/generate", json={"profile": {"city": "lahore"}, "source": "fixtures", "pool": 12})
     assert r.status_code == 200 and len(r.json()["stories"]) == 12
     assert [s["rank"] for s in r.json()["stories"]] == list(range(1, 13))
@@ -53,7 +53,7 @@ def test_candidate_pool_for_picking(monkeypatch):
 
 
 def test_generate_stream_reports_progress_then_edition(monkeypatch):
-    monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
+    monkeypatch.delenv("GROQ_API_KEY", raising=False)
     r = client.post("/api/generate/stream", json={"profile": {"city": "lahore"}, "source": "fixtures", "pool": 12})
     assert r.status_code == 200
     events = [json.loads(line) for line in r.text.splitlines() if line.strip()]

@@ -7,7 +7,7 @@ Required by the event rules. Log every meaningful use of AI tools during the bui
 | Tool | Used for |
 |------|----------|
 | Claude Code (Claude Opus 5.5) | Front-end design and code, backend pipeline, tests, fixtures, docs |
-| Claude API (in the product) | Writing grounded English and Urdu summaries of the selected stories |
+| Groq API, model openai/gpt-oss-120b (in the product) | Writing grounded English and Urdu summaries of the selected stories |
 | paraphrase-multilingual-mpnet-base-v2 (local, in the product) | Embeddings for grouping reports across English and Urdu |
 
 ## Log

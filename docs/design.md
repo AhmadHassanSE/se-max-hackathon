@@ -8,7 +8,7 @@ flowchart LR
   C --> G[Group by meaning, EN and UR<br/>group.py, local model]
   G --> T[Tag topics and cities<br/>tags.py, keyword rules]
   T --> R[Rank by published formula<br/>rank.py]
-  R -->|top 10 only| S[Summarise in batches<br/>summarize.py, Claude]
+  R -->|top 10 only| S[Summarise in batches<br/>summarize.py, Groq]
   S --> K{Grounding check<br/>grounding.py}
   K -->|pass| E[Edition JSON]
   K -->|fail, AI down, no quota| H[Source headlines with links] --> E
@@ -26,7 +26,7 @@ A FastAPI server (`server/app.py`) serves the static site in `web/` and a small 
 | `server/subah/group.py` | Average-link clustering, time window, coverage label | numpy |
 | `server/subah/tags.py` | Topic and city tags from English and Urdu keywords; For you tags | regex |
 | `server/subah/rank.py` | Mechanical score and top-ten selection | Python |
-| `server/subah/summarize.py` | Batched, cached summaries in English and Urdu | Claude API (`anthropic` SDK), structured JSON output |
+| `server/subah/summarize.py` | Batched, cached summaries in English and Urdu | Groq chat API (OpenAI-compatible, over httpx), model `openai/gpt-oss-120b`, strict JSON schema output with a plain JSON fallback |
 | `server/subah/grounding.py` | Rejects summaries with numbers or names not in the sources | Python |
 | `server/subah/edition.py` | Orchestrates one paper; fallback chain live, snapshot, fixtures | Python |
 | `server/app.py` | API and static files; no-cache headers; one generation at a time | FastAPI, uvicorn |

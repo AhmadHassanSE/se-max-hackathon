@@ -51,7 +51,7 @@ cp .env.example .env        # then add your API key if you have one
 
 ### Environment variables
 
-`ANTHROPIC_API_KEY` (optional: without it, stories show source headlines with links), `SUBAH_SOURCE` (`live`, `snapshot` or `fixtures`), `SUBAH_AI_BATCH`, `SUBAH_MAX_AI_CALLS`, `SUBAH_MODEL`, `SUBAH_AI`. See `.env.example`.
+`GROQ_API_KEY` (optional: without it, stories show source headlines with links; get one at console.groq.com), `SUBAH_SOURCE` (`live`, `snapshot` or `fixtures`), `SUBAH_AI_BATCH`, `SUBAH_MAX_AI_CALLS`, `SUBAH_MODEL`, `SUBAH_AI`. See `.env.example`.
 
 ### Run
 
@@ -76,7 +76,7 @@ bash scripts/test.sh
 - **Content licensing:** Subah shows headlines, short feed descriptions and links, with credit, and never copies articles. Licences with publishers are not yet agreed; that must happen before a public launch.
 - **Event rule on pre-collected data:** [insert ruling]. The app can run on live feeds, a saved snapshot or the bundled synthetic fixtures.
 - Grouping was tuned on one real day of feeds and a fixed test set; ongoing stories can collect several related developments into one group.
-- Live Claude summaries were exercised only through fake clients during the build (no key available). Run one live paper with a key before the demo.
+- AI summaries use Groq (`openai/gpt-oss-120b`) on the free tier. On a real day 9 of 10 stories passed the source check in 2 calls; the free tier has per-minute token limits, so very fast repeated generations may fall back to headlines until the minute resets.
 - Urdu AI output still needs review by an Urdu speaker.
 - Gift papers are a preview only; nothing is sent.
 
