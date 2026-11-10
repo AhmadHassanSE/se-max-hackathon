@@ -9,7 +9,7 @@ import calendar
 import hashlib
 import json
 import re
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -243,36 +243,49 @@ class Collection:
         }
 
 
+def _feed_event(r: "FeedReport") -> dict:
+    return {"type": "feed", "outlet": r.outlet, "outlet_id": r.outlet_id, "lang": r.lang, "status": r.status,
+            "items": r.items, "kept": r.kept, "error": r.error}
+
+
 def collect_live(outlets: list[dict], now: datetime | None = None, max_age_hours: float = 36,
-                 save_to: Path | None = None, fetcher=fetch) -> Collection:
+                 save_to: Path | None = None, fetcher=fetch, progress=None) -> Collection:
+    """Fetch every enabled feed in parallel. progress(event) is called as each feed answers."""
     now = now or datetime.now(timezone.utc)
     pairs = enabled_feeds(outlets)
-    with ThreadPoolExecutor(max_workers=8) as pool:
-        results = list(pool.map(lambda p: fetcher(p[1]["url"]), pairs))
     manifest = {"captured_at": now.isoformat(), "feeds": []}
     articles: list[Article] = []
     reports: list[FeedReport] = []
-    for i, ((outlet, feed), (body, err)) in enumerate(zip(pairs, results)):
-        if err:
-            r = FeedReport(outlet_id=outlet["id"], outlet=outlet["name"], url=feed["url"], lang=feed.get("lang", "en"), status="error", error=err)
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        futures = {pool.submit(fetcher, feed["url"]): (i, outlet, feed) for i, (outlet, feed) in enumerate(pairs)}
+        for fut in as_completed(futures):
+            i, outlet, feed = futures[fut]
+            try:
+                body, err = fut.result()
+            except Exception as exc:  # a fetcher that raises is treated like a failed fetch
+                body, err = None, type(exc).__name__
+            if err:
+                r = FeedReport(outlet_id=outlet["id"], outlet=outlet["name"], url=feed["url"], lang=feed.get("lang", "en"), status="error", error=err)
+                manifest["feeds"].append({"outlet_id": outlet["id"], "url": feed["url"], "lang": feed.get("lang", "en"), "file": None, "error": err})
+            else:
+                got, r = parse_feed(body, outlet, feed, now, max_age_hours)
+                articles.extend(got)
+                if save_to is not None:
+                    name = f"{i:02d}-{outlet['id']}-{feed.get('lang', 'en')}.xml"
+                    manifest["feeds"].append({"outlet_id": outlet["id"], "url": feed["url"], "lang": feed.get("lang", "en"), "file": name, "error": None})
+                    save_to.mkdir(parents=True, exist_ok=True)
+                    (save_to / name).write_bytes(body)
             reports.append(r)
-            manifest["feeds"].append({"outlet_id": outlet["id"], "url": feed["url"], "lang": feed.get("lang", "en"), "file": None, "error": err})
-            continue
-        got, r = parse_feed(body, outlet, feed, now, max_age_hours)
-        articles.extend(got)
-        reports.append(r)
-        if save_to is not None:
-            name = f"{i:02d}-{outlet['id']}-{feed.get('lang', 'en')}.xml"
-            manifest["feeds"].append({"outlet_id": outlet["id"], "url": feed["url"], "lang": feed.get("lang", "en"), "file": name, "error": None})
-            save_to.mkdir(parents=True, exist_ok=True)
-            (save_to / name).write_bytes(body)
+            if progress:
+                progress(_feed_event(r))
     if save_to is not None:
         (save_to / "manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
     kept, dups = dedupe(articles)
     return Collection(kept, reports, dups, "live", now)
 
 
-def collect_snapshot(snapshot_dir: Path, outlets: list[dict], max_age_hours: float = 36, source: str = "snapshot") -> Collection:
+def collect_snapshot(snapshot_dir: Path, outlets: list[dict], max_age_hours: float = 36, source: str = "snapshot",
+                     progress=None) -> Collection:
     """Replay a saved snapshot: a manifest.json plus the raw feed files captured at that time."""
     snapshot_dir = Path(snapshot_dir)
     manifest = json.loads((snapshot_dir / "manifest.json").read_text(encoding="utf-8"))
@@ -284,12 +297,17 @@ def collect_snapshot(snapshot_dir: Path, outlets: list[dict], max_age_hours: flo
         outlet = by_id.get(entry["outlet_id"]) or {"id": entry["outlet_id"], "name": entry.get("outlet", entry["outlet_id"])}
         feed = {"url": entry["url"], "lang": entry.get("lang", "en")}
         if entry.get("error") or not entry.get("file"):
-            reports.append(FeedReport(outlet_id=outlet["id"], outlet=outlet["name"], url=feed["url"], lang=feed["lang"], status="error", error=entry.get("error") or "no file"))
+            r = FeedReport(outlet_id=outlet["id"], outlet=outlet["name"], url=feed["url"], lang=feed["lang"], status="error", error=entry.get("error") or "no file")
+            reports.append(r)
+            if progress:
+                progress(_feed_event(r))
             continue
         path = snapshot_dir / entry["file"]
         body = path.read_bytes() if path.exists() else None
         got, r = parse_feed(body, outlet, feed, now, max_age_hours)
         articles.extend(got)
         reports.append(r)
+        if progress:
+            progress(_feed_event(r))
     kept, dups = dedupe(articles)
     return Collection(kept, reports, dups, source, now, note=manifest.get("note"))

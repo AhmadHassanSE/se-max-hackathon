@@ -11,7 +11,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:wght@400;500;700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/base.css">
   <link rel="stylesheet" href="assets/css/onboard.css">
+  <link rel="stylesheet" href="assets/css/live.css">
   <script src="assets/js/common.js" defer></script>
+  <script src="assets/js/live.js" defer></script>
   <script src="assets/js/onboard.js" defer></script>
 </head>
 <body class="theme-night page-onboard">
@@ -114,8 +116,7 @@
         </div>
         <div class="ob-print__copy">
           <h2 id="s3-title"><span id="print-title">Printing today’s paper</span></h2>
-          <ol class="press-log" id="press-log" aria-live="polite"></ol>
-          <div class="press-bar" aria-hidden="true"><span id="press-bar"></span></div>
+          <div id="live-root"></div>
           <p class="ob-hint" id="print-note"></p>
           <div class="ob-ready" id="ob-ready" hidden>
             <button class="btn btn--primary" type="button" data-magnetic="0.15" id="ob-pick"><span>Pick my stories</span><span class="btn__orb" data-icon="arrow"></span></button>

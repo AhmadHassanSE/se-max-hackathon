@@ -4,12 +4,15 @@ Run:  uvicorn server.app:app --port 8000   (from the repository root)
 """
 from __future__ import annotations
 
+import json
 import os
+import queue
 import threading
 from pathlib import Path
 from typing import Literal
 
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
@@ -33,6 +36,12 @@ def warm_up() -> None:
     """Load the grouping model and embed the newest snapshot in the background, so the first
     "generate now" during a demo only has to embed reports it has not seen."""
     def run() -> None:
+        # hold the generation lock so a paper requested during warm-up waits and then reuses the cached
+        # embeddings, instead of computing the same reports twice in parallel
+        with _lock:
+            _warm()
+
+    def _warm() -> None:
         try:
             from .subah.edition import FIXTURES_DIR, latest_snapshot
             from .subah.embed import get_embedder
@@ -96,7 +105,7 @@ def get_catalog() -> dict:
 @app.post("/api/generate")
 def generate(req: GenerateRequest) -> dict:
     """Generate today's paper now for the given test profile."""
-    if not _lock.acquire(timeout=120):
+    if not _lock.acquire(timeout=300):
         raise HTTPException(status_code=429, detail="Another paper is being generated. Try again in a moment.")
     try:
         edition = build_edition(req.profile.model_dump(), source=req.source or DEFAULT_SOURCE, pool=req.pool)
@@ -106,6 +115,40 @@ def generate(req: GenerateRequest) -> dict:
         _lock.release()
     save_latest(edition)
     return edition
+
+
+@app.post("/api/generate/stream")
+def generate_stream(req: GenerateRequest) -> StreamingResponse:
+    """Same as /api/generate, but streams progress as newline-delimited JSON: one line per feed as it answers,
+    then grouping, ranking and summaries, and finally {"type": "edition", "edition": {...}}."""
+    events: queue.Queue = queue.Queue()
+
+    def work() -> None:
+        if not _lock.acquire(timeout=300):
+            events.put({"type": "error", "detail": "Another paper is being generated. Try again in a moment."})
+            events.put(None)
+            return
+        try:
+            ed = build_edition(req.profile.model_dump(), source=req.source or DEFAULT_SOURCE, pool=req.pool, progress=events.put)
+            save_latest(ed)
+            events.put({"type": "edition", "edition": ed})
+        except ProfileError as exc:
+            events.put({"type": "error", "detail": str(exc)})
+        except Exception as exc:  # report, never hang the stream
+            events.put({"type": "error", "detail": f"generation failed: {type(exc).__name__}"})
+        finally:
+            _lock.release()
+            events.put(None)
+
+    def lines():
+        threading.Thread(target=work, daemon=True).start()
+        while True:
+            ev = events.get()
+            if ev is None:
+                break
+            yield json.dumps(ev, ensure_ascii=False) + "\n"
+
+    return StreamingResponse(lines(), media_type="application/x-ndjson", headers={"X-Accel-Buffering": "no"})
 
 
 @app.get("/api/edition/latest")

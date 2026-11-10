@@ -50,3 +50,22 @@ def test_candidate_pool_for_picking(monkeypatch):
     assert r.status_code == 200 and len(r.json()["stories"]) == 12
     assert [s["rank"] for s in r.json()["stories"]] == list(range(1, 13))
     assert client.post("/api/generate", json={"source": "fixtures", "pool": 40}).status_code == 422
+
+
+def test_generate_stream_reports_progress_then_edition(monkeypatch):
+    monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
+    r = client.post("/api/generate/stream", json={"profile": {"city": "lahore"}, "source": "fixtures", "pool": 12})
+    assert r.status_code == 200
+    events = [json.loads(line) for line in r.text.splitlines() if line.strip()]
+    kinds = [e["type"] for e in events]
+    assert kinds.count("feed") == 20  # one per feed in the fixture manifest, good or bad
+    assert {"collected", "grouped", "ranked", "summarised"} <= set(kinds)
+    assert kinds[-1] == "edition" and len(events[-1]["edition"]["stories"]) == 12
+    statuses = {e["status"] for e in events if e["type"] == "feed"}
+    assert {"ok", "malformed", "empty", "error"} <= statuses
+
+
+def test_generate_stream_bad_profile_is_an_error_event():
+    r = client.post("/api/generate/stream", json={"profile": {"city": "atlantis"}, "source": "fixtures"})
+    events = [json.loads(line) for line in r.text.splitlines() if line.strip()]
+    assert events[-1]["type"] == "error"

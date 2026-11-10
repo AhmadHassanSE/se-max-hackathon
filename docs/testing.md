@@ -19,7 +19,7 @@ or, with the virtual environment active, `python -m pytest server/tests -q`. The
 | Type | Total | Passed | Failed |
 |------|-------|--------|--------|
 | Unit (feeds, grouping, tags, ranking, grounding, summariser) | 43 | 43 | 0 |
-| Integration / API | 5 | 5 | 0 |
+| Integration / API | 8 | 8 | 0 |
 | End-to-end / manual (browser) | 6 pages | 6 | 0 |
 
 ## Edge cases covered
@@ -53,7 +53,7 @@ or, with the virtual environment active, `python -m pytest server/tests -q`. The
 | Smaller model, for comparison | Same sweep with paraphrase-multilingual-MiniLM-L12-v2 | 0 errors only near 0.42, where real feeds chained unrelated stories (groups of 17); rejected |
 | Grouping on real feeds | 300 live reports, groups read by hand | Event-level groups (for example one factory blast: 3 English + 2 Urdu reports from 5 outlets). Weak spot: an ongoing story such as a war can gather several related developments into one group |
 | Feeds answering | `python -m server.tools.check_feeds` on 2026-11-10 | 15 of 20 feeds; 3 returned HTTP 404 and 2 were unreadable, now paused and listed on the sources page |
-| Generate-now time | `edition.stats.timings_ms`, 300 reports | 63 s on a cold start (model loading and embedding), 2.2 s warm; the server warms up at start |
+| Generate-now time | `edition.stats.timings_ms`, 300 reports | 63 s on a cold start (model loading and embedding), 2.2 s warm; the server warms up at start and holds requests until it is ready. Paper page end to end with the live replay: 16 s warm |
 | AI calls per paper | `edition.ai.calls` with batches of 5 | 2 for 10 stories, 0 when cached |
 
 ## Defect log

@@ -52,35 +52,38 @@ def latest_snapshot() -> Path | None:
     return dirs[0] if dirs else None
 
 
-def collect(source: str, outlets: list[dict]) -> feeds.Collection:
+def collect(source: str, outlets: list[dict], progress=None) -> feeds.Collection:
     """live: fetch now (and keep a snapshot); snapshot: newest saved snapshot; fixtures: the bundled test set.
     A live run where every feed fails falls back to the newest snapshot, then to the fixtures, and says so."""
     if source == "fixtures":
-        return feeds.collect_snapshot(FIXTURES_DIR, outlets, MAX_AGE_HOURS, source="fixtures")
+        return feeds.collect_snapshot(FIXTURES_DIR, outlets, MAX_AGE_HOURS, source="fixtures", progress=progress)
     if source == "snapshot":
         snap = latest_snapshot()
         if snap:
-            return feeds.collect_snapshot(snap, outlets, MAX_AGE_HOURS)
-        col = feeds.collect_snapshot(FIXTURES_DIR, outlets, MAX_AGE_HOURS, source="fixtures")
+            return feeds.collect_snapshot(snap, outlets, MAX_AGE_HOURS, progress=progress)
+        col = feeds.collect_snapshot(FIXTURES_DIR, outlets, MAX_AGE_HOURS, source="fixtures", progress=progress)
         col.note = "no saved snapshot yet, so the bundled fixture feeds were used"
         return col
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-    col = feeds.collect_live(outlets, max_age_hours=MAX_AGE_HOURS, save_to=SNAPSHOTS_DIR / stamp)
+    col = feeds.collect_live(outlets, max_age_hours=MAX_AGE_HOURS, save_to=SNAPSHOTS_DIR / stamp, progress=progress)
     if col.articles:
         return col
-    fallback = collect("snapshot", outlets)
+    fallback = collect("snapshot", outlets, progress)
     fallback.note = "every live feed failed; " + (fallback.note or "used the newest saved snapshot")
     fallback.feeds = col.feeds + fallback.feeds
     return fallback
 
 
 def build_edition(profile: dict | None, source: str = "fixtures", client=None, collection: feeds.Collection | None = None,
-                  cache_path: Path | None | str = "default", pool: int | None = None) -> dict:
-    """pool: how many top stories to return; the reader can then keep, love or pass on each one."""
+                  cache_path: Path | None | str = "default", pool: int | None = None, progress=None) -> dict:
+    """pool: how many top stories to return; the reader can then keep, love or pass on each one.
+    progress(event): optional callback for live progress (feeds answering, grouping, ranking, summaries)."""
+    emit = progress or (lambda event: None)
     t0 = time.perf_counter()
     profile = clean_profile(profile)
     outlets = feeds.load_outlets()
-    col = collection or collect(source, outlets)
+    col = collection or collect(source, outlets, progress)
+    emit({"type": "collected", "articles": len(col.articles), "source": col.source})
     t_collect = time.perf_counter()
 
     embedder = get_embedder()
@@ -88,6 +91,8 @@ def build_edition(profile: dict | None, source: str = "fixtures", client=None, c
     for s in stories:
         tag_story(s)
     t_group = time.perf_counter()
+    emit({"type": "grouped", "articles": len(col.articles), "stories": len(stories),
+          "multi": sum(1 for s in stories if s.outlet_count > 1)})
 
     picked = rank(stories, profile, limit=max(1, min(15, pool or PAPER_SIZE)))
     items = [{
@@ -95,9 +100,11 @@ def build_edition(profile: dict | None, source: str = "fixtures", client=None, c
         "sources": [{"id": a.id, "outlet": a.outlet_name, "lang": a.lang, "title": a.title, "description": a.summary}
                     for a in p["story"].articles],
     } for p in picked]
+    emit({"type": "ranked", "picked": len(picked)})
     kwargs = {} if cache_path == "default" else {"cache_path": cache_path}
     run = summarize(items, client=client, **kwargs)
     t_ai = time.perf_counter()
+    emit({"type": "summarised", **run.stats()})
 
     out_stories = []
     for p in picked:

@@ -293,3 +293,5 @@ html.motion .pcard.is-top { animation: pcard-rise 380ms var(--ease-out); }
   transition: border-color var(--dur-short) var(--ease-out), color var(--dur-short) var(--ease-out);
 }
 .pick__skip:hover { border-color: var(--on-night-muted); color: var(--on-night); }
+
+#live-root { margin-top: var(--space-lg); }

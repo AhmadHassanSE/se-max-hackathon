@@ -243,3 +243,26 @@ html.motion .pp-story, html.motion .pp-lead { animation: none; }
 .pp-picks a { font-weight: 500; margin-inline-start: 6px; }
 .pp-loved { display: inline-flex; align-items: center; min-height: 22px; padding: 0 10px; border-radius: var(--radius-pill); background: oklch(90% 0.13 92); color: oklch(26% 0.04 80); font-size: 0.78rem; font-weight: 700; }
 .paper[lang="ur"] .pp-loved, .paper[lang="ur"] .pp-picks { font-family: var(--font-urdu); line-height: 1.9; }
+
+/* source constellation */
+:root { --cst-en: oklch(34% 0.06 255); --cst-ur: oklch(64% 0.17 48); }
+.cst { margin: 0; display: grid; gap: 4px; justify-items: center; }
+.cst svg { width: 100%; max-width: 240px; height: auto; overflow: visible; }
+.cst--big svg { max-width: 360px; }
+.cst__line { stroke: var(--rule-2); stroke-width: 1; opacity: 0.35; stroke-dasharray: 220; stroke-dashoffset: 0; }
+.cst__node circle { fill: var(--cst-en); }
+.cst__node--ur circle { fill: var(--cst-ur); }
+.cst__node--both circle { fill: var(--cst-en); stroke: var(--cst-ur); stroke-width: 3; }
+.cst__label { font-family: var(--font-ui); font-size: 9.5px; fill: var(--ink-2); }
+.cst__hub { fill: var(--ink); }
+.cst__count { font-family: var(--font-display); font-size: 15px; fill: var(--paper); }
+.cst--big .cst__count { font-size: 18px; }
+.cst__key { display: flex; gap: 14px; font-size: 0.76rem; color: var(--muted); }
+.cst__k::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-inline-end: 5px; }
+.cst__k--en::before { background: var(--cst-en); }
+.cst__k--ur::before { background: var(--cst-ur); }
+.cst__key[lang="ur"] { font-family: var(--font-urdu); line-height: 1.8; }
+html.motion .cst:not(.is-drawn) .cst__line { stroke-dashoffset: 220; }
+html.motion .cst:not(.is-drawn) .cst__node { opacity: 0; transform: scale(0.4); }
+html.motion .cst .cst__node { transform-box: fill-box; transform-origin: center; transition: opacity 420ms var(--ease-out), transform 520ms cubic-bezier(0.34, 1.5, 0.64, 1); transition-delay: calc(300ms + var(--i) * 70ms); }
+html.motion .cst .cst__line { transition: stroke-dashoffset 700ms var(--ease-out); transition-delay: calc(var(--i) * 70ms); }

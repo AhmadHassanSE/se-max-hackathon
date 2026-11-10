@@ -48,6 +48,7 @@ A FastAPI server (`server/app.py`) serves the static site in `web/` and a small 
 | GET | `/api/outlets` | The published outlet list and the ranking formula | No |
 | GET | `/api/catalog` | Topics and cities for the settings form | No |
 | POST | `/api/generate` | Generate today's paper now for a test profile `{city, topics, lang}`; optional `source`, and `pool` (1 to 15 stories, default 10; onboarding asks for 12 so the reader can pick) | No |
+| POST | `/api/generate/stream` | Same as generate, streamed as JSON lines: each feed as it answers, then grouping, ranking and summaries, then the edition. Drives the live press-room ticker and the clustering replay | No |
 | GET | `/api/edition/latest` | The last generated paper | No |
 
 ## Key decisions and tradeoffs

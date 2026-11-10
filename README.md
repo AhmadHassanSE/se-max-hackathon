@@ -69,7 +69,7 @@ Useful tools: `python -m server.tools.check_feeds` checks every feed; `python -m
 bash scripts/test.sh
 ```
 
-48 tests. See [docs/testing.md](docs/testing.md) and [docs/judge-checks.md](docs/judge-checks.md).
+51 tests. See [docs/testing.md](docs/testing.md) and [docs/judge-checks.md](docs/judge-checks.md).
 
 ## Known limitations
 

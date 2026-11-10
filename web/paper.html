@@ -11,7 +11,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:wght@400;500;700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/base.css">
   <link rel="stylesheet" href="assets/css/paper.css">
+  <link rel="stylesheet" href="assets/css/live.css">
   <script src="assets/js/common.js" defer></script>
+  <script src="assets/js/live.js" defer></script>
   <script src="assets/js/paper.js" defer></script>
 </head>
 <body class="theme-day page-paper">
@@ -58,6 +60,13 @@
       <noscript><p class="pp-noscript">Today’s paper needs JavaScript to load.</p></noscript>
     </article>
   </main>
+
+  <div class="live-overlay" id="live-overlay" hidden>
+    <div class="live-overlay__panel" role="dialog" aria-modal="true" aria-labelledby="live-title">
+      <p class="live-overlay__title" id="live-title">Printing today’s paper</p>
+      <div id="live-root"></div>
+    </div>
+  </div>
 
   <footer class="site-footer site-footer--slim">
     <div class="container footer__base">

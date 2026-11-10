@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           ${S.forYouHTML(st.for_you, lang)}
           <p class="pp-why"><span>${L.why}:</span> ${L.score(st.score_parts)}</p>
         </div>
-        <div class="${lead ? "pp-lead__side" : "pp-story__side"}">${sourcesList(st, lead)}</div>
+        <div class="${lead ? "pp-lead__side" : "pp-story__side"}">${st.outlet_count > 1 ? S.constellationHTML(st, { big: lead, lang }) : ""}${sourcesList(st, lead)}</div>
       </article>`;
   }
   function pickHTML(st) {
@@ -150,11 +150,22 @@ document.addEventListener("DOMContentLoaded", async () => {
     paper.style.setProperty("--scale", large ? 1.25 : 1);
     paper.classList.toggle("is-large", large);
     S.magnetic(paper);
+    observeConstellations();
     $("#pp-generate .pp-generate__label").textContent = L.generate;
     dots.innerHTML = stories.map((s, i) => `<li><span class="sr-only">Story ${i + 1}</span></li>`).join("");
     read.clear();
     updateProgress();
     note.textContent = edition.sample ? (S.api.online === false ? L.offline : L.sample) : "";
+  }
+
+  /* draw each constellation as it scrolls into view */
+  function observeConstellations() {
+    const figs = $$(".cst", paper);
+    if (S.reduceMotion || !("IntersectionObserver" in window)) { figs.forEach((f) => f.classList.add("is-drawn")); return; }
+    const io = new IntersectionObserver((es) => es.forEach((e) => {
+      if (e.isIntersecting) { e.target.classList.add("is-drawn"); io.unobserve(e.target); }
+    }), { rootMargin: "0px 0px -10% 0px" });
+    figs.forEach((f) => io.observe(f));
   }
 
   /* ---------------------------------------------------------------- reading progress */
@@ -222,8 +233,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     genBtn.classList.add("is-busy");
     $(".pp-generate__label", genBtn).textContent = T[lang].generating;
     paper.setAttribute("aria-busy", "true");
+    const overlay = $("#live-overlay");
+    const main = $("#paper-main");
     try {
-      edition = await S.api.generate(profile);
+      overlay.hidden = false;
+      main.inert = true;
+      const live = await S.Live.create($("#live-root"), { lang });
+      const fresh = await S.api.generateStream(profile, null, null, live.onEvent);
+      await live.replay(fresh);
+      edition = fresh;
       S.api.online = true;
       render();
       window.scrollTo({ top: 0, behavior: S.reduceMotion ? "auto" : "smooth" });
@@ -235,6 +253,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       S.toast(err.status ? `Could not generate: ${err.message}` : "The paper server isn’t running. Start it to generate a live paper.");
       paper.setAttribute("aria-busy", "false");
     } finally {
+      $("#live-overlay").hidden = true;
+      $("#paper-main").inert = false;
       genBtn.disabled = false;
       genBtn.classList.remove("is-busy");
       $(".pp-generate__label", genBtn).textContent = T[lang].generate;

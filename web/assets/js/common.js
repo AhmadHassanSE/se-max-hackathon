@@ -77,6 +77,39 @@
       store.setEdition(ed);
       return ed;
     },
+    /* same as generate(), but calls onEvent for each progress line as the server works */
+    async generateStream(profile, source, pool, onEvent) {
+      const body = { profile: { city: profile.city || null, topics: profile.topics || [], lang: profile.lang || "en" } };
+      if (source) body.source = source;
+      if (pool) body.pool = pool;
+      const res = await fetch("/api/generate/stream", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+      if (!res.ok || !res.body) {
+        const err = new Error(`HTTP ${res.status}`);
+        err.status = res.status;
+        throw err;
+      }
+      const reader = res.body.getReader();
+      const dec = new TextDecoder();
+      let buf = "", edition = null;
+      for (;;) {
+        const { value, done } = await reader.read();
+        if (value) buf += dec.decode(value, { stream: true });
+        let nl;
+        while ((nl = buf.indexOf("\n")) >= 0) {
+          const line = buf.slice(0, nl).trim();
+          buf = buf.slice(nl + 1);
+          if (!line) continue;
+          const ev = JSON.parse(line);
+          if (ev.type === "error") { const err = new Error(ev.detail); err.status = 422; throw err; }
+          if (ev.type === "edition") edition = ev.edition;
+          else if (onEvent) onEvent(ev);
+        }
+        if (done) break;
+      }
+      if (!edition) throw Object.assign(new Error("The stream ended without a paper"), { status: 500 });
+      store.setEdition(edition);
+      return edition;
+    },
     /* the reader's latest paper: this session, else the server's latest, else the bundled sample */
     async edition() {
       const mine = store.getEdition();
@@ -194,6 +227,48 @@
     }).join("");
     return `<div class="fy"${lang === "ur" ? ' lang="ur"' : ""}><span class="fy__head">${head}</span>${chips}</div>`;
   }
+  /* A small map of who reported the story: English outlets on the left, Urdu on the right, outlets with both
+     editions at the top and bottom, each joined to the story. Sizes come from the real source list. */
+  function constellationHTML(story, opts) {
+    opts = opts || {};
+    const big = !!opts.big;
+    const lang = opts.lang === "ur" ? "ur" : "en";
+    const W = big ? 340 : 240, H = big ? 170 : 116, cx = W / 2, cy = H / 2;
+    const outlets = new Map();
+    story.sources.forEach((s) => {
+      const o = outlets.get(s.outlet) || { name: s.outlet, langs: new Set(), n: 0 };
+      o.langs.add(s.lang); o.n++;
+      outlets.set(s.outlet, o);
+    });
+    const left = [], right = [], both = [];
+    outlets.forEach((o) => (o.langs.size > 1 ? both : o.langs.has("ur") ? right : left).push(o));
+    const place = (list, side) => list.map((o, i) => {
+      const t = list.length === 1 ? 0.5 : i / (list.length - 1);
+      const angle = (-0.38 + 0.76 * t) * Math.PI;
+      const rx = W * 0.36, ry = H * 0.36;
+      return { o, x: cx + side * rx * Math.cos(angle), y: cy + ry * Math.sin(angle), side };
+    });
+    const pts = place(left, -1).concat(place(right, 1)).concat(both.map((o, i) => ({ o, x: cx + (i % 2 ? 1 : -1) * (14 + 16 * Math.floor(i / 2)), y: i % 4 < 2 ? 12 : H - 12, side: 0 })));
+    const lines = pts.map((p, i) => `<line class="cst__line" x1="${cx}" y1="${cy}" x2="${p.x.toFixed(1)}" y2="${p.y.toFixed(1)}" style="--i:${i}"/>`).join("");
+    const dots = pts.map((p, i) => {
+      const cls = p.o.langs.size > 1 ? "both" : p.o.langs.has("ur") ? "ur" : "en";
+      const r = 4.5 + Math.min(3, p.o.n - 1) * 1.2;
+      const label = big ? `<text class="cst__label" x="${(p.x + (p.side < 0 ? -9 : p.side > 0 ? 9 : 0)).toFixed(1)}" y="${(p.y + (p.side === 0 ? (p.y < cy ? -9 : 15) : 3.5)).toFixed(1)}" text-anchor="${p.side < 0 ? "end" : p.side > 0 ? "start" : "middle"}">${esc(p.o.name)}</text>` : "";
+      return `<g class="cst__node cst__node--${cls}" style="--i:${i}"><title>${esc(p.o.name)}: ${p.o.n} report${p.o.n === 1 ? "" : "s"} (${[...p.o.langs].map((l) => (l === "ur" ? "Urdu" : "English")).join(" and ")})</title><circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${r.toFixed(1)}"/>${label}</g>`;
+    }).join("");
+    const n = outlets.size;
+    const names = [...outlets.values()].map((o) => o.name).join(", ");
+    const legend = lang === "ur" ? ["انگریزی", "اردو"] : ["English", "Urdu"];
+    return `<figure class="cst${big ? " cst--big" : ""}">
+      <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Reported by ${n} outlet${n === 1 ? "" : "s"}: ${esc(names)}">
+        ${lines}${dots}
+        <circle class="cst__hub" cx="${cx}" cy="${cy}" r="${big ? 17 : 13}"/>
+        <text class="cst__count" x="${cx}" y="${cy + (big ? 5.5 : 4.5)}" text-anchor="middle">${lang === "ur" ? toUrduDigits(n) : n}</text>
+      </svg>
+      ${big ? `<figcaption class="cst__key"${lang === "ur" ? ' lang="ur"' : ""}><span class="cst__k cst__k--en">${legend[0]}</span><span class="cst__k cst__k--ur">${legend[1]}</span></figcaption>` : ""}
+    </figure>`;
+  }
+
   function headlineOf(story, lang) {
     if (story.summary) return story.summary[lang].headline;
     return story.headline[lang] || story.headline.en;
@@ -318,7 +393,7 @@
 
   window.Subah = {
     ICONS, store, api, TEST_READERS, urduName, toUrduDigits, esc, cleanName, paperTitle, dates, ago, fillDates,
-    nextSevenAm, countdown, pickedStories, savePicks, coverageHTML, forYouHTML, headlineOf, magnetic, tilt, reveal, countUp, toast,
+    nextSevenAm, countdown, pickedStories, savePicks, constellationHTML, coverageHTML, forYouHTML, headlineOf, magnetic, tilt, reveal, countUp, toast,
     paintMarks, reduceMotion, finePointer
   };
 
