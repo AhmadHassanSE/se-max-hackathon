@@ -286,3 +286,10 @@ html.motion .pcard.is-top { animation: pcard-rise 380ms var(--ease-out); }
   .pcard__actions { gap: 8px; }
   .pcard__btn { min-height: 50px; font-size: 0.98rem; }
 }
+
+.pick__skip {
+  min-height: 44px; padding: 0 18px; border-radius: var(--radius-pill); border: 1px solid var(--night-rule);
+  background: transparent; color: var(--on-night-2); font-size: 0.95rem;
+  transition: border-color var(--dur-short) var(--ease-out), color var(--dur-short) var(--ease-out);
+}
+.pick__skip:hover { border-color: var(--on-night-muted); color: var(--on-night); }

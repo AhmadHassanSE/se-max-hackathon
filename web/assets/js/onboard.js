@@ -172,6 +172,14 @@ document.addEventListener("DOMContentLoaded", async () => {
   const countEl = $("#pick-count");
   $("#ob-pick").addEventListener("click", () => { goStep(4); startPicking(); });
   $("#pick-again").addEventListener("click", startPicking);
+  /* skip: every story not decided yet is kept, choices made so far stay */
+  $("#pick-skip").addEventListener("click", () => {
+    if (!printed) return;
+    printed.stories.slice(index).forEach((st) => { if (!picks[st.id]) picks[st.id] = "keep"; });
+    index = printed.stories.length;
+    tally();
+    renderDeck();
+  });
 
   function startPicking() {
     picks = {};
@@ -180,6 +188,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     $("#pick-done").hidden = true;
     deckEl.hidden = false;
     countEl.hidden = false;
+    $("#pick-skip").hidden = false;
     tally();
     renderDeck();
     setTimeout(() => deckEl.focus({ preventScroll: true }), 300);
@@ -300,6 +309,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const n = any ? S.pickedStories(printed).length : 0;
     deckEl.hidden = true;
     countEl.hidden = true;
+    $("#pick-skip").hidden = true;
     $("#pick-done-head").textContent = n
       ? `Your paper has ${n} stor${n === 1 ? "y" : "ies"}${Object.values(picks).includes("love") ? ", loved ones first" : ""}.`
       : "You passed on everything. Pick again, or read all of today’s stories.";
