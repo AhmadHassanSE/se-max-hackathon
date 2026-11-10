@@ -12,8 +12,8 @@ People in Pakistan, and their families abroad, see the same story many times acr
 
 ## Live deployment
 
-- **URL / install link:** (to add after deployment)
-- **Platform:** (to add). The grouping model needs about 2 GB of memory, so use a host with at least that much.
+- **URL / install link:** https://huggingface.co/spaces/<your-username>/subah (fill in after the first deploy)
+- **Platform:** Hugging Face Spaces, Docker, free CPU tier (2 vCPU, 16 GB memory). The grouping model needs about 1.5 GB, which rules out 512 MB free tiers.
 
 ## Judge quick start (under 5 minutes)
 
@@ -70,6 +70,19 @@ bash scripts/test.sh
 ```
 
 51 tests. See [docs/testing.md](docs/testing.md) and [docs/judge-checks.md](docs/judge-checks.md).
+
+## Deploy (free, Hugging Face Spaces)
+
+One-time setup, about 10 minutes:
+
+1. Create a free account at huggingface.co, then **New Space**: name `subah`, SDK **Docker**, template **Blank**, hardware **CPU basic (free)**, visibility **Public**.
+2. In the Space: **Settings > Variables and secrets > New secret**, name `GROQ_API_KEY`, value your Groq key. The key lives only there.
+3. In your Hugging Face account: **Settings > Access Tokens > Create new token**, type **Write**. Copy it.
+4. Deploy, either way:
+   - **From your computer:** `HF_TOKEN=<token> HF_SPACE=<your-username>/subah bash scripts/deploy_space.sh`
+   - **Automatically from GitHub:** in this repository, **Settings > Secrets and variables > Actions**: add the secret `HF_TOKEN` and the variable `HF_SPACE` = `<your-username>/subah`. Every push to `main` then deploys (`.github/workflows/deploy.yml`); you can also run it from the Actions tab.
+
+The first build takes about 10 minutes (it bakes the grouping model into the image). After a restart, the first paper takes a minute or two while the model warms up; open the site a few minutes before a demo.
 
 ## Known limitations
 

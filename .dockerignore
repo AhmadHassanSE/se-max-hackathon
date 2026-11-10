@@ -1,0 +1,13 @@
+.git
+.github
+.claude
+.venv
+.env
+.env.*
+**/__pycache__
+**/.pytest_cache
+server/data/snapshots
+server/data/cache
+server/data/editions
+docs
+*.md

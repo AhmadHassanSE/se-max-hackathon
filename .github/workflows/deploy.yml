@@ -1,0 +1,24 @@
+# Deploys the app to a Hugging Face Space on every push to main (or by hand from the Actions tab).
+# One-time setup in GitHub, Settings > Secrets and variables > Actions:
+#   secret   HF_TOKEN  = a Hugging Face access token with write permission
+#   variable HF_SPACE  = your Space id, for example your-username/subah
+# The Groq key is NOT stored here: add GROQ_API_KEY as a secret in the Space's own settings.
+name: Deploy to Hugging Face Spaces
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: ${{ vars.HF_SPACE != '' }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Push to the Space
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          HF_SPACE: ${{ vars.HF_SPACE }}
+          REPO_URL: https://github.com/${{ github.repository }}
+        run: bash scripts/deploy_space.sh
