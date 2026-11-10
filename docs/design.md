@@ -37,6 +37,7 @@ A FastAPI server (`server/app.py`) serves the static site in `web/` and a small 
 - **Article**: id, outlet, feed, language, title, description, link, published time.
 - **Story**: articles, distinct outlets, topics and cities (each with the matched word).
 - **Edition**: profile (city, topics, language), ten stories (rank, score parts, coverage, For you tags, summary or headline fallback, sources), stats, AI usage, feed report.
+- **Picks**: the reader's pass, love or keep per story, kept with the edition in the browser; the paper shows loved, then kept, each in formula order.
 - **Reader profile**: kept in the browser only (`localStorage`): masthead name, city, topics, language, large print.
 
 ## API / interfaces
@@ -46,7 +47,7 @@ A FastAPI server (`server/app.py`) serves the static site in `web/` and a small 
 | GET | `/api/health` | AI on or off (never the key), grouping model in use | No |
 | GET | `/api/outlets` | The published outlet list and the ranking formula | No |
 | GET | `/api/catalog` | Topics and cities for the settings form | No |
-| POST | `/api/generate` | Generate today's paper now for a test profile `{city, topics, lang}`; optional `source` | No |
+| POST | `/api/generate` | Generate today's paper now for a test profile `{city, topics, lang}`; optional `source`, and `pool` (1 to 15 stories, default 10; onboarding asks for 12 so the reader can pick) | No |
 | GET | `/api/edition/latest` | The last generated paper | No |
 
 ## Key decisions and tradeoffs

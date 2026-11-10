@@ -19,6 +19,7 @@ Each check from the idea approval, with where to see it and the test that proves
 | Summaries only from sources, linked; "what isn't known yet" removed; headline fallback | `summarize.py` prompt and `grounding.py`; paper page lists and links every source |
 | Rule-based For you, no predictions about personal costs | `tags.py`, `rank.py`; no AI involved |
 | Feed metadata and links only, attribution, licensing noted | `feeds.py` never fetches article pages; `/sources.html` and README "Known limitations" |
+| Reader picks (pass, love, keep) | The reader's own choice; no AI. Within loved and kept stories the published formula still sets the order (`pickedStories()` in `common.js`) |
 | Published outlet list, mechanical ranking | `/sources.html`, `GET /api/outlets`, `server/outlets.json`, formula in `rank.py` |
 | Scope: no payments, audio, quiz or third language; English + Urdu + large print; generate-now action | Paper page button "Generate today’s paper now" and `POST /api/generate` |
 | Quota: group before AI, summarise only selected stories, keys server-side | `edition.py` order of steps; `SUBAH_AI_BATCH`, `SUBAH_MAX_AI_CALLS`, per-story cache; key read only from server environment; `test_api.py::test_health_has_no_secrets` |

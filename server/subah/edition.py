@@ -75,7 +75,8 @@ def collect(source: str, outlets: list[dict]) -> feeds.Collection:
 
 
 def build_edition(profile: dict | None, source: str = "fixtures", client=None, collection: feeds.Collection | None = None,
-                  cache_path: Path | None | str = "default") -> dict:
+                  cache_path: Path | None | str = "default", pool: int | None = None) -> dict:
+    """pool: how many top stories to return; the reader can then keep, love or pass on each one."""
     t0 = time.perf_counter()
     profile = clean_profile(profile)
     outlets = feeds.load_outlets()
@@ -88,7 +89,7 @@ def build_edition(profile: dict | None, source: str = "fixtures", client=None, c
         tag_story(s)
     t_group = time.perf_counter()
 
-    picked = rank(stories, profile, limit=PAPER_SIZE)
+    picked = rank(stories, profile, limit=max(1, min(15, pool or PAPER_SIZE)))
     items = [{
         "id": p["story"].id,
         "sources": [{"id": a.id, "outlet": a.outlet_name, "lang": a.lang, "title": a.title, "description": a.summary}

@@ -65,6 +65,7 @@ class Profile(BaseModel):
 class GenerateRequest(BaseModel):
     profile: Profile = Field(default_factory=Profile)
     source: Literal["live", "snapshot", "fixtures"] | None = None
+    pool: int = Field(10, ge=1, le=15, description="How many top stories to return for the reader to pick from")
 
 
 @app.get("/api/health")
@@ -98,7 +99,7 @@ def generate(req: GenerateRequest) -> dict:
     if not _lock.acquire(timeout=120):
         raise HTTPException(status_code=429, detail="Another paper is being generated. Try again in a moment.")
     try:
-        edition = build_edition(req.profile.model_dump(), source=req.source or DEFAULT_SOURCE)
+        edition = build_edition(req.profile.model_dump(), source=req.source or DEFAULT_SOURCE, pool=req.pool)
     except ProfileError as exc:
         raise HTTPException(status_code=422, detail=str(exc)) from exc
     finally:

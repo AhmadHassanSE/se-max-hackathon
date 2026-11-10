@@ -14,7 +14,7 @@ Required by the event rules. Log every meaningful use of AI tools during the bui
 
 | Time | Member | Tool | What it was asked | What was accepted / changed / rejected | How it was verified |
 |------|--------|------|-------------------|----------------------------------------|---------------------|
-| 2026-11-09 | (fill in) | Claude Code | Design and build the first UI from the idea plan and the reference site | Accepted as a starting point; later cut to the approved scope | Viewed in the browser |
+| 2026-11-10 | (fill in) | Claude Code | Design and build the first UI from the idea plan and the reference site | Accepted as a starting point; later cut to the approved scope | Viewed in the browser |
 | 2026-11-10 | (fill in) | Claude Code | Apply the approval's required changes; build the backend | Accepted; coverage labels, rule-based tags and the mechanical ranking follow the approval's wording | 48 automated tests; live feed run read by hand |
 | 2026-11-10 | (fill in) | Claude Code | Tune grouping | First setting rejected after a live run chained unrelated stories; switched to a larger model and retuned | Threshold sweep on the fixed set and on real feeds (testing.md) |
 | 2026-11-10 | (fill in) | Claude Code | Write fixture feeds | Accepted; clearly marked synthetic | Used only in tests and offline demos |

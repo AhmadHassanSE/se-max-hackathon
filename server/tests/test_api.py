@@ -42,3 +42,11 @@ def test_server_files_are_not_served():
     assert client.get("/server/app.py").status_code == 404
     assert client.get("/.env").status_code == 404
     assert client.get("/index.html").status_code == 200
+
+
+def test_candidate_pool_for_picking(monkeypatch):
+    monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
+    r = client.post("/api/generate", json={"profile": {"city": "lahore"}, "source": "fixtures", "pool": 12})
+    assert r.status_code == 200 and len(r.json()["stories"]) == 12
+    assert [s["rank"] for s in r.json()["stories"]] == list(range(1, 13))
+    assert client.post("/api/generate", json={"source": "fixtures", "pool": 40}).status_code == 422

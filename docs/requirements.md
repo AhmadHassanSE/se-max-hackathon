@@ -30,6 +30,7 @@ Subah is a morning paper for one reader: the day's top stories, grouped across P
 | FR-12 | Gift paper preview for a parent: their city, topics, language and print size | Should | Done (preview only, nothing sent) |
 | FR-13 | Publish the outlet list and the ranking formula | Must | Done (`/sources.html`) |
 | FR-14 | Handle malformed, empty and duplicate feed data without crashing | Must | Done |
+| FR-15 | Reader picks stories from today's top 12 on cards (pass, love, keep); the paper shows loved stories first, then kept, each group in formula order | Should | Done |
 
 ## Non-functional requirements
 

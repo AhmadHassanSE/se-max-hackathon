@@ -231,3 +231,58 @@ html.motion .ob-step.is-entering { animation: step-in 620ms var(--ease-out) both
 .ps__h.is-ur { font-family: var(--font-urdu); line-height: 1.9; font-size: 0.88rem; text-align: right; }
 .press-log li { line-height: 1.45; }
 @media (max-width: 560px) { .topic-pick__grid { grid-template-columns: minmax(0, 1fr); } }
+
+/* ------------------------------------------------------------------ step 4: pick your stories */
+:root { --love-bg: oklch(86% 0.16 92); --love-ink: oklch(24% 0.04 80); --keep-bg: oklch(80% 0.13 150); --keep-ink: oklch(22% 0.05 155); }
+.ob-step__grid--pick { align-items: center; }
+.pick-tally { margin: var(--space-xl) 0 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: 360px; border-top: 1px solid var(--night-rule); }
+.pick-tally div { padding-top: 12px; display: grid; gap: 2px; }
+.pick-tally dt { font-size: 0.85rem; color: var(--on-night-muted); order: 2; }
+.pick-tally dd { margin: 0; font-family: var(--font-display); font-size: 2.2rem; line-height: 1; }
+.pick { display: grid; justify-items: center; gap: var(--space-md); }
+.pick__deck { position: relative; width: min(100%, 520px); height: 540px; border-radius: 36px; }
+.pick__deck:focus-visible { outline: 3px solid var(--focus); outline-offset: 8px; }
+.pcard {
+  position: absolute; inset: 0; display: flex; flex-direction: column; gap: 18px;
+  padding: 30px 34px 32px; border-radius: 36px; background: var(--paper); color: var(--ink);
+  box-shadow: var(--shadow-paper);
+  transform: translateY(calc(var(--d) * 18px)) scale(calc(1 - var(--d) * 0.045));
+  user-select: none; -webkit-user-select: none; touch-action: pan-y; cursor: grab;
+  --keep: 0; --pass: 0; --love: 0;
+}
+.pcard:not(.is-top) { filter: brightness(calc(1 - var(--d) * 0.05)); }
+.pcard.is-dragging { cursor: grabbing; }
+html.motion .pcard.is-top { animation: pcard-rise 380ms var(--ease-out); }
+@keyframes pcard-rise { from { transform: translateY(18px) scale(0.955); } }
+.pcard__top { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.pcard__topic { display: inline-flex; align-items: center; min-height: 40px; padding: 0 16px; border-radius: var(--radius-pill); background: var(--paper-3); font-weight: 500; font-size: 0.98rem; }
+.pcard__outlets { color: var(--muted); font-size: 0.98rem; }
+.pcard__head { font-family: var(--font-display); font-size: clamp(2rem, 3.4vw, 2.8rem); line-height: 1.06; letter-spacing: -0.02em; max-width: 16ch; }
+.pcard__head[lang="ur"] { font-family: var(--font-urdu); font-weight: 700; font-size: 1.7rem; line-height: 1.85; letter-spacing: 0; max-width: none; text-align: right; }
+.pcard__dek { font-family: var(--font-read); font-size: 1.08rem; line-height: 1.55; color: var(--ink-2); overflow: hidden; display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; }
+.pcard__dek[lang="ur"] { font-family: var(--font-urdu); line-height: 2.1; text-align: right; }
+.pcard .fy[lang="ur"] { justify-content: flex-end; }
+.pcard__actions { margin-top: auto; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.pcard__btn {
+  min-height: 58px; border: 0; border-radius: var(--radius-pill); font-size: 1.08rem; font-weight: 500;
+  transition: transform var(--dur-micro) var(--ease-out), filter var(--dur-short) var(--ease-out);
+}
+.pcard__btn:hover { filter: brightness(0.96); }
+.pcard__btn:active { transform: translateY(1px) scale(0.98); }
+.pcard__btn--pass { background: var(--paper-3); color: var(--ink); }
+.pcard__btn--love { background: var(--love-bg); color: var(--love-ink); }
+.pcard__btn--keep { background: var(--keep-bg); color: var(--keep-ink); }
+.pcard__btn[lang], .pcard[lang="ur"] .pcard__btn { font-family: var(--font-urdu); }
+.pcard__stamp { position: absolute; top: 84px; padding: 4px 14px; border: 3px solid; border-radius: 12px; font-weight: 700; font-size: 1.2rem; pointer-events: none; background: var(--paper); }
+.pcard__stamp--keep { left: 26px; color: var(--ok); transform: rotate(-12deg); opacity: var(--keep); }
+.pcard__stamp--pass { right: 26px; color: var(--bad); transform: rotate(12deg); opacity: var(--pass); }
+.pcard__stamp--love { left: 50%; top: auto; bottom: 110px; color: var(--love-ink); border-color: var(--love-bg); transform: translateX(-50%) rotate(-4deg); opacity: var(--love); }
+.pick__count { color: var(--on-night-2); font-size: 0.95rem; text-align: center; }
+.pick__done { text-align: center; display: grid; gap: var(--space-lg); justify-items: center; padding: var(--space-xl) 0; }
+.pick__done-head { font-family: var(--font-display); font-size: var(--step-4); line-height: 1.1; max-width: 18ch; }
+@media (max-width: 560px) {
+  .pick__deck { height: 520px; }
+  .pcard { padding: 22px 20px 22px; border-radius: 28px; gap: 14px; }
+  .pcard__actions { gap: 8px; }
+  .pcard__btn { min-height: 50px; font-size: 0.98rem; }
+}

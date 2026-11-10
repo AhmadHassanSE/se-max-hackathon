@@ -26,6 +26,7 @@
       <li class="is-active" data-s="1"><span class="ob-steps__n">1</span><span class="ob-steps__t">Your settings</span></li>
       <li data-s="2"><span class="ob-steps__n">2</span><span class="ob-steps__t">Topics</span></li>
       <li data-s="3"><span class="ob-steps__n">3</span><span class="ob-steps__t">Print</span></li>
+      <li data-s="4"><span class="ob-steps__n">4</span><span class="ob-steps__t">Your stories</span></li>
     </ol>
     <a class="ob-skip" href="paper.html">See the sample paper</a>
   </header>
@@ -117,8 +118,34 @@
           <div class="press-bar" aria-hidden="true"><span id="press-bar"></span></div>
           <p class="ob-hint" id="print-note"></p>
           <div class="ob-ready" id="ob-ready" hidden>
-            <a class="btn btn--primary" href="paper.html" data-magnetic="0.15" id="ob-read"><span>Read my paper</span><span class="btn__orb" data-icon="arrow"></span></a>
+            <button class="btn btn--primary" type="button" data-magnetic="0.15" id="ob-pick"><span>Pick my stories</span><span class="btn__orb" data-icon="arrow"></span></button>
+            <a class="link-arrow" href="paper.html" id="ob-read">Skip, read all of them</a>
             <a class="link-arrow" href="gift.html">Make one for someone you love</a>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- STEP 4 -->
+    <section class="ob-step" data-step="4" aria-labelledby="s4-title" hidden>
+      <div class="ob-step__grid ob-step__grid--pick">
+        <div class="ob-copy">
+          <h2 id="s4-title">Keep the stories you want in your paper.</h2>
+          <p class="ob-lede">These are today’s top stories by the published formula. Keep the ones you want, love the ones you never want to miss, pass on the rest. Loved stories go first.</p>
+          <dl class="pick-tally" aria-live="polite">
+            <div><dt>Loved</dt><dd class="tabular" id="t-love">0</dd></div>
+            <div><dt>Kept</dt><dd class="tabular" id="t-keep">0</dd></div>
+            <div><dt>Passed</dt><dd class="tabular" id="t-pass">0</dd></div>
+          </dl>
+        </div>
+        <div class="pick">
+          <div class="pick__deck" id="pick-deck" tabindex="0" aria-label="Story cards. Left arrow passes, up arrow loves, right arrow keeps."></div>
+          <p class="pick__count" id="pick-count" aria-live="polite">0 of 12. Drag, tap a button, or use the arrow keys.</p>
+          <div class="pick__done" id="pick-done" hidden>
+            <p class="pick__done-head" id="pick-done-head">Your paper has 0 stories.</p>
+            <div class="ob-actions">
+              <a class="btn btn--primary" href="paper.html" id="pick-read" data-magnetic="0.15"><span>Read my paper</span><span class="btn__orb" data-icon="arrow"></span></a>
+              <button class="btn btn--ghost" type="button" id="pick-again">Pick again</button>
+            </div>
           </div>
         </div>
       </div>

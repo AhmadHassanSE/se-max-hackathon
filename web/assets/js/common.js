@@ -69,9 +69,10 @@
     async outlets() {
       try { return await getJSON("/api/outlets"); } catch (e) { return getJSON("assets/data/outlets.json"); }
     },
-    async generate(profile, source) {
+    async generate(profile, source, pool) {
       const body = { profile: { city: profile.city || null, topics: profile.topics || [], lang: profile.lang || "en" } };
       if (source) body.source = source;
+      if (pool) body.pool = pool;
       const ed = await getJSON("/api/generate", { method: "POST", body: JSON.stringify(body) });
       store.setEdition(ed);
       return ed;
@@ -84,6 +85,21 @@
       catch (e) { return getJSON("assets/data/sample-edition.json"); }
     }
   };
+
+  /* ---------------------------------------------------------------- the reader's own picks
+     Loved stories come first, then kept ones, each group in the published formula order; passed stories leave the paper. */
+  function pickedStories(edition) {
+    const picks = edition && edition.picks;
+    if (!picks) return edition ? edition.stories : [];
+    const loved = edition.stories.filter((s) => picks[s.id] === "love");
+    const kept = edition.stories.filter((s) => picks[s.id] === "keep");
+    return loved.concat(kept);
+  }
+  function savePicks(edition, picks) {
+    edition.picks = picks;
+    store.setEdition(edition);
+    return edition;
+  }
 
   /* ---------------------------------------------------------------- Urdu and text helpers */
   const URDU_NAMES = {
@@ -302,7 +318,7 @@
 
   window.Subah = {
     ICONS, store, api, TEST_READERS, urduName, toUrduDigits, esc, cleanName, paperTitle, dates, ago, fillDates,
-    nextSevenAm, countdown, coverageHTML, forYouHTML, headlineOf, magnetic, tilt, reveal, countUp, toast,
+    nextSevenAm, countdown, pickedStories, savePicks, coverageHTML, forYouHTML, headlineOf, magnetic, tilt, reveal, countUp, toast,
     paintMarks, reduceMotion, finePointer
   };
 

@@ -239,3 +239,7 @@ html.motion .pp-story, html.motion .pp-lead { animation: none; }
   .pp-generate .pp-generate__label { font-size: 0.85rem; }
   .pp-made__stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
+.pp-picks { margin-top: 14px; font-size: calc(0.9rem * var(--scale)); color: var(--ink-2); }
+.pp-picks a { font-weight: 500; margin-inline-start: 6px; }
+.pp-loved { display: inline-flex; align-items: center; min-height: 22px; padding: 0 10px; border-radius: var(--radius-pill); background: oklch(90% 0.13 92); color: oklch(26% 0.04 80); font-size: 0.78rem; font-weight: 700; }
+.paper[lang="ur"] .pp-loved, .paper[lang="ur"] .pp-picks { font-family: var(--font-urdu); line-height: 1.9; }

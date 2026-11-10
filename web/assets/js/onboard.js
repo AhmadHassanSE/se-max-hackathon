@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const $ = (s, r) => (r || document).querySelector(s);
   const $$ = (s, r) => [...(r || document).querySelectorAll(s)];
   let profile = S.store.get();
+  const POOL = 12;
   let catalog = { topics: [], cities: [] };
   try { catalog = await S.api.catalog(); } catch (e) { /* the form still works without names */ }
 
@@ -111,7 +112,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     let edition = null, error = null;
     const started = performance.now();
     try {
-      edition = await S.api.generate(profile);
+      edition = await S.api.generate(profile, null, POOL);
     } catch (e) {
       error = e;
     }
@@ -122,13 +123,14 @@ document.addEventListener("DOMContentLoaded", async () => {
       logLine(error.status ? `Could not generate: ${error.message}` : "The paper server isn’t running", true);
       $("#print-note").textContent = error.status ? "" : "Start it with the command in the README, or read the bundled sample paper instead.";
       $("#print-title").textContent = "The press is offline.";
-      $("#ob-read").querySelector("span").textContent = "Read the sample paper";
+      $("#ob-read").textContent = "Read the sample paper";
+      $("#ob-pick").hidden = true;
       $("#ob-ready").hidden = false;
       return;
     }
     const st = edition.stats, ai = edition.ai;
     const steps = [
-      `${st.feeds_ok} feeds answered, ${st.articles} reports kept` + (st.feeds_failed ? ` (${st.feeds_failed} feeds failed and were skipped)` : ""),
+      `${st.feeds_ok} feeds answered, ${st.articles} reports kept` + (st.feeds_failed ? ` (${st.feeds_failed} feed${st.feeds_failed === 1 ? "" : "s"} failed and ${st.feeds_failed === 1 ? "was" : "were"} skipped)` : ""),
       `Grouped them into ${st.stories_grouped} stories, across English and Urdu`,
       `Counted the outlets behind each story and ranked them by the published formula`,
       ai.enabled ? `Summarised ${ai.summarised} stories in ${ai.calls} AI calls; ${ai.fallback} show headlines only` : `No AI today (${ai.note}): stories show their headlines and links`,
@@ -154,8 +156,157 @@ document.addEventListener("DOMContentLoaded", async () => {
     logLine("Printed", true);
     press.classList.remove("is-printing");
     $("#print-title").textContent = profile.name ? `Your paper is ready, ${profile.name}.` : "Your paper is ready.";
+    $("#ob-pick").hidden = false;
     $("#ob-ready").hidden = false;
-    $("#ob-read").focus({ preventScroll: true });
+    $("#ob-pick").focus({ preventScroll: true });
     S.magnetic($("#ob-ready"));
+    printed = edition;
   }
+
+  /* ---------------------------------------------------------------- step 4: keep the stories you want */
+  let printed = null;
+  let picks = {};
+  let index = 0;
+  let busy = false;
+  const deckEl = $("#pick-deck");
+  const countEl = $("#pick-count");
+  $("#ob-pick").addEventListener("click", () => { goStep(4); startPicking(); });
+  $("#pick-again").addEventListener("click", startPicking);
+
+  function startPicking() {
+    picks = {};
+    index = 0;
+    busy = false;
+    $("#pick-done").hidden = true;
+    deckEl.hidden = false;
+    countEl.hidden = false;
+    tally();
+    renderDeck();
+    setTimeout(() => deckEl.focus({ preventScroll: true }), 300);
+  }
+  function tally() {
+    const v = Object.values(picks);
+    $("#t-love").textContent = v.filter((x) => x === "love").length;
+    $("#t-keep").textContent = v.filter((x) => x === "keep").length;
+    $("#t-pass").textContent = v.filter((x) => x === "pass").length;
+  }
+  function cardHTML(st, lang) {
+    const t = st.topics && st.topics[0];
+    const topic = t ? (lang === "ur" ? t.ur : t.en) : (lang === "ur" ? "خبر" : "News");
+    const head = S.headlineOf(st, lang);
+    const headUr = /[؀-ۿ]/.test(head);
+    const dek = st.summary ? st.summary[lang].text : (lang === "ur" ? `سرخی بشکریہ ${st.headline_from.ur}` : `Headline from ${st.headline_from.en}`);
+    const outlets = lang === "ur" ? `${S.toUrduDigits(st.outlet_count)} ادارے` : `${st.outlet_count} outlet${st.outlet_count === 1 ? "" : "s"}`;
+    const ui = lang === "ur" ? { pass: "چھوڑیں", love: "پسندیدہ", keep: "رکھیں" } : { pass: "Pass", love: "Love", keep: "Keep" };
+    return `
+      <div class="pcard__top"><span class="pcard__topic"${lang === "ur" ? ' lang="ur"' : ""}>${S.esc(topic)}</span><span class="pcard__outlets"${lang === "ur" ? ' lang="ur"' : ""}>${outlets}</span></div>
+      <h3 class="pcard__head"${headUr ? ' lang="ur" dir="rtl"' : ""}>${S.esc(head)}</h3>
+      <p class="pcard__dek"${lang === "ur" ? ' lang="ur" dir="rtl"' : ""}>${S.esc(dek)}</p>
+      ${S.forYouHTML(st.for_you, lang)}
+      <div class="pcard__actions">
+        <button type="button" class="pcard__btn pcard__btn--pass" data-act="pass">${ui.pass}</button>
+        <button type="button" class="pcard__btn pcard__btn--love" data-act="love">${ui.love}</button>
+        <button type="button" class="pcard__btn pcard__btn--keep" data-act="keep">${ui.keep}</button>
+      </div>
+      <span class="pcard__stamp pcard__stamp--keep" aria-hidden="true">Keep</span>
+      <span class="pcard__stamp pcard__stamp--pass" aria-hidden="true">Pass</span>
+      <span class="pcard__stamp pcard__stamp--love" aria-hidden="true">Love</span>`;
+  }
+  function renderDeck() {
+    const stories = printed.stories;
+    const lang = profile.lang === "ur" ? "ur" : "en";
+    deckEl.innerHTML = "";
+    const depth = Math.min(3, stories.length - index);
+    for (let d = depth - 1; d >= 0; d--) {
+      const st = stories[index + d];
+      const card = document.createElement("article");
+      card.className = "pcard" + (d === 0 ? " is-top" : "");
+      card.style.setProperty("--d", d);
+      card.innerHTML = cardHTML(st, lang);
+      if (d === 0) {
+        card.setAttribute("aria-label", `Story ${index + 1} of ${stories.length}`);
+        bindCard(card);
+      } else {
+        card.setAttribute("aria-hidden", "true");
+        card.querySelectorAll("button").forEach((b) => { b.tabIndex = -1; });
+      }
+      deckEl.appendChild(card);
+    }
+    countEl.textContent = `${index} of ${stories.length}. Drag, tap a button, or use the arrow keys.`;
+    if (index >= stories.length) finish();
+  }
+  function bindCard(card) {
+    card.querySelectorAll(".pcard__btn").forEach((b) => b.addEventListener("click", () => decide(b.dataset.act)));
+    let sx = 0, sy = 0, dx = 0, dy = 0, id = null;
+    card.addEventListener("pointerdown", (e) => {
+      if (e.target.closest("button, a") || (e.button !== undefined && e.button !== 0)) return;
+      id = e.pointerId; sx = e.clientX; sy = e.clientY; dx = dy = 0;
+      card.setPointerCapture(id);
+      card.style.transition = "none";
+      card.classList.add("is-dragging");
+    });
+    card.addEventListener("pointermove", (e) => {
+      if (e.pointerId !== id) return;
+      dx = e.clientX - sx; dy = e.clientY - sy;
+      card.style.transform = `translate(${dx}px, ${dy}px) rotate(${dx * 0.05}deg)`;
+      card.style.setProperty("--keep", Math.max(0, Math.min(1, dx / 120)));
+      card.style.setProperty("--pass", Math.max(0, Math.min(1, -dx / 120)));
+      card.style.setProperty("--love", Math.abs(dx) < 80 ? Math.max(0, Math.min(1, -dy / 120)) : 0);
+    });
+    const end = (e) => {
+      if (e.pointerId !== id) return;
+      id = null;
+      card.classList.remove("is-dragging");
+      if (dx > 120) decide("keep");
+      else if (dx < -120) decide("pass");
+      else if (dy < -120 && Math.abs(dx) < 90) decide("love");
+      else {
+        card.style.transition = "transform 420ms cubic-bezier(0.22, 1, 0.36, 1)";
+        card.style.transform = "";
+        ["--keep", "--pass", "--love"].forEach((k) => card.style.setProperty(k, 0));
+      }
+    };
+    card.addEventListener("pointerup", end);
+    card.addEventListener("pointercancel", end);
+  }
+  function decide(act) {
+    const card = deckEl.querySelector(".pcard.is-top");
+    if (!card || busy) return;
+    busy = true;
+    picks[printed.stories[index].id] = act;
+    tally();
+    const w = window.innerWidth;
+    const to = act === "keep" ? `translate(${w * 0.7}px, 40px) rotate(22deg)`
+      : act === "pass" ? `translate(${-w * 0.7}px, 40px) rotate(-22deg)`
+      : `translate(0, ${-window.innerHeight * 0.8}px)`;
+    card.style.setProperty(`--${act}`, 1);
+    card.style.transition = S.reduceMotion ? "opacity 150ms linear" : "transform 480ms cubic-bezier(0.55, 0, 1, 0.45), opacity 480ms linear";
+    if (!S.reduceMotion) card.style.transform = to;
+    card.style.opacity = 0;
+    setTimeout(() => {
+      index++;
+      busy = false;
+      renderDeck();
+      if (index < printed.stories.length) deckEl.focus({ preventScroll: true });
+    }, S.reduceMotion ? 160 : 340);
+  }
+  deckEl.addEventListener("keydown", (e) => {
+    const map = { ArrowRight: "keep", ArrowLeft: "pass", ArrowUp: "love" };
+    if (map[e.key]) { e.preventDefault(); decide(map[e.key]); }
+  });
+  function finish() {
+    const any = Object.values(picks).some((v) => v !== "pass");
+    S.savePicks(printed, any ? picks : null);
+    const n = any ? S.pickedStories(printed).length : 0;
+    deckEl.hidden = true;
+    countEl.hidden = true;
+    $("#pick-done-head").textContent = n
+      ? `Your paper has ${n} stor${n === 1 ? "y" : "ies"}${Object.values(picks).includes("love") ? ", loved ones first" : ""}.`
+      : "You passed on everything. Pick again, or read all of today’s stories.";
+    $("#pick-read").querySelector("span").textContent = n ? "Read my paper" : "Read all of them";
+    $("#pick-done").hidden = false;
+    $("#pick-read").focus({ preventScroll: true });
+    S.magnetic($("#pick-done"));
+  }
+
 });

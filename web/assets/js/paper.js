@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       made: "How this paper was made", reader: "Your settings", change: "Change",
       topicsNone: "no topics chosen", endHead: "That’s the paper.", endBody: "Nothing else is waiting. The last page shows today’s top three again, with their sources.",
       endBtn: "Finish today’s paper", generate: "Generate today’s paper now", generating: "Generating…",
+      picked: (n, of) => `You kept ${n} of today’s top ${of} stories. Loved ones come first; within each group the published formula sets the order.`, repick: "Pick again",
       offline: "The paper server isn’t running, so this is the bundled sample paper built from test feeds.",
       sample: "Sample paper built from the synthetic test feeds.",
       sourceLine: (ed) => ed.source === "live" ? "Built from live feeds" : ed.source === "snapshot" ? "Built from a saved snapshot of the feeds" : "Built from the synthetic test feeds",
@@ -34,6 +35,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       made: "یہ اخبار کیسے بنا", reader: "آپ کی ترتیبات", change: "تبدیل کریں",
       topicsNone: "کوئی موضوع منتخب نہیں", endHead: "بس، یہی تھا آج کا اخبار۔", endBody: "آگے کچھ انتظار نہیں کر رہا۔ آخری صفحے پر آج کی تین بڑی خبریں ذرائع کے ساتھ دوبارہ ہیں۔",
       endBtn: "آج کا اخبار مکمل کریں", generate: "آج کا اخبار ابھی بنائیں", generating: "بن رہا ہے…",
+      picked: (n, of) => `آپ نے آج کی ${S.toUrduDigits(of)} بڑی خبروں میں سے ${S.toUrduDigits(n)} رکھیں۔ پسندیدہ خبریں پہلے ہیں؛ ہر گروپ میں ترتیب شائع شدہ فارمولے کے مطابق ہے۔`, repick: "دوبارہ منتخب کریں",
       offline: "اخبار کا سرور نہیں چل رہا، اس لیے یہ آزمائشی فیڈز سے بنا نمونہ اخبار ہے۔",
       sample: "آزمائشی فیڈز سے بنا نمونہ اخبار۔",
       sourceLine: (ed) => ed.source === "live" ? "تازہ فیڈز سے بنا" : ed.source === "snapshot" ? "فیڈز کے محفوظ شدہ نسخے سے بنا" : "آزمائشی فیڈز سے بنا",
@@ -67,15 +69,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
     return `<p class="pp-fallback">${L.fallback}</p>`;
   }
-  function storyHTML(st, lead) {
+  function storyHTML(st, lead, pos) {
     const L = T[lang];
     const head = S.headlineOf(st, lang);
     const headLang = !st.summary && /[؀-ۿ]/.test(head) ? "ur" : (st.summary ? lang : "en");
     const tag = lead ? "h2" : "h3";
     return `
-      <article class="${lead ? "pp-lead" : "pp-story"}" id="${esc(st.id)}" data-i="${st.rank - 1}" aria-labelledby="h-${esc(st.id)}">
+      <article class="${lead ? "pp-lead" : "pp-story"}" id="${esc(st.id)}" data-i="${pos}" aria-labelledby="h-${esc(st.id)}">
         <div class="${lead ? "pp-lead__main" : "pp-story__main"}">
-          <p class="pp-sec"><span>${esc(sectionOf(st))}</span><span class="pp-num">${num(st.rank)}</span></p>
+          <p class="pp-sec"><span>${esc(sectionOf(st))}</span><span class="pp-num">${num(pos + 1)}</span>${pickHTML(st)}</p>
           <${tag} class="pp-head" id="h-${esc(st.id)}"${headLang !== lang ? ` lang="${headLang}" dir="${headLang === "ur" ? "rtl" : "ltr"}"` : ""}>${esc(head)}</${tag}>
           ${!st.summary ? `<p class="pp-from">${L.from} ${esc(st.headline_from[headLang === "ur" ? "ur" : "en"])}</p>` : ""}
           ${body(st)}
@@ -85,6 +87,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         </div>
         <div class="${lead ? "pp-lead__side" : "pp-story__side"}">${sourcesList(st, lead)}</div>
       </article>`;
+  }
+  function pickHTML(st) {
+    const p = edition.picks && edition.picks[st.id];
+    if (p !== "love") return "";
+    return `<span class="pp-loved">${lang === "ur" ? "آپ کی پسندیدہ" : "You loved this"}</span>`;
   }
   function cityName(id) {
     const c = catalog.cities.find((x) => x.id === id);
@@ -118,7 +125,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     paper.setAttribute("lang", lang === "ur" ? "ur" : "en");
     paper.setAttribute("dir", lang === "ur" ? "rtl" : "ltr");
     paper.setAttribute("aria-busy", "false");
-    const stories = edition.stories;
+    const stories = S.pickedStories(edition);
     const city = cityName(edition.profile.city);
     const topics = (edition.profile.topics || []).map(topicName);
     document.title = `${S.paperTitle(profile.name, "en")}, today’s paper`;
@@ -130,8 +137,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         <div class="pp-mast__bar"><span>${S.dates[lang](new Date(edition.as_of))}</span><span>${L.stories(stories.length)}</span></div>
         <p class="pp-for"><span>${L.reader}:</span> <b>${esc(city || L.noCity)}</b><span>${esc(topics.length ? topics.join(lang === "ur" ? "، " : ", ") : L.topicsNone)}</span><a href="onboard.html">${L.change}</a></p>
       </header>
-      ${stories.length ? storyHTML(stories[0], true) : ""}
-      <div class="pp-grid">${stories.slice(1).map((s) => storyHTML(s, false)).join("")}</div>
+      ${edition.picks ? `<p class="pp-picks">${L.picked(stories.length, edition.stories.length)} <a href="onboard.html">${L.repick}</a></p>` : ""}
+      ${stories.length ? storyHTML(stories[0], true, 0) : ""}
+      <div class="pp-grid">${stories.slice(1).map((s, i) => storyHTML(s, false, i + 1)).join("")}</div>
       ${madeHTML(edition)}
       <footer class="pp-end">
         <div class="pp-end__rule"></div>
@@ -157,7 +165,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   let ticking = false;
   function updateProgress() {
     if (!edition) return;
-    const n = edition.stories.length;
+    const n = S.pickedStories(edition).length;
     const vh = window.innerHeight;
     let current = -1;
     $$("[data-i]", paper).forEach((b) => {

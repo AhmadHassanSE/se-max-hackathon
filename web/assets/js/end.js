@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       rememberTitle: "Today’s top three, once more", nextTitle: "Your next paper prints in",
       nextNote: "Tomorrow at 7:00 am, Lahore time. Until then, the news can wait.", close: "Close the paper",
       gift: "Make one for someone you love", seeYou: "See you at seven.", home: "Back to the front page",
-      stats: (ed) => [[ed.stories.length, "stories in today’s paper"], [ed.stats.outlets_read, "outlets read overnight"], [0, "feeds to scroll"]],
+      stats: (ed) => [[S.pickedStories(ed).length, "stories in today’s paper"], [ed.stats.outlets_read, "outlets read overnight"], [0, "feeds to scroll"]],
       sources: (n) => `Sources (${n})`, none: "Generate a paper first to see its top three here."
     },
     ur: {
@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       rememberTitle: "آج کی تین بڑی خبریں، ایک بار پھر", nextTitle: "آپ کا اگلا اخبار چھپنے میں",
       nextNote: "کل صبح سات بجے، لاہور کے وقت کے مطابق۔ تب تک خبریں انتظار کر سکتی ہیں۔", close: "اخبار بند کریں",
       gift: "کسی پیارے کے لیے بنائیں", seeYou: "سات بجے ملتے ہیں۔", home: "پہلے صفحے پر واپس",
-      stats: (ed) => [[ed.stories.length, "خبریں آج کے اخبار میں"], [ed.stats.outlets_read, "ادارے رات بھر پڑھے گئے"], [0, "فیڈ اسکرول کرنے کو"]],
+      stats: (ed) => [[S.pickedStories(ed).length, "خبریں آج کے اخبار میں"], [ed.stats.outlets_read, "ادارے رات بھر پڑھے گئے"], [0, "فیڈ اسکرول کرنے کو"]],
       sources: (n) => `ذرائع (${S.toUrduDigits(n)})`, none: "یہاں تین بڑی خبریں دیکھنے کے لیے پہلے اخبار بنائیں۔"
     }
   };
@@ -31,8 +31,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   function renderTop() {
     const L = T[lang];
     const list = $("#remember-list");
-    if (!edition || !edition.stories.length) { list.innerHTML = `<li>${L.none}</li>`; return; }
-    list.innerHTML = edition.stories.slice(0, 3).map((st, i) => {
+    const mine = edition ? S.pickedStories(edition) : [];
+    if (!mine.length) { list.innerHTML = `<li>${L.none}</li>`; return; }
+    list.innerHTML = mine.slice(0, 3).map((st, i) => {
       const head = S.headlineOf(st, lang);
       const headUr = /[؀-ۿ]/.test(head);
       return `<li class="is-flip top3" style="--i:${i}"${lang === "ur" ? ' lang="ur" dir="rtl"' : ""}>
