@@ -2,6 +2,10 @@
 
 > AI-Powered SE-MAX · CUI Tech Fest FA'26 · Team: <Team Name>
 
+**🌐 Live website: [https://ranaahmad3048-subah.hf.space](https://ranaahmad3048-subah.hf.space)**
+
+Quick links: [Today's paper](https://ranaahmad3048-subah.hf.space/paper.html) · [Make my paper](https://ranaahmad3048-subah.hf.space/onboard.html) · [For family (gift by email)](https://ranaahmad3048-subah.hf.space/gift.html) · [Pricing](https://ranaahmad3048-subah.hf.space/pricing.html) · [Log in / Sign up](https://ranaahmad3048-subah.hf.space/account.html) · [Our sources](https://ranaahmad3048-subah.hf.space/sources.html)
+
 ## What it does
 
 A morning paper for one reader: the day's top ten stories, grouped across Pakistani and world newsrooms, each labelled with how many outlets reported it and linking every report, in English or Urdu, in large print if wanted. Then it ends.
