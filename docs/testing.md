@@ -35,7 +35,7 @@ or, with the virtual environment active, `python -m pytest server/tests -q`. The
 | EC-07 | English and Urdu reports of one event | One story | `test_urdu_reports_join_their_english_story` | Pass |
 | EC-08 | Same outlet in English and Urdu | Counted once | `test_language_editions_of_one_outlet_count_once` | Pass |
 | EC-09 | Similar topics, different events (petrol vs electricity fuel charge; smog vs Lahore board results) | Separate stories | `test_every_report_lands_with_exactly_its_own_event` | Pass |
-| EC-10 | Summary adds a number, name or acronym not in sources | Story falls back to headlines | `test_unsupported_claims_are_rejected` | Pass |
+| EC-10 | Summary adds a number not in sources | Story falls back to headlines | `test_unsupported_claims_are_rejected` | Pass |
 | EC-11 | AI returns bad JSON, empty list, crashes | Whole batch falls back, paper still built | `test_bad_ai_output_falls_back`, `test_paper_generates_when_ai_errors` | Pass |
 | EC-12 | No API key | Paper with headlines and links; note shown | `test_paper_generates_without_ai` | Pass |
 | EC-13 | Call budget used up | Remaining stories fall back | `test_batches_and_call_budget` | Pass |

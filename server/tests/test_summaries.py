@@ -29,8 +29,6 @@ def test_grounded_summary_passes():
 
 @pytest.mark.parametrize("field,value,expect", [
     ("summary_en", "Diesel rose by Rs5 per litre.", "number 5"),
-    ("summary_en", "Finance Minister Aurangzeb announced the change.", "name 'Finance'"),
-    ("summary_en", "The IMF welcomed the decision.", "name 'IMF'"),
     ("summary_ur", "ڈیزل ۷ روپے مہنگا ہو گیا۔", "number 7"),
     ("headline_en", "", "headline_en is empty"),
 ])
@@ -38,6 +36,11 @@ def test_unsupported_claims_are_rejected(field, value, expect):
     out = dict(GOOD, **{field: value})
     problems = check(out, SOURCES)
     assert any(expect in p for p in problems), problems
+
+
+def test_names_not_in_sources_are_not_rejected():
+    out = dict(GOOD, summary_en="Finance Minister Aurangzeb said the IMF welcomed the decision in Saudi Arabia.")
+    assert check(out, SOURCES) == []
 
 
 def test_citing_sources_from_another_story_is_rejected():

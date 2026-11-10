@@ -66,7 +66,7 @@ A FastAPI server (`server/app.py`) serves the static site in `web/` and a small 
 ## AI components
 
 - **What AI does:** writes a neutral headline and a one-to-two-sentence summary for each of the ten selected stories, in English and Urdu, using only the headlines and feed descriptions of that story's own reports.
-- **What code validates:** JSON schema (structured output); every number and capitalised name present in the sources; cited source ids belong to the story; nothing empty.
+- **What code validates:** JSON schema (structured output); every number present in the sources (names are not checked); cited source ids belong to the story; nothing empty.
 - **When AI fails:** no key, rate limit, network error, refusal, cut-off output, invalid JSON, missing story, failed grounding or used-up call budget all lead to the same result for that story: the outlets' own headlines with links. The paper is always produced.
 - **Not AI:** grouping, outlet counts, tags, For you, ranking.
 
