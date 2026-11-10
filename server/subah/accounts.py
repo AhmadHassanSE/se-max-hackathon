@@ -143,16 +143,26 @@ class MongoStore:
     kind = "mongodb"
 
     def __init__(self, uri: str, db_name: str = "subah"):
-        from pymongo import ASCENDING, MongoClient
-        self.client = MongoClient(uri, serverSelectionTimeoutMS=6000, connectTimeoutMS=6000, tz_aware=True)
-        self.db = self.client[db_name]
+        from pymongo import ASCENDING
+        self._uri, self._db_name = uri, db_name
+        self.client = None
+        self.db = None
         self._indexed = False
         self._ascending = ASCENDING
         self._error: str | None = None
 
+    def _connect(self):
+        """Create the client on first use, and again after a failure: an srv:// address needs a DNS lookup,
+        which can fail on a flaky network; that must not crash the server or stick forever."""
+        if self.client is None:
+            from pymongo import MongoClient
+            self.client = MongoClient(self._uri, serverSelectionTimeoutMS=6000, connectTimeoutMS=6000, tz_aware=True)
+            self.db = self.client[self._db_name]
+
     def _ready(self):
         if not self._indexed:
             try:
+                self._connect()
                 self.db.users.create_index("email", unique=True)
                 self.db.sessions.create_index("token_hash", unique=True)
                 self.db.sessions.create_index("expires_at", expireAfterSeconds=0)
@@ -234,6 +244,8 @@ def describe_db_error(exc: Exception) -> str:
     text = str(exc)
     if "bad auth" in text or "Authentication failed" in text:
         return "MongoDB refused the username or password in MONGODB_URI"
+    if "resolution lifetime expired" in text or "DNS" in text or "does not exist" in text:
+        return "MongoDB's address could not be looked up (DNS); check this computer's internet connection"
     if "timed out" in text.lower() or "ServerSelectionTimeout" in type(exc).__name__:
         return "MongoDB could not be reached (check Network Access allows this server)"
     return f"MongoDB error: {type(exc).__name__}"

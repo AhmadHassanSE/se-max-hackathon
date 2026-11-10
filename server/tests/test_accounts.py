@@ -147,3 +147,17 @@ def test_preview_needs_no_account(client):
     r = client.post("/api/gift/preview", json=GIFT)
     assert r.status_code == 200 and "<html" in r.json()["html"]
     assert client.sent == []
+
+
+def test_unreachable_database_reports_instead_of_crashing(monkeypatch):
+    """An srv:// address that cannot be looked up must not crash /api/health or sign-up."""
+    accounts.set_store(accounts.MongoStore("mongodb+srv://test:test@nonexistent-cluster.invalid/"))
+    try:
+        c = TestClient(app_module.app)
+        h = c.get("/api/health")
+        assert h.status_code == 200
+        assert h.json()["accounts"]["ok"] is False and h.json()["accounts"]["note"]
+        r = c.post("/api/auth/signup", json={"name": "Test A", "email": "test.a@example.com", "password": "test-pass-1"}, headers=H)
+        assert r.status_code == 503
+    finally:
+        accounts.set_store(None)
