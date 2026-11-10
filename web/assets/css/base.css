@@ -46,6 +46,9 @@
   --bad: oklch(52% 0.19 27);
   --bad-soft: oklch(94.5% 0.035 25);
   --moon: oklch(94% 0.04 95);
+  --cover-soft: oklch(93% 0.025 250);
+  --cover-ink: oklch(34% 0.06 255);
+  --kesar-soft: oklch(95% 0.045 75);
 
   /* type */
   --font-display: "Gloock", "Libre Bodoni", Georgia, serif;
@@ -334,13 +337,23 @@ html.is-daylight .nav, .theme-day .nav {
 .badge__icon svg { width: 12px; height: 12px; }
 .badge__dots { display: inline-flex; gap: 3px; margin-left: 2px; }
 .badge__dots i { width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: 0.85; }
-.badge--confirmed { background: var(--ok-soft); color: var(--ok); }
-.badge--confirmed .badge__icon { background: var(--ok); color: var(--ok-soft); }
-.badge--single { background: var(--warn-soft); color: var(--warn); }
-.badge--single .badge__icon { background: var(--warn-mark); color: var(--kesar-ink); }
-.badge--unconfirmed { background: var(--bad-soft); color: var(--bad); }
-.badge--unconfirmed .badge__icon { background: var(--bad); color: var(--bad-soft); }
+/* one neutral style: the label is a count of outlets, not a verdict, so it never uses success or warning colours */
+.badge--coverage { background: var(--cover-soft); color: var(--cover-ink); }
+.badge--coverage .badge__icon { background: var(--cover-ink); color: var(--cover-soft); }
 .badge[lang="ur"] { font-family: var(--font-urdu); font-size: 0.86rem; line-height: 1.9; padding-block: 0; }
+
+/* For you: rule-based tags that show the word that matched */
+.fy { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.fy__head { font-size: 0.82rem; font-weight: 700; margin-inline-end: 2px; }
+.fy-tag {
+  display: inline-flex; align-items: center; gap: 6px; min-height: 28px; padding: 2px 10px 2px 8px;
+  border-radius: var(--radius-pill); background: var(--kesar-soft); color: var(--kesar-ink);
+  border: 1px solid color-mix(in oklab, var(--kesar) 45%, transparent); font-size: 0.84rem; font-weight: 500;
+}
+.fy-tag svg { width: 13px; height: 13px; flex-shrink: 0; color: var(--kesar-deep); }
+.fy-tag__why { font-weight: 400; color: var(--muted); font-size: 0.78rem; }
+.fy[lang="ur"] { font-family: var(--font-urdu); line-height: 1.8; }
+.fy[lang="ur"] .fy-tag { font-family: var(--font-urdu); }
 
 /* ------------------------------------------------------------------ chips */
 .chip {
@@ -382,58 +395,6 @@ html.is-daylight .nav, .theme-day .nav {
 .wave i:nth-child(6) { animation-delay: -0.75s; } .wave i:nth-child(7) { animation-delay: -0.45s; }
 .wave i:nth-child(8) { animation-delay: -0.15s; } .wave i:nth-child(9) { animation-delay: -0.55s; }
 @keyframes wave { 0%, 100% { transform: scaleY(0.25); } 50% { transform: scaleY(1); } }
-
-/* ------------------------------------------------------------------ swipe deck + topic bars (night surfaces) */
-:root { --pass-on-night: oklch(72% 0.15 27); --keep-on-night: oklch(76% 0.13 158); }
-.bars__title { font-size: 0.95rem; color: var(--on-night-muted); margin-bottom: var(--space-sm); }
-.bars__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
-.bar { display: grid; grid-template-columns: 104px minmax(0, 1fr) 30px; gap: 12px; align-items: center; font-size: 0.92rem; }
-.bar__track { height: 8px; border-radius: 99px; background: var(--night-3); overflow: hidden; }
-.bar__fill {
-  display: block; height: 100%; border-radius: 99px; background: var(--kesar);
-  transform-origin: left; transform: scaleX(var(--w, 0.08));
-  transition: transform 600ms var(--ease-out);
-}
-.bar__fill.is-neg { background: var(--on-night-muted); }
-.bar__val { text-align: right; color: var(--on-night-muted); font-variant-numeric: tabular-nums; }
-.deck { position: relative; width: min(100%, 380px); height: 330px; border-radius: 24px; }
-.deck:focus-visible { outline: 3px solid var(--focus); outline-offset: 6px; }
-.swipe-card {
-  position: absolute; inset: 0;
-  display: flex; flex-direction: column; justify-content: space-between; gap: 16px;
-  padding: 26px; border-radius: 24px;
-  background: var(--paper); color: var(--ink);
-  box-shadow: var(--shadow-paper);
-  transform: translateY(calc(var(--d) * 16px)) scale(calc(1 - var(--d) * 0.05));
-  user-select: none; -webkit-user-select: none; touch-action: pan-y; cursor: grab;
-  --keep: 0; --pass: 0; --love: 0;
-}
-.swipe-card:not(.is-top) { filter: brightness(calc(1 - var(--d) * 0.06)); }
-.swipe-card.is-dragging { cursor: grabbing; }
-html.motion .swipe-card.is-top { animation: card-rise 360ms var(--ease-out); }
-@keyframes card-rise { from { transform: translateY(16px) scale(0.95); } }
-.swipe-card__meta { display: flex; justify-content: space-between; align-items: center; font-size: 0.88rem; color: var(--muted); }
-.swipe-card__label { display: inline-flex; min-height: 30px; align-items: center; padding: 0 12px; border-radius: 99px; background: var(--paper-2); color: var(--ink); font-weight: 500; }
-.swipe-card__headline { font-family: var(--font-display); font-size: clamp(1.6rem, 2.6vw, 2.05rem); line-height: 1.08; letter-spacing: -0.015em; }
-.swipe-card__stamp {
-  position: absolute; top: 22px; padding: 4px 12px; border: 3px solid; border-radius: 10px;
-  font-weight: 700; font-size: 1.1rem; pointer-events: none;
-}
-.swipe-card__stamp--keep { left: 20px; color: var(--ok); transform: rotate(-12deg); opacity: var(--keep); }
-.swipe-card__stamp--pass { right: 20px; color: var(--bad); transform: rotate(12deg); opacity: var(--pass); }
-.swipe-card__stamp--love { left: 50%; top: auto; bottom: 90px; color: var(--kesar-deep); transform: translateX(-50%) rotate(-4deg); opacity: var(--love); }
-.deck-actions { display: flex; gap: 16px; }
-.deck-btn {
-  width: 58px; height: 58px; border-radius: 50%; border: 1px solid var(--night-rule);
-  background: var(--night-2); color: var(--on-night); display: grid; place-items: center;
-  transition: background-color var(--dur-short) var(--ease-out), transform var(--dur-micro) var(--ease-out);
-}
-.deck-btn:hover { background: var(--night-3); }
-.deck-btn:active { transform: scale(0.94); }
-.deck-btn span, .deck-btn svg { width: 24px; height: 24px; }
-.deck-btn--pass { color: var(--pass-on-night); }
-.deck-btn--keep { color: var(--keep-on-night); }
-.deck-btn--love { color: var(--kesar); width: 50px; height: 50px; align-self: center; }
 
 /* ------------------------------------------------------------------ reveal (one, opt-in, visible by default) */
 html.js.motion [data-reveal] { opacity: 0; transform: translateY(14px); }

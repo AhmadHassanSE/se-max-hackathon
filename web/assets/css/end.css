@@ -49,7 +49,7 @@ html.motion .bas__ur { display: inline-block; animation: bas-in 1.1s var(--ease-
 
 /* remember */
 .remember { padding: var(--space-3xl) 0; border-top: 4px double var(--rule-2); }
-.remember h2, .quiz h2 { font-size: var(--step-5); max-width: 16ch; }
+.remember h2 { font-size: var(--step-5); max-width: 16ch; }
 .remember__list { list-style: none; margin: var(--space-xl) 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-lg); counter-reset: r; }
 .remember__list li {
   counter-increment: r; position: relative; background: var(--paper); border-radius: var(--radius-lg);
@@ -64,55 +64,6 @@ html.motion .bas__ur { display: inline-block; animation: bas-in 1.1s var(--ease-
 .remember__list li[lang="ur"] { font-family: var(--font-urdu); line-height: 2.2; font-size: 1.05rem; text-align: right; }
 html.motion .remember__list li.is-flip { animation: flip-in 640ms var(--ease-out) both; animation-delay: calc(var(--i) * 90ms); }
 @keyframes flip-in { from { opacity: 0; transform: perspective(900px) rotateX(-40deg) translateY(16px); } }
-
-/* quiz */
-.quiz { padding: var(--space-3xl) 0; border-top: 1px solid var(--rule); }
-.quiz__head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--space-xl); align-items: end; }
-.quiz__head p { color: var(--ink-2); font-size: var(--step-1); max-width: 36ch; }
-.quiz__card {
-  margin-top: var(--space-xl); background: var(--paper); border-radius: var(--radius-lg); border: 1px solid var(--rule);
-  padding: clamp(22px, 4vw, 44px); box-shadow: var(--shadow-paper); max-width: 860px;
-}
-.quiz__meta { display: flex; justify-content: space-between; align-items: center; color: var(--muted); font-size: 0.95rem; }
-.quiz__pips { display: flex; gap: 6px; }
-.quiz__pips i { width: 28px; height: 6px; border-radius: 99px; background: var(--paper-3); }
-.quiz__pips i.is-right { background: var(--ok); }
-.quiz__pips i.is-wrong { background: var(--bad); }
-.quiz__pips i.is-now { background: var(--kesar); }
-.quiz__q { font-family: var(--font-display); font-size: clamp(1.7rem, 3vw, 2.4rem); line-height: 1.1; margin: 18px 0 22px; max-width: 30ch; }
-.quiz__q[lang="ur"] { font-family: var(--font-urdu); font-weight: 700; line-height: 1.9; font-size: clamp(1.3rem, 2.4vw, 1.8rem); }
-.quiz__opts { display: grid; gap: 10px; }
-.quiz__opt {
-  display: grid; grid-template-columns: 32px minmax(0, 1fr) 24px; gap: 14px; align-items: center; text-align: start;
-  min-height: 58px; padding: 10px 16px; border-radius: 16px; border: 1px solid var(--rule); background: var(--paper);
-  font-size: 1.05rem; font-weight: 500;
-  transition: border-color var(--dur-short) var(--ease-out), background-color var(--dur-short) var(--ease-out), transform var(--dur-micro) var(--ease-out);
-}
-.quiz__opt:hover:not([disabled]) { border-color: var(--ink); }
-.quiz__opt:active:not([disabled]) { transform: translateY(1px); }
-.quiz__opt[disabled] { cursor: default; }
-.quiz__key { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; background: var(--paper-2); font-weight: 700; font-size: 0.9rem; }
-.quiz__mark { width: 24px; height: 24px; }
-.quiz__opt.is-right { border-color: var(--ok); background: var(--ok-soft); }
-.quiz__opt.is-right .quiz__key { background: var(--ok); color: var(--ok-soft); }
-.quiz__opt.is-wrong { border-color: var(--bad); background: var(--bad-soft); }
-.quiz__opt.is-wrong .quiz__key { background: var(--bad); color: var(--bad-soft); }
-.quiz__opt.is-dim { opacity: 0.55; }
-html.motion .quiz__opt.is-wrong { animation: shake 360ms var(--ease-out); }
-@keyframes shake { 25% { transform: translateX(-5px); } 60% { transform: translateX(4px); } }
-.quiz__opt[lang="ur"], .quiz__card[dir="rtl"] .quiz__opt { font-family: var(--font-urdu); line-height: 1.9; }
-.quiz__note { margin-top: 16px; min-height: 1.6em; color: var(--ink-2); font-family: var(--font-read); }
-.quiz__note[lang="ur"] { font-family: var(--font-urdu); line-height: 2; }
-.quiz__next { margin-top: 18px; }
-.quiz__done { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--space-xl); align-items: center; }
-.quiz__ring { width: 150px; height: 150px; position: relative; display: grid; place-items: center; }
-.quiz__ring svg { position: absolute; inset: 0; transform: rotate(-90deg); }
-.quiz__ring circle { fill: none; stroke-width: 10; }
-.quiz__ring .track { stroke: var(--paper-3); }
-.quiz__ring .fill { stroke: var(--ok); stroke-linecap: round; stroke-dasharray: 377; stroke-dashoffset: 377; transition: stroke-dashoffset 1s var(--ease-out); }
-.quiz__score { font-family: var(--font-display); font-size: 2.6rem; line-height: 1; }
-.quiz__done h3 { font-size: var(--step-3); }
-.quiz__done p { color: var(--ink-2); margin-top: 8px; }
 
 /* tomorrow */
 .tomorrow {
@@ -171,13 +122,22 @@ h2.is-ur { font-weight: 700; }
 
 @media (max-width: 900px) {
   .remember__list { grid-template-columns: minmax(0, 1fr); }
-  .quiz__head, .tomorrow { grid-template-columns: minmax(0, 1fr); }
+  .tomorrow { grid-template-columns: minmax(0, 1fr); }
   .chai__svg { width: 160px; }
   .end-back { display: none; }
 }
 @media (max-width: 560px) {
   .bas__stats { grid-template-columns: minmax(0, 1fr); }
   .bas__stats > div { border-left: 0; border-bottom: 1px solid var(--rule); padding: var(--space-md) 0; }
-  .quiz__done { grid-template-columns: minmax(0, 1fr); justify-items: start; }
   .end-head .seg button { padding: 0 10px; }
 }
+
+/* top three */
+.top3 { display: grid; gap: 14px; align-content: start; padding-top: 72px !important; }
+.top3__head { font-family: var(--font-display); font-size: 1.45rem; line-height: 1.12; }
+.top3__head[lang="ur"] { font-family: var(--font-urdu); font-weight: 700; line-height: 1.9; font-size: 1.15rem; }
+.top3 .badge { justify-self: start; white-space: normal; }
+.top3__src summary { cursor: pointer; font-family: var(--font-ui); font-weight: 700; font-size: 0.9rem; min-height: 36px; display: flex; align-items: center; }
+.top3__src ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; font-family: var(--font-ui); font-size: 0.9rem; line-height: 1.4; }
+.top3__src a { color: var(--ink-2); }
+.top3__src a[lang="ur"] { font-family: var(--font-urdu); line-height: 1.9; }

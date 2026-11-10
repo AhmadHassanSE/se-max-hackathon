@@ -28,6 +28,34 @@ app = FastAPI(title="Subah", docs_url="/api/docs", openapi_url="/api/openapi.jso
 _lock = threading.Lock()
 
 
+@app.on_event("startup")
+def warm_up() -> None:
+    """Load the grouping model and embed the newest snapshot in the background, so the first
+    "generate now" during a demo only has to embed reports it has not seen."""
+    def run() -> None:
+        try:
+            from .subah.edition import FIXTURES_DIR, latest_snapshot
+            from .subah.embed import get_embedder
+            from .subah.group import similarity
+
+            snap = latest_snapshot() or FIXTURES_DIR
+            col = feeds.collect_snapshot(snap, feeds.load_outlets())
+            similarity(col.articles, get_embedder())
+        except Exception:  # warm-up is best effort
+            pass
+
+    if os.environ.get("SUBAH_WARMUP", "on") != "off":
+        threading.Thread(target=run, daemon=True).start()
+
+
+@app.middleware("http")
+async def no_stale_pages(request, call_next):
+    """Pages and editions change often during a demo; make browsers revalidate instead of showing old copies."""
+    response = await call_next(request)
+    response.headers.setdefault("Cache-Control", "no-cache")
+    return response
+
+
 class Profile(BaseModel):
     city: str | None = None
     topics: list[str] = Field(default_factory=list, max_length=5)
@@ -52,7 +80,8 @@ def outlets() -> dict:
         "definition": "An outlet is one newsroom brand. Its English and Urdu editions count once.",
         "outlets": [{
             "id": o["id"], "name": o["name"], "country": o.get("country"), "site": o.get("site"), "note": o.get("note"),
-            "feeds": [{"url": f["url"], "lang": f.get("lang", "en"), "enabled": f.get("enabled", True)} for f in o["feeds"]],
+            "feeds": [{"url": f["url"], "lang": f.get("lang", "en"), "enabled": f.get("enabled", True), "status": f.get("status")}
+                      for f in o["feeds"]],
         } for o in data],
         "ranking": FORMULA,
     }

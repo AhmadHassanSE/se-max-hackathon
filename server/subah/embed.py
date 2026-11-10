@@ -14,7 +14,8 @@ import numpy as np
 
 from .textnorm import fold
 
-MULTILINGUAL_MODEL = os.environ.get("SUBAH_EMBED_MODEL", "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
+MULTILINGUAL_MODEL = os.environ.get("SUBAH_EMBED_MODEL", "sentence-transformers/paraphrase-multilingual-mpnet-base-v2")
+_CACHE_MAX = 20000
 
 
 class Embedder:
@@ -35,13 +36,19 @@ class MultilingualEmbedder(Embedder):
         kwargs = {"cache_dir": cache} if cache else {}
         self._model = TextEmbedding(model_name=model_name, **kwargs)
         self.name = model_name
+        self._cache: dict[str, np.ndarray] = {}  # a regenerated paper only embeds reports it has not seen
 
     def embed(self, texts: list[str]) -> np.ndarray:
         if not texts:
-            return np.zeros((0, 384), dtype=np.float32)
-        vecs = np.array(list(self._model.embed(texts)), dtype=np.float32)
-        norms = np.linalg.norm(vecs, axis=1, keepdims=True)
-        return vecs / np.maximum(norms, 1e-9)
+            return np.zeros((0, 768), dtype=np.float32)
+        missing = list(dict.fromkeys(t for t in texts if t not in self._cache))
+        if missing:
+            if len(self._cache) + len(missing) > _CACHE_MAX:
+                self._cache.clear()
+            for t, v in zip(missing, self._model.embed(missing)):
+                v = np.asarray(v, dtype=np.float32)
+                self._cache[t] = v / max(float(np.linalg.norm(v)), 1e-9)
+        return np.stack([self._cache[t] for t in texts])
 
 
 class LexicalEmbedder(Embedder):

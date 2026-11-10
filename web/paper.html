@@ -4,20 +4,19 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Your Subah, today’s paper</title>
-  <meta name="description" content="Today’s sample Subah: ten stories checked across Pakistani and world newsrooms, each with why it matters, what we don’t know yet, and a line for you.">
+  <meta name="description" content="Today’s Subah: the day’s stories grouped across Pakistani and world newsrooms, each with the outlets that reported it and links to every source.">
   <meta name="theme-color" content="#f6f1e6">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:wght@400;500;700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/base.css">
   <link rel="stylesheet" href="assets/css/paper.css">
-  <script src="assets/js/data.js" defer></script>
   <script src="assets/js/common.js" defer></script>
   <script src="assets/js/paper.js" defer></script>
 </head>
 <body class="theme-day page-paper">
   <a class="skip-link" href="#paper">Skip to the paper</a>
-  <p class="demo-strip"><b>Demo edition.</b> These stories are samples written for the prototype. The live paper fills from real feeds and links every source.</p>
+  <p class="demo-strip" id="demo-strip"><b>Prototype.</b> Stories come from the outlets on <a href="sources.html">our published list</a>. Every story links to the reports it is built from.</p>
 
   <div class="read-progress" aria-hidden="true"><span></span></div>
 
@@ -30,17 +29,14 @@
         <div class="seg" role="group" aria-label="Language" id="pp-lang">
           <button type="button" data-lang="en" aria-pressed="true">English</button>
           <button type="button" data-lang="ur" aria-pressed="false" lang="ur">اردو</button>
-          <button type="button" data-lang="ro" aria-pressed="false">Roman</button>
         </div>
         <div class="seg seg--size" role="group" aria-label="Type size" id="pp-size">
-          <button type="button" data-size="1" aria-pressed="true" aria-label="Regular type">A</button>
-          <button type="button" data-size="1.22" aria-pressed="false" aria-label="Large type">A</button>
-          <button type="button" data-size="1.45" aria-pressed="false" aria-label="Extra large type">A</button>
+          <button type="button" data-large="0" aria-pressed="true" aria-label="Regular type">A</button>
+          <button type="button" data-large="1" aria-pressed="false" aria-label="Large print">A</button>
         </div>
-        <button class="btn btn--ghost btn--sm pp-listen" type="button" id="pp-listen" aria-pressed="false">
-          <span class="pp-listen__icon" data-icon="play"></span>
-          <span class="pp-listen__label">Listen</span>
-          <span class="wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+        <button class="btn btn--primary btn--sm pp-generate" type="button" id="pp-generate">
+          <span class="pp-generate__icon" data-icon="refresh"></span>
+          <span class="pp-generate__label">Generate today’s paper now</span>
         </button>
       </div>
       <div class="pp-progress" aria-live="polite">
@@ -48,25 +44,25 @@
           <circle cx="20" cy="20" r="16" class="pp-ring__track"/>
           <circle cx="20" cy="20" r="16" class="pp-ring__fill" id="pp-ring"/>
         </svg>
-        <span class="pp-progress__text"><b class="tabular" id="pp-left">6</b> <span id="pp-left-label">min left</span></span>
+        <span class="pp-progress__text"><b class="tabular" id="pp-read">0</b> <span id="pp-read-label">of 10 read</span></span>
       </div>
     </div>
     <ol class="pp-dots" id="pp-dots" aria-label="Stories read"></ol>
   </header>
 
-  <p class="pp-note" id="pp-note" aria-live="polite"></p>
+  <p class="pp-note" id="pp-note" role="status" aria-live="polite"></p>
 
   <main class="desk" id="paper-main">
-    <article class="paper" id="paper" lang="en" dir="ltr">
-      <!-- rendered by paper.js -->
-      <noscript><p class="pp-noscript">Today’s paper needs JavaScript to print. The home page explains how it works.</p></noscript>
+    <article class="paper" id="paper" lang="en" dir="ltr" aria-busy="true">
+      <p class="pp-loading">Fetching today’s paper…</p>
+      <noscript><p class="pp-noscript">Today’s paper needs JavaScript to load.</p></noscript>
     </article>
   </main>
 
   <footer class="site-footer site-footer--slim">
     <div class="container footer__base">
-      <span>A hackathon prototype. Summaries are written in our own words and credit every publisher.</span>
-      <a href="index.html">Back to the front page</a>
+      <span>A hackathon prototype. Summaries are written only from the linked reports; every story credits its outlets.</span>
+      <a href="sources.html">Our sources and ranking</a>
     </div>
   </footer>
 </body>

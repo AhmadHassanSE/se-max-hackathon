@@ -11,13 +11,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:wght@400;500;700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/base.css">
   <link rel="stylesheet" href="assets/css/gift.css">
-  <script src="assets/js/data.js" defer></script>
   <script src="assets/js/common.js" defer></script>
   <script src="assets/js/gift.js" defer></script>
 </head>
 <body class="theme-day page-gift">
   <a class="skip-link" href="#gift-form">Skip to the form</a>
-  <p class="demo-strip"><b>Demo edition.</b> Nothing on this page is sent anywhere yet. The preview shows what the paper will look like.</p>
+  <p class="demo-strip"><b>Prototype.</b> Nothing on this page is sent anywhere. The preview uses today’s stories.</p>
 
   <header class="site-header">
     <nav class="nav" aria-label="Main">
@@ -28,7 +27,7 @@
         <li><a href="index.html#how">How it works</a></li>
         <li><a href="paper.html">Sample paper</a></li>
         <li><a href="gift.html" aria-current="page">For family</a></li>
-        <li><a href="index.html#pricing">Pricing</a></li>
+        <li><a href="sources.html">Our sources</a></li>
       </ul>
       <a class="btn btn--ghost btn--nav-plain" href="onboard.html">Make my own</a>
       <button class="nav__menu-btn" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Menu"></button>
@@ -38,7 +37,7 @@
   <main class="gift-main">
     <section class="gift-hero container" aria-labelledby="gift-title">
       <h1 id="gift-title">A paper for someone you love.</h1>
-      <p class="gift-hero__lede">You’re abroad. They’re home. Every morning at 7 their paper arrives in their language and type size, signed from you.</p>
+      <p class="gift-hero__lede">You’re abroad. They’re home. Every morning at 7 their paper arrives in Urdu or English, in large print if they like, signed from you.</p>
     </section>
 
     <div class="container gift-grid">
@@ -48,18 +47,16 @@
           <div class="field">
             <label class="field__label" for="g-name">What you call them</label>
             <input class="input" id="g-name" name="recipient" value="Ammi" maxlength="24" autocomplete="off">
-          </div>
-          <div class="field">
-            <label class="field__label" for="g-about">Describe them in one sentence</label>
-            <textarea class="textarea" id="g-about" name="about" rows="3" maxlength="240">Retired teacher in Lahore. Loves cooking shows and cricket, worries about prices, needs big type.</textarea>
-            <span class="field__hint">Their editor writes every “For you” line from this.</span>
+            <span class="field__hint">A test name for the demo. Nothing is sent or stored on a server.</span>
           </div>
           <div class="field">
             <label class="field__label" for="g-city">Their city</label>
-            <select class="select" id="g-city" name="city">
-              <option>Lahore</option><option>Karachi</option><option>Islamabad</option><option>Multan</option><option>Faisalabad</option><option>Peshawar</option><option>Quetta</option>
-            </select>
+            <select class="select" id="g-city" name="city"><option value="">No city</option></select>
           </div>
+          <fieldset class="field g-topics">
+            <legend class="field__label">Their topics (up to five)</legend>
+            <div class="g-topics__row" id="g-topics"></div>
+          </fieldset>
         </fieldset>
 
         <fieldset class="gift-set">
@@ -69,29 +66,22 @@
             <div class="seg" role="group" aria-labelledby="g-lang-label" id="g-lang">
               <button type="button" data-lang="ur" aria-pressed="true" lang="ur">اردو</button>
               <button type="button" data-lang="en" aria-pressed="false">English</button>
-              <button type="button" data-lang="ro" aria-pressed="false">Roman Urdu</button>
             </div>
           </div>
           <div class="field">
             <span class="field__label" id="g-size-label">Type size</span>
             <div class="seg seg--size" role="group" aria-labelledby="g-size-label" id="g-size">
               <button type="button" data-size="1" aria-pressed="false">Regular</button>
-              <button type="button" data-size="1.22" aria-pressed="true">Large</button>
-              <button type="button" data-size="1.45" aria-pressed="false">Extra large</button>
+              <button type="button" data-size="1.25" aria-pressed="true">Large print</button>
             </div>
           </div>
-          <label class="switch">
-            <input type="checkbox" id="g-audio" checked>
-            <span class="switch__track" aria-hidden="true"><span class="switch__thumb"></span></span>
-            <span class="switch__text"><b>Audio edition</b><span>A short Urdu voice note with the headlines, for tired eyes.</span></span>
-          </label>
         </fieldset>
 
         <fieldset class="gift-set">
           <legend>From you</legend>
           <div class="field">
             <label class="field__label" for="g-from">Signed by</label>
-            <input class="input" id="g-from" name="from" value="Ayesha" maxlength="24" autocomplete="given-name">
+            <input class="input" id="g-from" name="from" value="Test A" maxlength="24" autocomplete="off">
           </div>
           <div class="field">
             <label class="field__label" for="g-where">Where are you?</label>
@@ -105,24 +95,10 @@
               <option value="Australia/Sydney">Sydney</option>
             </select>
           </div>
-          <div class="field">
-            <span class="field__label" id="g-via-label">Delivered by</span>
-            <div class="via" role="radiogroup" aria-labelledby="g-via-label">
-              <label class="via__opt"><input type="radio" name="via" value="email" checked><span>Email</span></label>
-              <label class="via__opt is-later"><input type="radio" name="via" value="whatsapp" disabled><span>WhatsApp <small>later</small></span></label>
-              <label class="via__opt is-later"><input type="radio" name="via" value="print" disabled><span>Print <small>later</small></span></label>
-            </div>
-          </div>
-          <div class="field">
-            <label class="field__label" for="g-email">Their email</label>
-            <input class="input" id="g-email" name="email" type="email" inputmode="email" autocomplete="off" placeholder="name@example.com">
-            <span class="field__hint" id="g-email-hint">Optional for the preview.</span>
-          </div>
         </fieldset>
 
         <div class="gift-submit">
           <button class="btn btn--primary" type="submit" data-magnetic="0.15"><span>Preview the first delivery</span><span class="btn__orb" data-icon="arrow"></span></button>
-          <p class="gift-price"><b>$5</b> a month per paper. Cancel any time.</p>
         </div>
         <p class="gift-status" id="gift-status" role="status" aria-live="polite"></p>
       </form>
@@ -150,19 +126,14 @@
           <article class="gp" id="gift-paper" lang="ur" dir="rtl"></article>
         </div>
 
-        <div class="voice" id="voice">
-          <button class="voice__play" type="button" id="voice-play" aria-pressed="false" aria-label="Play the voice note"><span data-icon="play"></span></button>
-          <span class="voice__wave wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
-          <span class="voice__label" id="voice-label">Voice note in Urdu</span>
-        </div>
-        <p class="voice__note" id="voice-note" aria-live="polite"></p>
+        <p class="gp-note" id="gp-note"></p>
       </aside>
     </div>
   </main>
 
   <footer class="site-footer site-footer--slim">
     <div class="container footer__base">
-      <span>A hackathon prototype. Gift papers are the paid part: free for readers, paid to give.</span>
+      <span>A hackathon prototype. Gift papers use the same stories, sources and tags as every paper.</span>
       <a href="index.html">Front page</a>
     </div>
   </footer>

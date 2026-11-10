@@ -1,0 +1,111 @@
+{
+ "topics": [
+  {
+   "id": "prices",
+   "en": "Prices",
+   "ur": "قیمتیں"
+  },
+  {
+   "id": "energy",
+   "en": "Electricity and gas",
+   "ur": "بجلی اور گیس"
+  },
+  {
+   "id": "economy",
+   "en": "Money and economy",
+   "ur": "معیشت"
+  },
+  {
+   "id": "cricket",
+   "en": "Cricket",
+   "ur": "کرکٹ"
+  },
+  {
+   "id": "weather",
+   "en": "Weather and smog",
+   "ur": "موسم اور سموگ"
+  },
+  {
+   "id": "education",
+   "en": "Education and exams",
+   "ur": "تعلیم اور امتحانات"
+  },
+  {
+   "id": "health",
+   "en": "Health",
+   "ur": "صحت"
+  },
+  {
+   "id": "jobs",
+   "en": "Jobs and tech",
+   "ur": "روزگار اور ٹیکنالوجی"
+  },
+  {
+   "id": "politics",
+   "en": "Politics",
+   "ur": "سیاست"
+  },
+  {
+   "id": "world",
+   "en": "World and Gulf",
+   "ur": "دنیا اور خلیج"
+  }
+ ],
+ "cities": [
+  {
+   "id": "lahore",
+   "en": "Lahore",
+   "ur": "لاہور"
+  },
+  {
+   "id": "karachi",
+   "en": "Karachi",
+   "ur": "کراچی"
+  },
+  {
+   "id": "islamabad",
+   "en": "Islamabad",
+   "ur": "اسلام آباد"
+  },
+  {
+   "id": "rawalpindi",
+   "en": "Rawalpindi",
+   "ur": "راولپنڈی"
+  },
+  {
+   "id": "peshawar",
+   "en": "Peshawar",
+   "ur": "پشاور"
+  },
+  {
+   "id": "quetta",
+   "en": "Quetta",
+   "ur": "کوئٹہ"
+  },
+  {
+   "id": "multan",
+   "en": "Multan",
+   "ur": "ملتان"
+  },
+  {
+   "id": "faisalabad",
+   "en": "Faisalabad",
+   "ur": "فیصل آباد"
+  },
+  {
+   "id": "hyderabad",
+   "en": "Hyderabad",
+   "ur": "حیدرآباد"
+  },
+  {
+   "id": "sialkot",
+   "en": "Sialkot",
+   "ur": "سیالکوٹ"
+  },
+  {
+   "id": "gujranwala",
+   "en": "Gujranwala",
+   "ur": "گوجرانوالہ"
+  }
+ ]
+}

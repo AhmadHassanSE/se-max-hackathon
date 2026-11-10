@@ -17,10 +17,12 @@ from .embed import Embedder
 from .feeds import Article
 from .textnorm import fold
 
-# Tuned on server/tests/fixtures (see docs/testing.md): 0.40 to 0.45 gave zero errors; 0.42 sits in the middle.
-# Higher merges less. Retune on a real day of feeds before the demo.
-THRESHOLD = float(os.environ.get("SUBAH_GROUP_THRESHOLD", "0.42"))
+# Tuned on the fixed fixture set and a real day of feeds (see docs/testing.md). Higher merges less.
+THRESHOLD = float(os.environ.get("SUBAH_GROUP_THRESHOLD", "0.62"))
 WORD_BOOST = 0.3  # weight of shared content words (Jaccard), helps same-language reports with different phrasing
+# Multilingual models score an English report and its Urdu twin lower than two English reports about the same
+# event, so English-Urdu pairs get this bonus; it lets the threshold stay high enough to stop same-language chaining.
+CROSS_LANG_BONUS = float(os.environ.get("SUBAH_CROSS_LANG_BONUS", "0.1"))
 LEXICAL_THRESHOLD = 0.45
 WINDOW_HOURS = 36.0
 _STOP = set("the a an of to in on for and by with as at from is are was were has have be will its it that this "
@@ -87,7 +89,9 @@ def similarity(articles: list[Article], embedder: Embedder) -> np.ndarray:
             union = len(words[i] | words[j])
             if union:
                 jac[i, j] = jac[j, i] = len(words[i] & words[j]) / union
-    return sim + WORD_BOOST * jac
+    langs = np.array([a.lang for a in articles])
+    cross = (langs[:, None] != langs[None, :]).astype(np.float64)
+    return sim + WORD_BOOST * jac + CROSS_LANG_BONUS * cross
 
 
 def group_articles(articles: list[Article], embedder: Embedder, threshold: float | None = None,

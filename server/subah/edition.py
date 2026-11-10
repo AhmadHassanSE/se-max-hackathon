@@ -112,7 +112,8 @@ def build_edition(profile: dict | None, source: str = "fixtures", client=None, c
             "outlet_count": s.outlet_count,
             "coverage": {"en": coverage_label(s.outlet_count, "en"), "ur": coverage_label(s.outlet_count, "ur")},
             "outlets": s.outlet_names,
-            "topics": [{"id": k, "en": TOPICS[k][0], "ur": TOPICS[k][1], "term": v} for k, v in s.topics.items()],
+            # in catalog order, so the section label prefers specific topics over "World"
+            "topics": [{"id": k, "en": TOPICS[k][0], "ur": TOPICS[k][1], "term": s.topics[k]} for k in TOPICS if k in s.topics],
             "cities": [{"id": k, "en": CITIES[k][0], "ur": CITIES[k][1], "term": v} for k, v in s.cities.items()],
             "for_you": p["for_you"],
             "summary_status": res["status"],

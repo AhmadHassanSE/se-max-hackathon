@@ -4,20 +4,19 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Bas, done for today</title>
-  <meta name="description" content="The last page of today’s Subah: three things to remember, a three-question quiz, and the time your next paper prints.">
+  <meta name="description" content="The last page of today’s Subah: the top three stories again with their sources, and the time your next paper prints.">
   <meta name="theme-color" content="#f6f1e6">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:wght@400;500;700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/base.css">
   <link rel="stylesheet" href="assets/css/end.css">
-  <script src="assets/js/data.js" defer></script>
   <script src="assets/js/common.js" defer></script>
   <script src="assets/js/end.js" defer></script>
 </head>
 <body class="theme-day page-end">
   <a class="skip-link" href="#end-main">Skip to the last page</a>
-  <p class="demo-strip"><b>Demo edition.</b> The takeaways and quiz come from today’s sample stories.</p>
+  <p class="demo-strip"><b>Prototype.</b> The top three below are today’s top-ranked stories, with links to every report.</p>
 
   <header class="end-head">
     <a class="wordmark" href="index.html" aria-label="Subah home">
@@ -26,34 +25,21 @@
     <div class="seg" role="group" aria-label="Language" id="end-lang">
       <button type="button" data-lang="en" aria-pressed="true">English</button>
       <button type="button" data-lang="ur" aria-pressed="false" lang="ur">اردو</button>
-      <button type="button" data-lang="ro" aria-pressed="false">Roman</button>
     </div>
-    <a class="end-back" href="paper.html">Back to today’s paper</a>
+    <a class="end-back" href="paper.html" data-t="back">Back to today’s paper</a>
   </header>
 
   <main id="end-main" class="end-main">
     <section class="bas" aria-labelledby="bas-title">
       <div class="bas__sun" aria-hidden="true"></div>
       <h1 class="bas__title" id="bas-title"><span class="bas__en">Bas.</span><span class="bas__ur" lang="ur">بس</span></h1>
-      <p class="bas__lede" data-t="lede">You’re done for today. Ten stories, about six minutes, and nothing else is waiting.</p>
-      <div class="bas__stats" role="list">
-        <div role="listitem"><b class="tabular" data-t="s1v">10 of 10</b><span data-t="s1">stories read</span></div>
-        <div role="listitem"><b class="tabular" data-t="s2v">8 + 1 + 1</b><span data-t="s2">confirmed, single source, unconfirmed</span></div>
-        <div role="listitem"><b class="tabular" data-t="s3v">0</b><span data-t="s3">feeds to scroll</span></div>
-      </div>
+      <p class="bas__lede" data-t="lede">You’re done for today. Nothing else is waiting.</p>
+      <div class="bas__stats" role="list" id="bas-stats"></div>
     </section>
 
     <section class="remember" aria-labelledby="remember-title">
-      <h2 id="remember-title" data-t="rememberTitle">Three things to remember</h2>
+      <h2 id="remember-title" data-t="rememberTitle">Today’s top three, once more</h2>
       <ol class="remember__list" id="remember-list"></ol>
-    </section>
-
-    <section class="quiz" aria-labelledby="quiz-title">
-      <div class="quiz__head">
-        <h2 id="quiz-title" data-t="quizTitle">The Daily 3</h2>
-        <p data-t="quizLede">Three questions from this morning’s paper. No timer, no streak.</p>
-      </div>
-      <div class="quiz__card" id="quiz-card" aria-live="polite"></div>
     </section>
 
     <section class="tomorrow" aria-labelledby="tomorrow-title">
@@ -83,7 +69,6 @@
     </section>
   </main>
 
-  <!-- the closing fold -->
   <div class="closing" id="closing" hidden>
     <div class="closing__half closing__half--top"></div>
     <div class="closing__half closing__half--bottom"></div>
@@ -97,8 +82,8 @@
 
   <footer class="site-footer site-footer--slim">
     <div class="container footer__base">
-      <span>A hackathon prototype. Summaries are written in our own words and credit every publisher.</span>
-      <a href="index.html">Front page</a>
+      <span>A hackathon prototype. Every story credits and links the outlets that reported it.</span>
+      <a href="sources.html">Our sources and ranking</a>
     </div>
   </footer>
 </body>

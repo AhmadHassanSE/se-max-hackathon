@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Subah, the morning paper that ends</title>
-  <meta name="description" content="A morning paper for one reader: ten stories checked across 24 newsrooms, in English or Urdu, every day at 7. Then it ends.">
+  <meta name="description" content="A morning paper for one reader: the day’s top stories grouped across Pakistani and world newsrooms, with every source linked, in English or Urdu. Then it ends.">
   <meta name="theme-color" content="#0f1424">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -30,7 +30,7 @@
     <div class="sky__layer sky__day"></div>
   </div>
 
-  <p class="demo-strip"><b>Demo edition.</b> Stories on this site are samples written for the prototype; the live paper fills from real feeds.</p>
+  <p class="demo-strip"><b>Prototype.</b> Stories on this page are illustrations. The real paper is built from the outlets on <a href="sources.html">our published list</a>.</p>
 
   <header class="site-header">
     <nav class="nav" aria-label="Main">
@@ -43,7 +43,7 @@
         <li><a href="#how">How it works</a></li>
         <li><a href="paper.html">Sample paper</a></li>
         <li><a href="#family">For family</a></li>
-        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="sources.html">Our sources</a></li>
       </ul>
       <a class="btn btn--primary btn--nav" href="onboard.html" data-magnetic="0.2">
         <span><span class="btn__label-long">Print my </span>paper</span>
@@ -73,7 +73,7 @@
           <p class="gloss" data-hero-fade>
             <b>bas</b> <span class="ur" lang="ur">بس</span> <i>Urdu</i> <span>enough; that’s all for today.</span>
           </p>
-          <p class="hero__sub" data-hero-fade>A morning paper for one reader, checked across 24 newsrooms, in English or Urdu.</p>
+          <p class="hero__sub" data-hero-fade>A morning paper for one reader, grouped across <span data-outlet-count>13</span> newsrooms, every source linked, in English or Urdu.</p>
           <form class="namebar" id="namebar" data-hero-fade novalidate>
             <label class="namebar__label" for="hero-name">Whose paper?</label>
             <input class="namebar__input" id="hero-name" name="given-name" autocomplete="given-name" placeholder="Your name" maxlength="24" spellcheck="false">
@@ -97,26 +97,26 @@
                 <div class="mp__lead">
                   <p class="mp__sec">Prices</p>
                   <h3 class="mp__head">Petrol price held for two weeks; diesel up Rs 3 a litre</h3>
-                  <p class="mp__dek">The government kept petrol unchanged in its fortnightly review and raised high-speed diesel.</p>
-                  <span class="badge badge--confirmed"><span class="badge__icon" data-icon="check"></span>Confirmed by 8 outlets</span>
-                  <p class="mp__foryou"><b>For you.</b> Your motorbike commute costs the same this fortnight.</p>
+                  <p class="mp__dek">The federal government kept petrol unchanged for the next fortnight and raised high-speed diesel by Rs3 per litre.</p>
+                  <span class="badge badge--coverage"><span class="badge__icon" data-icon="stack"></span>Reported by 5 outlets</span>
+                  <div class="fy"><span class="fy__head">For you</span><span class="fy-tag fy-tag--topic"><span data-icon="tag"></span><span>Prices</span></span></div>
                 </div>
                 <div class="mp__side">
                   <div class="mp__item">
                     <p class="mp__sec">Lahore</p>
                     <h4 class="mp__head mp__head--s">Lahore schools switch to online classes on Mondays</h4>
-                    <span class="badge badge--confirmed"><span class="badge__icon" data-icon="check"></span>6 outlets</span>
+                    <span class="badge badge--coverage"><span class="badge__icon" data-icon="stack"></span>4 outlets</span>
                   </div>
                   <div class="mp__item">
-                    <p class="mp__sec">Viral check</p>
-                    <h4 class="mp__head mp__head--s">‘Accounts frozen on Friday’: no bank confirms it</h4>
-                    <span class="badge badge--unconfirmed"><span class="badge__icon" data-icon="question"></span>Unconfirmed</span>
+                    <p class="mp__sec">Cricket</p>
+                    <h4 class="mp__head mp__head--s">Three uncapped players in squad for home Tests</h4>
+                    <span class="badge badge--coverage"><span class="badge__icon" data-icon="stack"></span>4 outlets</span>
                   </div>
                 </div>
               </div>
             </article>
           </div>
-          <p class="hero__caption" data-hero-fade>Type your name. The masthead is already yours, in English and Urdu.</p>
+          <p class="hero__caption" data-hero-fade>Type a name. The masthead is already yours, in English and Urdu.</p>
         </div>
       </div>
       <a class="hero__scroll" href="#how" aria-label="Scroll to how it works">
@@ -130,11 +130,11 @@
       <div class="cluster__pin">
         <div class="container cluster__grid">
           <div class="cluster__copy">
-            <h2 id="cluster-title">While you slept, we read <span class="cluster__count tabular" data-count="24">24</span> newsrooms.</h2>
+            <h2 id="cluster-title">While you slept, we read <span class="cluster__count tabular" data-outlet-count>13</span> newsrooms.</h2>
             <ol class="cluster__steps">
-              <li class="is-active" data-step="0"><span><b>Every outlet files its own version.</b> Dawn, Geo, BBC Urdu and the rest, in English and Urdu, all night.</span></li>
-              <li data-step="1"><span><b>We group the versions of each event.</b> Twenty-six headlines, five events. Same event, same story, whatever the wording.</span></li>
-              <li data-step="2"><span><b>The count becomes the proof.</b> Eight outlets agree: confirmed. Only WhatsApp forwards: unconfirmed.</span></li>
+              <li class="is-active" data-step="0"><span><b>Every outlet files its own version.</b> Dawn, Geo, BBC Urdu and the rest, in English and Urdu. We read each feed’s headline and description, never the article.</span></li>
+              <li data-step="1"><span><b>We group the versions of each event.</b> Nineteen headlines, five events, across English and Urdu, by a model on our own server.</span></li>
+              <li data-step="2"><span><b>The label is the count.</b> Five outlets reported it, so it says “Reported by 5 outlets”. One outlet, and it says one. A count, never a verdict.</span></li>
             </ol>
           </div>
           <div class="cluster__stage" id="cluster-stage">
@@ -144,30 +144,22 @@
       </div>
     </section>
 
-    <!-- ============================================================ SWIPE / LEARN -->
+    <!-- ============================================================ PICK / RANKING RULES -->
     <section class="learn is-night" data-clock="240,300" aria-labelledby="learn-title">
       <div class="container learn__grid">
         <div class="learn__copy">
-          <h2 id="learn-title">Then we keep the ten that are yours.</h2>
-          <p class="learn__lede">Tell us who you are in one sentence, then swipe twelve headlines. Try five here: drag right to keep, left to pass, up if you love it.</p>
-          <div class="bars" aria-live="polite">
-            <p class="bars__title">What your editor is learning</p>
-            <ul class="bars__list" id="learn-bars"></ul>
+          <h2 id="learn-title">Then we pick ten, by a formula you can read.</h2>
+          <p class="learn__lede">Outlets reporting the story, plus 2 if it names your city, plus 1 for each topic you chose. Try it: change the city and topics, and watch the order and the For you tags change.</p>
+          <div class="picker" role="group" aria-label="Try the ranking">
+            <label class="picker__field"><span>Your city</span>
+              <select class="select select--night" id="pick-city">
+                <option value="">No city</option><option value="lahore" selected>Lahore</option><option value="karachi">Karachi</option><option value="rawalpindi">Rawalpindi</option><option value="islamabad">Islamabad</option>
+              </select>
+            </label>
+            <div class="picker__topics" id="pick-topics" role="group" aria-label="Your topics"></div>
           </div>
         </div>
-        <div class="learn__deck-wrap">
-          <div class="deck" id="learn-deck" aria-label="Headline cards. Use left and right arrow keys to pass or keep, up arrow to love."></div>
-          <div class="deck-actions">
-            <button class="deck-btn deck-btn--pass" type="button" data-act="pass" aria-label="Pass"><span data-icon="x"></span></button>
-            <button class="deck-btn deck-btn--love" type="button" data-act="love" aria-label="Love"><span data-icon="heart"></span></button>
-            <button class="deck-btn deck-btn--keep" type="button" data-act="keep" aria-label="Keep"><span data-icon="keep"></span></button>
-          </div>
-          <div class="deck-done" id="learn-done" hidden>
-            <p class="deck-done__head">That’s how your editor learns.</p>
-            <p>The real onboarding has twelve headlines and one sentence about you.</p>
-            <a class="link-arrow" href="onboard.html">Try the full onboarding <span data-icon="arrow" class="link-arrow__i"></span></a>
-          </div>
-        </div>
+        <ol class="rank-list" id="rank-list" aria-live="polite"></ol>
       </div>
     </section>
 
@@ -218,44 +210,30 @@
       </div>
     </section>
 
-    <!-- ============================================================ FOR YOU + TRUST -->
+    <!-- ============================================================ SHOWS ITS WORK -->
     <section class="foryou is-day" data-clock="420,421" aria-labelledby="foryou-title">
       <div class="container foryou__grid">
         <div class="foryou__copy">
-          <h2 id="foryou-title">Every story says what it means for you.</h2>
-          <p class="foryou__lede">One line under each story ties it to your city, your work and your money. Same story, four readers:</p>
-          <div class="personas" role="tablist" aria-label="Choose a reader" id="personas"></div>
+          <h2 id="foryou-title">Every story shows its sources.</h2>
+          <p class="foryou__lede">A short summary written only from the reports listed under it, the count of outlets, why it made your paper, and a link to every report.</p>
         </div>
-        <article class="story-card" aria-labelledby="sc-head" data-reveal>
-          <p class="story-card__sec">Prices</p>
-          <h3 class="story-card__head" id="sc-head">Petrol price held for two weeks; diesel up Rs 3 a litre</h3>
-          <p class="story-card__dek">The government kept petrol unchanged in its fortnightly review and raised high-speed diesel, citing global oil prices.</p>
-          <div class="story-card__badge" id="sc-badge"></div>
-          <div class="foryou-line" role="tabpanel" id="persona-panel" aria-live="polite">
-            <span class="foryou-line__label">For you.</span>
-            <span class="foryou-line__text" id="foryou-text">Your motorbike commute costs the same this fortnight. Watch bus fares and the mess bill, which follow diesel.</span>
-          </div>
-          <dl class="story-card__facts">
-            <div><dt>Why it matters</dt><dd>Diesel moves the trucks that carry food, so a rise usually reaches vegetable and flour prices within weeks.</dd></div>
-            <div><dt>What we don’t know yet</dt><dd>Whether transporters will raise fares this week.</dd></div>
-          </dl>
-        </article>
+        <article class="story-card" aria-labelledby="sc-head" data-reveal id="story-card"></article>
       </div>
 
       <div class="container trust" aria-labelledby="trust-title">
-        <h3 class="trust__title" id="trust-title">Three badges, so you never have to guess.</h3>
+        <h3 class="trust__title" id="trust-title">Three promises, checked by code.</h3>
         <div class="trust__grid">
           <div class="trust__item" data-reveal style="--i:0">
-            <span class="badge badge--confirmed"><span class="badge__icon" data-icon="check"></span>Confirmed by 8 outlets<span class="badge__dots" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span></span>
-            <p>Several newsrooms reported the same event independently. Every one is linked under the story.</p>
+            <span class="badge badge--coverage"><span class="badge__icon" data-icon="stack"></span>Reported by 5 outlets</span>
+            <p>A count of distinct newsrooms, never a verdict. An outlet’s English and Urdu editions count once.</p>
           </div>
           <div class="trust__item" data-reveal style="--i:1">
-            <span class="badge badge--single"><span class="badge__icon" data-icon="one"></span>Single source</span>
-            <p>Only one outlet has it so far. We print it, and we tell you that it rests on one report.</p>
+            <span class="trust__mark">No new facts</span>
+            <p>Every number and name in a summary must appear in the linked reports, or the summary is thrown away.</p>
           </div>
           <div class="trust__item" data-reveal style="--i:2">
-            <span class="badge badge--unconfirmed"><span class="badge__icon" data-icon="question"></span>Unconfirmed</span>
-            <p>A viral claim no outlet has reported. We say so plainly, before it reaches the family group.</p>
+            <span class="trust__mark">Always a paper</span>
+            <p>If the AI is down or out of quota, you still get today’s stories as the outlets’ own headlines, with links.</p>
           </div>
         </div>
       </div>
@@ -265,31 +243,26 @@
     <section class="sample is-day" id="sample" data-clock="421,423" aria-labelledby="sample-title">
       <div class="container">
         <div class="sample__head">
-          <h2 id="sample-title">Read it in Urdu, in large print, or out loud.</h2>
+          <h2 id="sample-title">Read it in Urdu, or in large print.</h2>
           <div class="sample__controls" role="group" aria-label="Paper settings">
             <div class="seg" role="group" aria-label="Language" id="sample-lang">
               <button type="button" aria-pressed="true" data-lang="en">English</button>
               <button type="button" aria-pressed="false" data-lang="ur" lang="ur">اردو</button>
-              <button type="button" aria-pressed="false" data-lang="ro">Roman Urdu</button>
             </div>
             <label class="size-ctl">
               <span class="size-ctl__a" aria-hidden="true">A</span>
               <input type="range" min="1" max="1.6" step="0.05" value="1" id="sample-size" aria-label="Type size">
               <span class="size-ctl__a size-ctl__a--big" aria-hidden="true">A</span>
             </label>
-            <button class="btn btn--ghost listen" type="button" id="sample-listen" aria-pressed="false">
-              <span class="listen__icon" data-icon="play"></span>
-              <span class="listen__label">Listen</span>
-              <span class="wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
-            </button>
+            <a class="btn btn--ghost btn--sm" href="paper.html">Open today’s paper</a>
           </div>
         </div>
-        <p class="sample__note" id="sample-note" aria-live="polite"></p>
+        <p class="sample__note">An illustration. The real paper comes from the server, built from our outlet list.</p>
         <div class="sample__flip">
           <article class="sample__paper" id="sample-paper" lang="en" dir="ltr"></article>
         </div>
         <div class="sample__foot">
-          <a class="btn btn--ink" href="paper.html">Open the full sample paper <span data-icon="arrow"></span></a>
+          <a class="btn btn--ink" href="onboard.html">Make my paper <span data-icon="arrow"></span></a>
         </div>
       </div>
     </section>
@@ -299,11 +272,11 @@
       <div class="container gift__grid">
         <div class="gift__copy">
           <h2 id="gift-title">Make one for Ammi.</h2>
-          <p class="gift__lede">You’re in Dubai or London. She’s in Lahore. Describe her in a sentence and her paper arrives every morning at 7, in Urdu, in large print, signed from you.</p>
+          <p class="gift__lede">You’re in Dubai or London. She’s in Lahore. Choose her city and topics, and her paper arrives every morning at 7, in Urdu, in large print, signed from you.</p>
           <dl class="gift__facts">
-            <div><dt>Languages</dt><dd>Urdu, English and Roman Urdu</dd></div>
-            <div><dt>Type size</dt><dd>Regular, large or extra large</dd></div>
-            <div><dt>Audio edition</dt><dd>A short Urdu voice version for tired eyes</dd></div>
+            <div><dt>Languages</dt><dd>Urdu or English</dd></div>
+            <div><dt>Type size</dt><dd>Regular or large print</dd></div>
+            <div><dt>For you</dt><dd>Tags for her city and her topics</dd></div>
           </dl>
           <a class="btn btn--ink" href="gift.html">Make a gift paper <span data-icon="arrow"></span></a>
         </div>
@@ -336,55 +309,9 @@
       </div>
       <div class="ribbon" aria-hidden="true">
         <div class="ribbon__track">
-          <span>Make one for someone you love</span><span lang="ur">ان کی زبان میں</span><span>Large print for tired eyes</span><span lang="ur">محبت کے ساتھ</span><span>On their phone at 7</span><span lang="ur">بڑے حروف میں</span>
-          <span>Make one for someone you love</span><span lang="ur">ان کی زبان میں</span><span>Large print for tired eyes</span><span lang="ur">محبت کے ساتھ</span><span>On their phone at 7</span><span lang="ur">بڑے حروف میں</span>
+          <span>Make one for someone you love</span><span lang="ur">ان کی زبان میں</span><span>Large print</span><span lang="ur">محبت کے ساتھ</span><span>On their phone at 7</span><span lang="ur">بڑے حروف میں</span>
+          <span>Make one for someone you love</span><span lang="ur">ان کی زبان میں</span><span>Large print</span><span lang="ur">محبت کے ساتھ</span><span>On their phone at 7</span><span lang="ur">بڑے حروف میں</span>
         </div>
-      </div>
-    </section>
-
-    <!-- ============================================================ PRICING -->
-    <section class="pricing is-day" id="pricing" data-clock="424,425" aria-labelledby="pricing-title">
-      <div class="container">
-        <div class="pricing__head">
-          <h2 id="pricing-title">Free to read. Paid to give.</h2>
-          <p>We earn when you finish a paper you value, never by keeping you scrolling. No ads, so the business and the reader want the same thing.</p>
-        </div>
-        <div class="tiers">
-          <article class="tier" data-tilt>
-            <h3 class="tier__name">Reader</h3>
-            <p class="tier__price">Free</p>
-            <p class="tier__per">every morning, for good</p>
-            <ul class="tier__list">
-              <li>Ten checked stories at 7</li>
-              <li>English, Urdu or Roman Urdu</li>
-              <li>The last page and the Daily 3 quiz</li>
-            </ul>
-            <a class="btn btn--ghost" href="onboard.html">Start reading</a>
-          </article>
-          <article class="tier tier--gift" data-tilt>
-            <h3 class="tier__name">Gift paper</h3>
-            <p class="tier__price">$5</p>
-            <p class="tier__per">a month, per paper</p>
-            <ul class="tier__list">
-              <li>For a parent, in their language</li>
-              <li>Large print and the audio edition</li>
-              <li>Signed from you, every morning</li>
-            </ul>
-            <a class="btn btn--ink" href="gift.html">Make a gift paper</a>
-          </article>
-          <article class="tier" data-tilt>
-            <h3 class="tier__name">Team brief</h3>
-            <p class="tier__price">$8</p>
-            <p class="tier__per">a seat, a month</p>
-            <ul class="tier__list">
-              <li>One shared brief for your company</li>
-              <li>Prices, regulation and competitors</li>
-              <li>In the inbox before the 9 am meeting</li>
-            </ul>
-            <a class="btn btn--ghost" href="#pricing">Ask about teams</a>
-          </article>
-        </div>
-        <p class="pricing__note">The expensive work, reading and grouping the news, happens once per story overnight and is shared by every reader. Your paper only costs the last step.</p>
       </div>
     </section>
 
@@ -392,7 +319,7 @@
     <section class="sources is-day" data-clock="425,426" aria-labelledby="sources-title">
       <div class="container sources__head">
         <h2 id="sources-title">We read them, so you don’t have to.</h2>
-        <p>Pakistani newsrooms first, then the world. Every story links back to the outlets that reported it.</p>
+        <p>Pakistani newsrooms first, then the world. The full list, with every feed address, is <a href="sources.html">published here</a>.</p>
         <button class="btn btn--ghost btn--sm marquee-toggle" type="button" id="marquee-toggle" aria-pressed="false">Pause</button>
       </div>
       <div class="marquee" id="marquee-pk"><div class="marquee__track"></div></div>
@@ -420,11 +347,11 @@
         </div>
         <div class="ending__copy">
           <h2 class="ending__bas" id="end-title"><span>Bas.</span> <span class="ur" lang="ur">بس</span></h2>
-          <p class="ending__lede">No feed and no “one more”. The last page gives you three things to remember and a three-question quiz, then lets you go.</p>
+          <p class="ending__lede">No feed and no “one more”. The last page shows today’s top three once more, with their sources, then lets you go.</p>
           <p class="ending__next">Your next paper prints in <time class="ending__count tabular" id="home-countdown">00:00:00</time></p>
           <div class="ending__actions">
             <a class="btn btn--ink" href="end.html">See today’s last page <span data-icon="arrow"></span></a>
-            <a class="link-arrow" href="onboard.html">Print my first paper</a>
+            <a class="link-arrow" href="onboard.html">Make my paper</a>
           </div>
         </div>
       </div>
@@ -436,24 +363,24 @@
       <div class="footer__grid">
         <div class="footer__brand">
           <a class="wordmark" href="index.html" aria-label="Subah home"><span data-sunmark></span><span class="wordmark__en">Subah</span><span class="wordmark__ur" lang="ur">صبح</span></a>
-          <p>The news should inform you, not consume you. Ten stories, in your language, and then we let you go.</p>
+          <p>The news should inform you, not consume you. Ten stories, in your language, every source linked, and then we let you go.</p>
         </div>
         <div class="footer__col">
           <h3>Read</h3>
-          <ul><li><a href="paper.html">Today’s sample paper</a></li><li><a href="end.html">The last page</a></li><li><a href="onboard.html">Make your paper</a></li></ul>
+          <ul><li><a href="paper.html">Today’s paper</a></li><li><a href="end.html">The last page</a></li><li><a href="onboard.html">Make your paper</a></li></ul>
         </div>
         <div class="footer__col">
           <h3>Give</h3>
-          <ul><li><a href="gift.html">Gift paper</a></li><li><a href="#pricing">Pricing</a></li><li><a href="#family">For family</a></li></ul>
+          <ul><li><a href="gift.html">Gift paper</a></li><li><a href="#family">For family</a></li></ul>
         </div>
         <div class="footer__col">
           <h3>Trust</h3>
-          <ul><li><a href="#how">How we check</a></li><li><a href="#sources-title">Who we read</a></li><li><a href="paper.html#viral">Viral checks</a></li></ul>
+          <ul><li><a href="#how">How we group</a></li><li><a href="sources.html">Our sources and ranking</a></li></ul>
         </div>
       </div>
       <p class="footer__mast" aria-hidden="true">Subah <span class="ur" lang="ur">صبح</span></p>
       <div class="footer__base">
-        <span>A hackathon prototype. Summaries are written in our own words and link to every publisher.</span>
+        <span>A hackathon prototype. Summaries are written only from the linked reports, and credit every publisher.</span>
         <span>Printed in Lahore time.</span>
       </div>
     </div>

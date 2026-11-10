@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Our sources and ranking, Subah</title>
+  <meta name="description" content="Every outlet Subah reads, the exact ranking formula, what the coverage label means, and how AI is and is not used.">
+  <meta name="theme-color" content="#f6f1e6">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:wght@400;500;700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/sources.css">
+  <script src="assets/js/common.js" defer></script>
+  <script src="assets/js/sources.js" defer></script>
+</head>
+<body class="theme-day page-sources">
+  <a class="skip-link" href="#src-main">Skip to content</a>
+  <header class="site-header">
+    <nav class="nav" aria-label="Main">
+      <a class="wordmark" href="index.html" aria-label="Subah home">
+        <span data-sunmark></span><span class="wordmark__en">Subah</span><span class="wordmark__ur" lang="ur">صبح</span>
+      </a>
+      <ul class="nav__links" id="nav-links">
+        <li><a href="index.html#how">How it works</a></li>
+        <li><a href="paper.html">Today’s paper</a></li>
+        <li><a href="gift.html">For family</a></li>
+        <li><a href="sources.html" aria-current="page">Our sources</a></li>
+      </ul>
+      <a class="btn btn--primary btn--nav" href="onboard.html"><span>Make my paper</span><span class="btn__orb" data-icon="arrow"></span></a>
+      <button class="nav__menu-btn" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Menu"></button>
+    </nav>
+  </header>
+
+  <main class="container src-main" id="src-main">
+    <section class="src-hero">
+      <h1>Who we read, and how a story makes the paper.</h1>
+      <p>Everything that decides your paper is on this page. No step uses AI to judge what matters.</p>
+    </section>
+
+    <section class="src-block" aria-labelledby="rank-title">
+      <h2 id="rank-title">The ranking formula</h2>
+      <p class="src-formula" id="formula">Score = outlets reporting the story, plus 2 if it names your city, plus 1 per matching topic (at most 2). Ties go to the newest report.</p>
+      <ol class="src-steps">
+        <li><b>Collect.</b> We read each feed’s headline, description, link and time. We never fetch or copy the article itself.</li>
+        <li><b>Group.</b> Reports about the same event are grouped by meaning, across English and Urdu, using a model that runs on our server. Reports more than 36 hours apart never group.</li>
+        <li><b>Count.</b> The label is the number of distinct outlets in the group. An outlet’s English and Urdu editions count once.</li>
+        <li><b>Rank.</b> The formula above, and nothing else. The top ten make the paper.</li>
+        <li><b>Summarise.</b> Only those ten are sent to the AI, with the headlines and descriptions of their own reports.</li>
+      </ol>
+    </section>
+
+    <section class="src-block src-split" aria-labelledby="label-title">
+      <div>
+        <h2 id="label-title">What “Reported by 5 outlets” means</h2>
+        <p>Five different newsrooms published a report that we grouped with this one. It is a count of coverage. It does not mean the story is confirmed, and one outlet does not mean it is wrong.</p>
+      </div>
+      <div class="src-example">
+        <span class="badge badge--coverage"><span class="badge__icon" data-icon="stack"></span>Reported by 5 outlets<span class="badge__dots" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span></span>
+        <span class="badge badge--coverage"><span class="badge__icon" data-icon="stack"></span>Reported by 1 outlet<span class="badge__dots" aria-hidden="true"><i></i></span></span>
+      </div>
+    </section>
+
+    <section class="src-block src-split" aria-labelledby="ai-title">
+      <div>
+        <h2 id="ai-title">How summaries are written</h2>
+        <p>The AI sees only the headlines and feed descriptions of the reports in that story, and is told to add nothing else. Our code then checks every number and every name in the summary against those reports. If anything is missing from the sources, or the AI is unavailable, the story shows the outlets’ own headlines with links instead.</p>
+      </div>
+      <div>
+        <h2>How “For you” works</h2>
+        <p>A story gets a For you tag only when it names the city you chose, or matches one of your topics by keyword. Each tag shows the word that matched. Nothing is predicted about your costs or your life.</p>
+      </div>
+    </section>
+
+    <section class="src-block" aria-labelledby="list-title">
+      <div class="src-list-head">
+        <h2 id="list-title">The outlet list</h2>
+        <p id="list-def">An outlet is one newsroom brand. Its English and Urdu editions count once.</p>
+      </div>
+      <div class="src-table-wrap">
+        <table class="src-table">
+          <thead><tr><th scope="col">Outlet</th><th scope="col">Feed</th><th scope="col">Language</th><th scope="col">Status</th></tr></thead>
+          <tbody id="outlet-rows"><tr><td colspan="4">Loading…</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="src-block src-split" aria-labelledby="open-title">
+      <div>
+        <h2 id="open-title">Open issues</h2>
+        <p><b>Content licensing.</b> We show headlines, short feed descriptions and links, with credit to each outlet, and send readers to the publisher. We have not yet agreed licences with publishers; that has to happen before a public launch.</p>
+      </div>
+      <div>
+        <h2>Your data</h2>
+        <p>Your settings (city, topics, language, print size, a masthead name) stay in your browser. The server receives your city, topics and language only when you generate a paper, and does not store them.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer site-footer--slim">
+    <div class="container footer__base">
+      <span>A hackathon prototype.</span>
+      <a href="index.html">Front page</a>
+    </div>
+  </footer>
+</body>
+</html>

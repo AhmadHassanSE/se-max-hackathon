@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const byId = (id) => document.getElementById(id);
   const story = (id) => D.STORIES.find((s) => s.id === id);
+  const outletCount = { n: 13 };
   const profile = S.store.get();
 
   /* ------------------------------------------------------------ smooth scroll */
@@ -155,36 +156,23 @@ document.addEventListener("DOMContentLoaded", () => {
   /* ------------------------------------------------------------ clock: hero */
   clockTrigger(document.querySelector(".hero"));
 
-  /* ------------------------------------------------------------ cluster: 26 headlines become 5 stories */
+  /* ------------------------------------------------------------ cluster: 19 headlines become 5 stories */
   const stage = byId("cluster-stage");
-  const clusterStories = ["petrol", "smog", "cricket", "rupee", "viral"].map(story);
+  const clusterStories = ["petrol", "smog", "cricket", "rupee", "results"].map(story);
   const chips = [];
   clusterStories.forEach((st, g) => {
-    st.chips.forEach(([outlet, text]) => {
-      const isUr = /[؀-ۿ]/.test(text);
-      chips.push({ g, outlet, text, isUr, wa: outlet === "WhatsApp forward" });
-    });
+    st.chips.forEach(([outlet, text]) => chips.push({ g, outlet, text, isUr: /[\u0600-\u06FF]/.test(text) }));
   });
   stage.innerHTML =
-    chips.map((c) => `<div class="cl-chip${c.wa ? " cl-chip--wa" : ""}" aria-hidden="true"><b>${c.outlet}</b>${c.isUr ? `<span class="ur" lang="ur">${c.text}</span>` : c.text}</div>`).join("") +
+    chips.map((c) => `<div class="cl-chip" aria-hidden="true"><b>${S.esc(c.outlet)}</b>${c.isUr ? `<span class="ur" lang="ur">${S.esc(c.text)}</span>` : S.esc(c.text)}</div>`).join("") +
     clusterStories.map((st) => `
       <div class="cl-card">
-        <span class="cl-card__sec">${st.en.section}</span>
-        <span class="cl-card__head">${shortHead(st)}</span>
-        ${S.badgeHTML(st, "en", { dots: false })}
-        <span class="cl-card__from">${st.outlets.length ? `${st.chips.length} headlines, one story` : "3 forwards, 0 outlets"}</span>
+        <span class="cl-card__sec">${S.esc(st.topics[0].en)}</span>
+        <span class="cl-card__head">${S.esc(st.summary.en.headline)}</span>
+        ${S.coverageHTML(st, "en", { dots: false })}
+        <span class="cl-card__from">${st.chips.length} headline${st.chips.length === 1 ? "" : "s"}, one story</span>
       </div>`).join("");
-  function shortHead(st) {
-    return {
-      petrol: "Petrol held; diesel up Rs 3",
-      smog: "Lahore schools online on Mondays",
-      cricket: "Young squad for home Tests",
-      rupee: "Rupee steady on remittances",
-      viral: "‘Accounts frozen Friday’ message"
-    }[st.id];
-  }
   const countEl = document.querySelector(".cluster__count");
-  countEl.textContent = D.OUTLETS.length;
 
   if (choreo) {
     const chipEls = [...stage.querySelectorAll(".cl-chip")];
@@ -238,44 +226,51 @@ document.addEventListener("DOMContentLoaded", () => {
 
     ScrollTrigger.create({
       trigger: ".cluster", start: "top 70%", once: true,
-      onEnter: () => S.countUp(countEl, D.OUTLETS.length, { duration: 1200 })
+      onEnter: () => S.countUp(countEl, outletCount.n, { duration: 1200 })
     });
   }
 
-  /* ------------------------------------------------------------ learn: swipe five headlines */
-  const learnTopics = ["prices", "local", "cricket", "money", "work"];
-  const weights = Object.fromEntries(learnTopics.map((t) => [t, 0]));
-  const barsEl = byId("learn-bars");
-  barsEl.innerHTML = learnTopics.map((t) => `
-    <li class="bar" data-topic="${t}">
-      <span>${D.TOPICS[t]}</span>
-      <span class="bar__track"><span class="bar__fill"></span></span>
-      <span class="bar__val">0</span>
-    </li>`).join("");
-  function paintBars() {
-    learnTopics.forEach((t) => {
-      const li = barsEl.querySelector(`[data-topic="${t}"]`);
-      const v = weights[t];
-      const fill = li.querySelector(".bar__fill");
-      fill.style.setProperty("--w", v > 0 ? Math.min(1, 0.12 + v * 0.3) : 0.06);
-      fill.classList.toggle("is-neg", v < 0);
-      li.querySelector(".bar__val").textContent = v > 0 ? `+${v}` : v;
-    });
-  }
-  paintBars();
-  const deckItems = learnTopics.map((t) => D.SWIPE.find((s) => s.topic === t));
-  const deck = new S.SwipeDeck(byId("learn-deck"), deckItems, {
-    onSwipe: (item, action) => {
-      weights[item.topic] += action === "love" ? 2 : action === "keep" ? 1 : -1;
-      paintBars();
-    },
-    onDone: () => {
-      byId("learn-done").hidden = false;
-      document.querySelector(".learn .deck-actions").hidden = true;
-      byId("learn-deck").hidden = true;
+  /* ------------------------------------------------------------ the ranking formula, live */
+  const PICK_TOPICS = [["prices", "Prices"], ["weather", "Weather and smog"], ["cricket", "Cricket"], ["economy", "Money and economy"], ["education", "Education and exams"]];
+  const pickTopics = byId("pick-topics");
+  pickTopics.innerHTML = PICK_TOPICS.map(([id, label], i) =>
+    `<label class="pick-chip"><input type="checkbox" value="${id}"${i < 2 ? " checked" : ""}><span>${label}</span></label>`).join("");
+  const rankList = byId("rank-list");
+  function renderRank() {
+    const city = byId("pick-city").value;
+    const topics = [...pickTopics.querySelectorAll("input:checked")].map((i) => i.value);
+    const scored = D.STORIES.map((st) => {
+      const tags = [];
+      const c = st.cities.find((x) => x.id === city);
+      if (c) tags.push({ type: "city", label_en: c.en, label_ur: c.ur, term: c.term });
+      st.topics.filter((t) => topics.includes(t.id)).forEach((t) => tags.push({ type: "topic", label_en: t.en, label_ur: t.ur, term: t.term }));
+      const cityPts = c ? 2 : 0;
+      const topicPts = Math.min(2, tags.filter((t) => t.type === "topic").length);
+      return { st, tags, cityPts, topicPts, score: st.outlet_count + cityPts + topicPts };
+    }).sort((a, b) => b.score - a.score || D.STORIES.indexOf(a.st) - D.STORIES.indexOf(b.st));
+    const first = !rankList.children.length;
+    const before = new Map([...rankList.children].map((li) => [li.dataset.id, li.getBoundingClientRect().top]));
+    rankList.innerHTML = scored.map(({ st, tags, cityPts, topicPts, score }) => `
+      <li class="rank-row" data-id="${st.id}">
+        <span class="rank-row__score tabular" aria-label="score ${score}">${score}</span>
+        <span class="rank-row__body">
+          <span class="rank-row__head">${S.esc(st.summary.en.headline)}</span>
+          <span class="rank-row__math">${st.outlet_count} outlet${st.outlet_count === 1 ? "" : "s"}${cityPts ? " + 2 city" : ""}${topicPts ? ` + ${topicPts} topic${topicPts === 1 ? "" : "s"}` : ""}</span>
+          ${S.forYouHTML(tags, "en")}
+        </span>
+      </li>`).join("");
+    if (!first && !S.reduceMotion) {
+      [...rankList.children].forEach((li) => {
+        const was = before.get(li.dataset.id);
+        if (was == null) return;
+        const dy = was - li.getBoundingClientRect().top;
+        if (dy) li.animate([{ transform: `translateY(${dy}px)` }, { transform: "none" }], { duration: 420, easing: "cubic-bezier(0.22, 1, 0.36, 1)" });
+      });
     }
-  });
-  document.querySelectorAll(".learn .deck-btn").forEach((b) => b.addEventListener("click", () => deck.fling(b.dataset.act)));
+  }
+  byId("pick-city").addEventListener("change", renderRank);
+  pickTopics.addEventListener("change", renderRank);
+  renderRank();
   clockTrigger(document.querySelector(".learn"));
 
   /* ------------------------------------------------------------ fajr: the sun comes up over Lahore */
@@ -316,53 +311,27 @@ document.addEventListener("DOMContentLoaded", () => {
     fajrHH.textContent = "7:00";
   }
 
-  /* ------------------------------------------------------------ for you: one story, four readers */
-  const personas = byId("personas");
-  const fyText = byId("foryou-text");
-  byId("sc-badge").innerHTML = S.badgeHTML(story("petrol"), "en");
-  personas.innerHTML = D.PERSONAS.map((p, i) => `
-    <button class="persona" type="button" role="tab" id="persona-${p.id}" aria-controls="persona-panel" aria-selected="${i === 0}" tabindex="${i === 0 ? 0 : -1}" data-i="${i}">${p.label}</button>`).join("");
-  const tabs = [...personas.querySelectorAll(".persona")];
-  function selectPersona(i, focus) {
-    tabs.forEach((t, k) => { t.setAttribute("aria-selected", String(k === i)); t.tabIndex = k === i ? 0 : -1; });
-    byId("persona-panel").setAttribute("aria-labelledby", tabs[i].id);
-    if (focus) tabs[i].focus();
-    S.typewriter(fyText, D.PERSONAS[i].line, { speed: 16 });
-  }
-  tabs.forEach((t, i) => {
-    t.addEventListener("click", () => selectPersona(i));
-    t.addEventListener("keydown", (e) => {
-      if (e.key === "ArrowRight" || e.key === "ArrowDown") { e.preventDefault(); selectPersona((i + 1) % tabs.length, true); }
-      if (e.key === "ArrowLeft" || e.key === "ArrowUp") { e.preventDefault(); selectPersona((i - 1 + tabs.length) % tabs.length, true); }
-    });
-  });
-  byId("persona-panel").setAttribute("aria-labelledby", tabs[0].id);
-  /* auto-cycle readers once while the card is on screen, until the visitor picks one */
-  let autoCycle = true, cycleTimer = 0;
-  tabs.forEach((t) => t.addEventListener("click", () => { autoCycle = false; clearTimeout(cycleTimer); }));
-  if ("IntersectionObserver" in window && !S.reduceMotion) {
-    let k = 0;
-    const io = new IntersectionObserver((es) => es.forEach((e) => {
-      if (!e.isIntersecting || !autoCycle) return;
-      io.disconnect();
-      const next = () => {
-        if (!autoCycle || k >= D.PERSONAS.length - 1) return;
-        k += 1; selectPersona(k);
-        cycleTimer = setTimeout(next, 4200);
-      };
-      cycleTimer = setTimeout(next, 2600);
-    }), { threshold: 0.6 });
-    io.observe(document.querySelector(".story-card"));
-  }
-  ["foryou", "sample", "gift", "pricing", "sources", "ending"].forEach((c) => clockTrigger(document.querySelector("." + c)));
+  /* ------------------------------------------------------------ every story shows its work */
+  const card = byId("story-card");
+  const petrol = story("petrol");
+  card.innerHTML = `
+    <p class="story-card__sec">${S.esc(petrol.topics[0].en)}</p>
+    <h3 class="story-card__head" id="sc-head">${S.esc(petrol.summary.en.headline)}</h3>
+    <p class="story-card__dek">${S.esc(petrol.summary.en.text)}</p>
+    <p class="story-card__ai">Summary written by AI from the reports below only. Every number and name was checked against them.</p>
+    <div class="story-card__badge">${S.coverageHTML(petrol, "en")}</div>
+    ${S.forYouHTML([{ type: "topic", label_en: "Prices", label_ur: "قیمتیں", term: "petrol" }], "en")}
+    <p class="story-card__why"><b>Why it is here:</b> 5 outlets, +1 for your topic Prices.</p>
+    <ul class="story-card__src">${petrol.chips.map(([o, t]) => `<li><b>${S.esc(o)}</b><span${/[\u0600-\u06FF]/.test(t) ? ' lang="ur" dir="rtl"' : ""}>${S.esc(t)}</span></li>`).join("")}</ul>`;
+  S.paintMarks(card);
+  ["foryou", "sample", "gift", "sources", "ending"].forEach((c) => clockTrigger(document.querySelector("." + c)));
 
-  /* ------------------------------------------------------------ sample paper: language, size, audio */
+  /* ------------------------------------------------------------ sample paper: language and size */
   const paper = byId("sample-paper");
-  const sampleIds = ["petrol", "smog", "viral"];
+  const sampleIds = ["petrol", "smog", "cricket"];
   const LBL = {
-    en: { edition: "Edition No. 1", city: "Lahore", count: "10 stories, 6 min", fy: "For you.", date: "en" },
-    ur: { edition: "شمارہ ۱", city: "لاہور", count: "۱۰ خبریں، ۶ منٹ", fy: "آپ کے لیے:", date: "ur" },
-    ro: { edition: "Shumara 1", city: "Lahore", count: "10 khabrein, 6 minute", fy: "Aap ke liye:", date: "ro" }
+    en: { edition: "Edition", city: "Lahore", count: "10 stories" },
+    ur: { edition: "شمارہ", city: "لاہور", count: "۱۰ خبریں" }
   };
   let lang = "en";
   function renderSample() {
@@ -372,18 +341,21 @@ document.addEventListener("DOMContentLoaded", () => {
     paper.innerHTML = `
       <header class="sp__mast">
         <div class="sp__meta"><span>${l.edition}</span><span>${l.city}</span></div>
-        <h3 class="sp__title">${S.paperTitle(S.cleanName(nameInput.value), lang)}</h3>
-        <div class="sp__meta"><span>${S.dates[l.date]()}</span><span>${l.count}</span></div>
+        <h3 class="sp__title">${S.esc(S.paperTitle(S.cleanName(nameInput.value), lang))}</h3>
+        <div class="sp__meta"><span>${S.dates[lang]()}</span><span>${l.count}</span></div>
       </header>
       <div class="sp__grid">
         ${sampleIds.map((id, i) => {
-          const st = story(id), t = st[lang];
+          const st = story(id), t = st.summary[lang];
+          const tags = [];
+          if (st.cities.some((c) => c.id === "lahore")) tags.push({ type: "city", label_en: "Lahore", label_ur: "لاہور", term: "Lahore" });
+          st.topics.filter((x) => ["prices", "weather"].includes(x.id)).forEach((x) => tags.push({ type: "topic", label_en: x.en, label_ur: x.ur, term: x.term }));
           return `<div class="sp__story" data-i="${i}">
-            <p class="sp__sec">${t.section}</p>
-            <h4 class="sp__head">${t.headline}</h4>
-            ${i === 0 ? `<p class="sp__dek">${t.dek}</p>` : ""}
-            ${S.badgeHTML(st, lang, { dots: false })}
-            <p class="sp__foryou"><b>${l.fy}</b> ${t.forYou}</p>
+            <p class="sp__sec">${S.esc(lang === "ur" ? st.topics[0].ur : st.topics[0].en)}</p>
+            <h4 class="sp__head">${S.esc(t.headline)}</h4>
+            ${i === 0 ? `<p class="sp__dek">${S.esc(t.text)}</p>` : ""}
+            ${S.coverageHTML(st, lang, { dots: false })}
+            ${S.forYouHTML(tags, lang)}
           </div>`;
         }).join("")}
       </div>`;
@@ -394,7 +366,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (b.dataset.lang === lang) return;
     langSeg.querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
     const swap = () => { lang = b.dataset.lang; renderSample(); };
-    stopAudio();
     if (choreo) {
       gsap.timeline()
         .to(paper, { rotateY: lang === "en" ? -90 : 90, duration: 0.28, ease: "power2.in" })
@@ -407,38 +378,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const v = parseFloat(sizeInput.value);
     paper.style.setProperty("--scale", v);
     paper.classList.toggle("is-large", v >= 1.3);
-  });
-
-  const listenBtn = byId("sample-listen");
-  const note = byId("sample-note");
-  function stopAudio() {
-    S.speech.stop();
-    listenBtn.classList.remove("is-speaking");
-    listenBtn.setAttribute("aria-pressed", "false");
-    listenBtn.querySelector(".listen__label").textContent = "Listen";
-    listenBtn.querySelector(".listen__icon").innerHTML = S.ICONS.play;
-    paper.querySelectorAll(".sp__story").forEach((s) => s.classList.remove("is-reading"));
-  }
-  listenBtn.addEventListener("click", () => {
-    if (listenBtn.classList.contains("is-speaking")) { stopAudio(); note.textContent = ""; return; }
-    if (!S.speech.supported) { note.textContent = "This browser has no speech voice. The live audio edition is a recorded Urdu voice note."; return; }
-    let readLang = lang;
-    const v = S.speech.voiceFor("ur");
-    if (lang === "ur" && !(v && v.lang.toLowerCase().startsWith("ur"))) {
-      readLang = "ro";
-      note.textContent = "No Urdu voice on this device, so it reads the Roman Urdu edition. The live audio edition uses a recorded Urdu voice.";
-    } else note.textContent = "";
-    const items = sampleIds.map((id, i) => {
-      const t = story(id)[readLang];
-      return { text: `${t.headline}. ${LBL[readLang].fy.replace(/[.:]/, "")}: ${t.forYou}`, onStart: () => {
-        paper.querySelectorAll(".sp__story").forEach((s, k) => s.classList.toggle("is-reading", k === i));
-      } };
-    });
-    listenBtn.classList.add("is-speaking");
-    listenBtn.setAttribute("aria-pressed", "true");
-    listenBtn.querySelector(".listen__label").textContent = "Stop";
-    listenBtn.querySelector(".listen__icon").innerHTML = S.ICONS.pause;
-    S.speech.play(items, readLang, { onEnd: stopAudio });
   });
   nameInput.addEventListener("input", () => { const t = paper.querySelector(".sp__title"); if (t) t.textContent = S.paperTitle(S.cleanName(nameInput.value), lang); });
 
@@ -468,21 +407,24 @@ document.addEventListener("DOMContentLoaded", () => {
       .to(".letter", { yPercent: -74, duration: 2.2, ease: "power3.out" }, 5.6);
   }
 
-  /* ------------------------------------------------------------ pricing tilt */
-  document.querySelectorAll("[data-tilt]").forEach((el) => S.tilt(el, 7));
-
-  /* ------------------------------------------------------------ sources marquee */
-  const outletHTML = (o) => `<span class="outlet outlet--${o.region}"><span class="outlet__mono" aria-hidden="true">${o.name.replace(/^The /, "")[0]}</span>${o.name}</span>`;
+  /* ------------------------------------------------------------ sources marquee, from the published list */
+  const mToggle = byId("marquee-toggle");
+  const outletHTML = (o) => `<span class="outlet outlet--${o.country === "PK" ? "pk" : "world"}"><span class="outlet__mono" aria-hidden="true">${S.esc(o.name.replace(/^The /, "")[0])}</span>${S.esc(o.name)}</span>`;
   const fillMarquee = (el, list) => {
     const track = el.querySelector(".marquee__track");
     track.innerHTML = list.map(outletHTML).join("");
+    el.querySelectorAll(".marquee__track[aria-hidden]").forEach((x) => x.remove());
     const clone = track.cloneNode(true);
     clone.setAttribute("aria-hidden", "true");
     el.appendChild(clone);
   };
-  fillMarquee(byId("marquee-pk"), D.OUTLETS.filter((o) => o.region === "pk"));
-  fillMarquee(byId("marquee-world"), D.OUTLETS.filter((o) => o.region === "world"));
-  const mToggle = byId("marquee-toggle");
+  S.api.outlets().then((data) => {
+    const live = data.outlets.filter((o) => o.feeds.some((f) => f.enabled));
+    outletCount.n = live.length;
+    document.querySelectorAll("[data-outlet-count]").forEach((x) => { x.textContent = live.length; });
+    fillMarquee(byId("marquee-pk"), live.filter((o) => o.country === "PK"));
+    fillMarquee(byId("marquee-world"), live.filter((o) => o.country !== "PK"));
+  }).catch(() => { /* the marquee simply stays empty */ });
   if (S.reduceMotion) mToggle.hidden = true;
   mToggle.addEventListener("click", () => {
     const paused = mToggle.getAttribute("aria-pressed") !== "true";

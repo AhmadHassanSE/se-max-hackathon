@@ -1,0 +1,1092 @@
+{
+ "edition_id": "202611100200-10",
+ "generated_at": "2026-11-10T06:28:59.227322+00:00",
+ "as_of": "2026-11-10T02:00:00+00:00",
+ "source": "fixtures",
+ "profile": {
+  "city": "lahore",
+  "topics": [
+   "prices",
+   "weather"
+  ],
+  "lang": "en"
+ },
+ "ranking": {
+  "en": "Score = outlets reporting the story, plus 2 if it names your city, plus 1 per matching topic (at most 2). Ties go to the newest report.",
+  "ur": "اسکور = خبر رپورٹ کرنے والے اداروں کی تعداد، آپ کے شہر کا ذکر ہو تو ۲ مزید، اور ہر ملتے موضوع کا ۱ (زیادہ سے زیادہ ۲)۔ برابری پر تازہ ترین رپورٹ پہلے۔"
+ },
+ "stories": [
+  {
+   "id": "se86e949a0b",
+   "rank": 1,
+   "score": 7.0,
+   "score_parts": {
+    "outlets": 4,
+    "city": 2,
+    "topics": 1
+   },
+   "outlet_count": 4,
+   "coverage": {
+    "en": "Reported by 4 outlets",
+    "ur": "۴ اداروں نے رپورٹ کیا"
+   },
+   "outlets": [
+    "BBC",
+    "Dawn",
+    "Independent Urdu",
+    "The News International"
+   ],
+   "topics": [
+    {
+     "id": "weather",
+     "en": "Weather and smog",
+     "ur": "موسم اور سموگ",
+     "term": "smog"
+    },
+    {
+     "id": "education",
+     "en": "Education and exams",
+     "ur": "تعلیم اور امتحانات",
+     "term": "schools"
+    }
+   ],
+   "cities": [
+    {
+     "id": "lahore",
+     "en": "Lahore",
+     "ur": "لاہور",
+     "term": "Lahore"
+    }
+   ],
+   "for_you": [
+    {
+     "type": "city",
+     "id": "lahore",
+     "label_en": "Lahore",
+     "label_ur": "لاہور",
+     "term": "Lahore"
+    },
+    {
+     "type": "topic",
+     "id": "weather",
+     "label_en": "Weather and smog",
+     "label_ur": "موسم اور سموگ",
+     "term": "smog"
+    }
+   ],
+   "summary_status": "fallback",
+   "summary_note": "AI turned off (SUBAH_AI=off)",
+   "summary": null,
+   "used_sources": [],
+   "headline": {
+    "en": "Lahore schools to hold online classes on Mondays as smog worsens",
+    "ur": "سموگ کے باعث لاہور کے اسکولوں میں پیر کو آن لائن تدریس"
+   },
+   "headline_from": {
+    "en": "Dawn",
+    "ur": "Independent Urdu"
+   },
+   "latest": "2026-11-09T18:00:00+00:00",
+   "sources": [
+    {
+     "id": "a397895abb3",
+     "outlet_id": "dawn",
+     "outlet": "Dawn",
+     "lang": "en",
+     "title": "Lahore schools to hold online classes on Mondays as smog worsens",
+     "link": "https://example.com/dawn/en/lahore-smog-schools",
+     "published": "2026-11-09T16:00:00+00:00"
+    },
+    {
+     "id": "a63d00733d3",
+     "outlet_id": "thenews",
+     "outlet": "The News International",
+     "lang": "en",
+     "title": "Punjab extends smog curbs, Lahore schools go online on Mondays",
+     "link": "https://example.com/thenews/en/punjab-smog-curbs",
+     "published": "2026-11-09T17:00:00+00:00"
+    },
+    {
+     "id": "af567345cbd",
+     "outlet_id": "independenturdu",
+     "outlet": "Independent Urdu",
+     "lang": "ur",
+     "title": "سموگ کے باعث لاہور کے اسکولوں میں پیر کو آن لائن تدریس",
+     "link": "https://example.com/independenturdu/ur/smog-online-tadrees",
+     "published": "2026-11-09T18:00:00+00:00"
+    },
+    {
+     "id": "a5ce97aef1b",
+     "outlet_id": "bbc",
+     "outlet": "BBC",
+     "lang": "ur",
+     "title": "لاہور میں سموگ: اسکولوں میں پیر کو آن لائن کلاسیں",
+     "link": "https://example.com/bbc/ur/lahore-smog-urdu",
+     "published": "2026-11-09T18:00:00+00:00"
+    }
+   ]
+  },
+  {
+   "id": "se20185ace9",
+   "rank": 2,
+   "score": 6.0,
+   "score_parts": {
+    "outlets": 5,
+    "city": 0,
+    "topics": 1
+   },
+   "outlet_count": 5,
+   "coverage": {
+    "en": "Reported by 5 outlets",
+    "ur": "۵ اداروں نے رپورٹ کیا"
+   },
+   "outlets": [
+    "ARY News",
+    "Business Recorder",
+    "Dawn",
+    "Express",
+    "Geo News"
+   ],
+   "topics": [
+    {
+     "id": "prices",
+     "en": "Prices",
+     "ur": "قیمتیں",
+     "term": "petrol"
+    }
+   ],
+   "cities": [],
+   "for_you": [
+    {
+     "type": "topic",
+     "id": "prices",
+     "label_en": "Prices",
+     "label_ur": "قیمتیں",
+     "term": "petrol"
+    }
+   ],
+   "summary_status": "fallback",
+   "summary_note": "AI turned off (SUBAH_AI=off)",
+   "summary": null,
+   "used_sources": [],
+   "headline": {
+    "en": "Govt keeps petrol price unchanged, raises diesel by Rs3 per litre",
+    "ur": "پیٹرول کی قیمت برقرار، ڈیزل 3 روپے مہنگا"
+   },
+   "headline_from": {
+    "en": "Dawn",
+    "ur": "Express"
+   },
+   "latest": "2026-11-09T14:00:00+00:00",
+   "sources": [
+    {
+     "id": "af2df69689d",
+     "outlet_id": "dawn",
+     "outlet": "Dawn",
+     "lang": "en",
+     "title": "Govt keeps petrol price unchanged, raises diesel by Rs3 per litre",
+     "link": "https://example.com/dawn/en/petrol-unchanged",
+     "published": "2026-11-09T12:00:00+00:00"
+    },
+    {
+     "id": "abe71f81efd",
+     "outlet_id": "express",
+     "outlet": "Express",
+     "lang": "ur",
+     "title": "پیٹرول کی قیمت برقرار، ڈیزل 3 روپے مہنگا",
+     "link": "https://example.com/express/ur/petrol-qeemat",
+     "published": "2026-11-09T13:00:00+00:00"
+    },
+    {
+     "id": "a61c6d55762",
+     "outlet_id": "brecorder",
+     "outlet": "Business Recorder",
+     "lang": "en",
+     "title": "HSD price increased by Rs3 per litre, petrol price maintained",
+     "link": "https://example.com/brecorder/en/hsd-increased",
+     "published": "2026-11-09T13:00:00+00:00"
+    },
+    {
+     "id": "a13df114ad8",
+     "outlet_id": "express",
+     "outlet": "Express",
+     "lang": "en",
+     "title": "Petrol price unchanged, diesel up Rs3 for next 15 days",
+     "link": "https://example.com/express/en/petrol-diesel-fortnight",
+     "published": "2026-11-09T13:00:00+00:00"
+    },
+    {
+     "id": "a4df69a84ce",
+     "outlet_id": "geo",
+     "outlet": "Geo News",
+     "lang": "ur",
+     "title": "آئندہ پندرہ روز کے لیے پیٹرول کی قیمت میں کوئی تبدیلی نہیں، ڈیزل مہنگا",
+     "link": "https://example.com/geo/ur/petrol-tabdeeli-nahin",
+     "published": "2026-11-09T14:00:00+00:00"
+    },
+    {
+     "id": "acc65126650",
+     "outlet_id": "ary",
+     "outlet": "ARY News",
+     "lang": "en",
+     "title": "Diesel price increased, petrol rate kept unchanged",
+     "link": "https://example.com/ary/en/diesel-increased",
+     "published": "2026-11-09T14:00:00+00:00"
+    }
+   ]
+  },
+  {
+   "id": "sa6a472c0c0",
+   "rank": 3,
+   "score": 4.0,
+   "score_parts": {
+    "outlets": 4,
+    "city": 0,
+    "topics": 0
+   },
+   "outlet_count": 4,
+   "coverage": {
+    "en": "Reported by 4 outlets",
+    "ur": "۴ اداروں نے رپورٹ کیا"
+   },
+   "outlets": [
+    "ARY News",
+    "Dawn",
+    "Express",
+    "Geo News"
+   ],
+   "topics": [
+    {
+     "id": "cricket",
+     "en": "Cricket",
+     "ur": "کرکٹ",
+     "term": "Test squad"
+    }
+   ],
+   "cities": [
+    {
+     "id": "rawalpindi",
+     "en": "Rawalpindi",
+     "ur": "راولپنڈی",
+     "term": "Rawalpindi"
+    }
+   ],
+   "for_you": [],
+   "summary_status": "fallback",
+   "summary_note": "AI turned off (SUBAH_AI=off)",
+   "summary": null,
+   "used_sources": [],
+   "headline": {
+    "en": "Three uncapped players named in Pakistan Test squad",
+    "ur": "ٹیسٹ سیریز کے لیے قومی اسکواڈ کا اعلان، تین نئے کھلاڑی شامل"
+   },
+   "headline_from": {
+    "en": "Geo News",
+    "ur": "Express"
+   },
+   "latest": "2026-11-09T16:00:00+00:00",
+   "sources": [
+    {
+     "id": "a6e2120b0c4",
+     "outlet_id": "geo",
+     "outlet": "Geo News",
+     "lang": "en",
+     "title": "Three uncapped players named in Pakistan Test squad",
+     "link": "https://example.com/geo/en/uncapped-test-squad",
+     "published": "2026-11-09T15:00:00+00:00"
+    },
+    {
+     "id": "a9999d68c9e",
+     "outlet_id": "ary",
+     "outlet": "ARY News",
+     "lang": "en",
+     "title": "Pakistan announce squad for home Test series",
+     "link": "https://example.com/ary/en/pakistan-test-squad",
+     "published": "2026-11-09T15:00:00+00:00"
+    },
+    {
+     "id": "a7466da3765",
+     "outlet_id": "dawn",
+     "outlet": "Dawn",
+     "lang": "en",
+     "title": "Selectors rest two senior pacers, pick three new faces for home Tests",
+     "link": "https://example.com/dawn/en/selectors-rest-pacers",
+     "published": "2026-11-09T16:00:00+00:00"
+    },
+    {
+     "id": "a9a022aca5b",
+     "outlet_id": "express",
+     "outlet": "Express",
+     "lang": "ur",
+     "title": "ٹیسٹ سیریز کے لیے قومی اسکواڈ کا اعلان، تین نئے کھلاڑی شامل",
+     "link": "https://example.com/express/ur/test-squad-urdu",
+     "published": "2026-11-09T16:00:00+00:00"
+    }
+   ]
+  },
+  {
+   "id": "s11425ab144",
+   "rank": 4,
+   "score": 4.0,
+   "score_parts": {
+    "outlets": 4,
+    "city": 0,
+    "topics": 0
+   },
+   "outlet_count": 4,
+   "coverage": {
+    "en": "Reported by 4 outlets",
+    "ur": "۴ اداروں نے رپورٹ کیا"
+   },
+   "outlets": [
+    "Arab News Pakistan",
+    "Business Recorder",
+    "Geo News",
+    "Profit"
+   ],
+   "topics": [
+    {
+     "id": "economy",
+     "en": "Money and economy",
+     "ur": "معیشت",
+     "term": "Rupee"
+    },
+    {
+     "id": "world",
+     "en": "World and Gulf",
+     "ur": "دنیا اور خلیج",
+     "term": "US"
+    }
+   ],
+   "cities": [],
+   "for_you": [],
+   "summary_status": "fallback",
+   "summary_note": "AI turned off (SUBAH_AI=off)",
+   "summary": null,
+   "used_sources": [],
+   "headline": {
+    "en": "Rupee stable against dollar as remittances rise",
+    "ur": "ترسیلات زر میں اضافہ، روپیہ مستحکم"
+   },
+   "headline_from": {
+    "en": "Business Recorder",
+    "ur": "Geo News"
+   },
+   "latest": "2026-11-09T12:00:00+00:00",
+   "sources": [
+    {
+     "id": "a7edc70ecaf",
+     "outlet_id": "brecorder",
+     "outlet": "Business Recorder",
+     "lang": "en",
+     "title": "Rupee stable against dollar as remittances rise",
+     "link": "https://example.com/brecorder/en/rupee-stable-remittances",
+     "published": "2026-11-09T10:00:00+00:00"
+    },
+    {
+     "id": "a511dd9614c",
+     "outlet_id": "arabnews",
+     "outlet": "Arab News Pakistan",
+     "lang": "en",
+     "title": "Pakistan's remittances from Gulf countries climb, central bank says",
+     "link": "https://example.com/arabnews/en/gulf-remittances-climb",
+     "published": "2026-11-09T11:00:00+00:00"
+    },
+    {
+     "id": "a9467848809",
+     "outlet_id": "profit",
+     "outlet": "Profit",
+     "lang": "en",
+     "title": "Workers' remittances rise year-on-year in October, SBP data shows",
+     "link": "https://example.com/profit/en/remittances-october",
+     "published": "2026-11-09T11:00:00+00:00"
+    },
+    {
+     "id": "a58d1a7c283",
+     "outlet_id": "geo",
+     "outlet": "Geo News",
+     "lang": "ur",
+     "title": "ترسیلات زر میں اضافہ، روپیہ مستحکم",
+     "link": "https://example.com/geo/ur/tarseelat-izafa",
+     "published": "2026-11-09T12:00:00+00:00"
+    }
+   ]
+  },
+  {
+   "id": "s45ab351ff3",
+   "rank": 5,
+   "score": 3.0,
+   "score_parts": {
+    "outlets": 1,
+    "city": 2,
+    "topics": 0
+   },
+   "outlet_count": 1,
+   "coverage": {
+    "en": "Reported by 1 outlet",
+    "ur": "۱ ادارے نے رپورٹ کیا"
+   },
+   "outlets": [
+    "Pakistan Today"
+   ],
+   "topics": [
+    {
+     "id": "education",
+     "en": "Education and exams",
+     "ur": "تعلیم اور امتحانات",
+     "term": "intermediate"
+    }
+   ],
+   "cities": [
+    {
+     "id": "lahore",
+     "en": "Lahore",
+     "ur": "لاہور",
+     "term": "Lahore"
+    }
+   ],
+   "for_you": [
+    {
+     "type": "city",
+     "id": "lahore",
+     "label_en": "Lahore",
+     "label_ur": "لاہور",
+     "term": "Lahore"
+    }
+   ],
+   "summary_status": "fallback",
+   "summary_note": "AI turned off (SUBAH_AI=off)",
+   "summary": null,
+   "used_sources": [],
+   "headline": {
+    "en": "Lahore board to announce intermediate supplementary results next week",
+    "ur": "Lahore board to announce intermediate supplementary results next week"
+   },
+   "headline_from": {
+    "en": "Pakistan Today",
+    "ur": "Pakistan Today"
+   },
+   "latest": "2026-11-09T17:00:00+00:00",
+   "sources": [
+    {
+     "id": "a42697c3476",
+     "outlet_id": "pakistantoday",
+     "outlet": "Pakistan Today",
+     "lang": "en",
+     "title": "Lahore board to announce intermediate supplementary results next week",
+     "link": "https://example.com/pakistantoday/en/lahore-board-results",
+     "published": "2026-11-09T17:00:00+00:00"
+    }
+   ]
+  },
+  {
+   "id": "s45b97a1f17",
+   "rank": 6,
+   "score": 3.0,
+   "score_parts": {
+    "outlets": 3,
+    "city": 0,
+    "topics": 0
+   },
+   "outlet_count": 3,
+   "coverage": {
+    "en": "Reported by 3 outlets",
+    "ur": "۳ اداروں نے رپورٹ کیا"
+   },
+   "outlets": [
+    "Express",
+    "Profit",
+    "ProPakistani"
+   ],
+   "topics": [
+    {
+     "id": "economy",
+     "en": "Money and economy",
+     "ur": "معیشت",
+     "term": "SBP"
+    },
+    {
+     "id": "jobs",
+     "en": "Jobs and tech",
+     "ur": "روزگار اور ٹیکنالوجی",
+     "term": "freelancers"
+    }
+   ],
+   "cities": [],
+   "for_you": [],
+   "summary_status": "fallback",
+   "summary_note": "AI turned off (SUBAH_AI=off)",
+   "summary": null,
+   "used_sources": [],
+   "headline": {
+    "en": "SBP directs banks to credit freelancers' export proceeds within one day",
+    "ur": "فری لانسرز کو ادائیگیاں ایک دن میں ملیں گی، اسٹیٹ بینک"
+   },
+   "headline_from": {
+    "en": "ProPakistani",
+    "ur": "Express"
+   },
+   "latest": "2026-11-09T13:00:00+00:00",
+   "sources": [
+    {
+     "id": "a9b50520961",
+     "outlet_id": "propakistani",
+     "outlet": "ProPakistani",
+     "lang": "en",
+     "title": "SBP directs banks to credit freelancers' export proceeds within one day",
+     "link": "https://example.com/propakistani/en/sbp-freelancers",
+     "published": "2026-11-09T11:00:00+00:00"
+    },
+    {
+     "id": "abc33b69d4f",
+     "outlet_id": "profit",
+     "outlet": "Profit",
+     "lang": "en",
+     "title": "Freelance export payments to be credited faster, SBP says",
+     "link": "https://example.com/profit/en/freelance-payments-faster",
+     "published": "2026-11-09T12:00:00+00:00"
+    },
+    {
+     "id": "a3b8b93ceaf",
+     "outlet_id": "express",
+     "outlet": "Express",
+     "lang": "ur",
+     "title": "فری لانسرز کو ادائیگیاں ایک دن میں ملیں گی، اسٹیٹ بینک",
+     "link": "https://example.com/express/ur/freelancers-adaigi",
+     "published": "2026-11-09T13:00:00+00:00"
+    }
+   ]
+  },
+  {
+   "id": "s595b55c082",
+   "rank": 7,
+   "score": 3.0,
+   "score_parts": {
+    "outlets": 3,
+    "city": 0,
+    "topics": 0
+   },
+   "outlet_count": 3,
+   "coverage": {
+    "en": "Reported by 3 outlets",
+    "ur": "۳ اداروں نے رپورٹ کیا"
+   },
+   "outlets": [
+    "Business Recorder",
+    "Dawn",
+    "Express"
+   ],
+   "topics": [
+    {
+     "id": "energy",
+     "en": "Electricity and gas",
+     "ur": "بجلی اور گیس",
+     "term": "electricity"
+    },
+    {
+     "id": "economy",
+     "en": "Money and economy",
+     "ur": "معیشت",
+     "term": "reserves"
+    }
+   ],
+   "cities": [],
+   "for_you": [],
+   "summary_status": "fallback",
+   "summary_note": "AI turned off (SUBAH_AI=off)",
+   "summary": null,
+   "used_sources": [],
+   "headline": {
+    "en": "NEPRA hears plea for fuel charge adjustment on electricity bills",
+    "ur": "بجلی صارفین پر فیول ایڈجسٹمنٹ کی درخواست، نیپرا نے فیصلہ محفوظ کر لیا"
+   },
+   "headline_from": {
+    "en": "Dawn",
+    "ur": "Express"
+   },
+   "latest": "2026-11-09T10:00:00+00:00",
+   "sources": [
+    {
+     "id": "a42eb53cc47",
+     "outlet_id": "dawn",
+     "outlet": "Dawn",
+     "lang": "en",
+     "title": "NEPRA hears plea for fuel charge adjustment on electricity bills",
+     "link": "https://example.com/dawn/en/nepra-fca-hearing",
+     "published": "2026-11-09T08:00:00+00:00"
+    },
+    {
+     "id": "add973079de",
+     "outlet_id": "brecorder",
+     "outlet": "Business Recorder",
+     "lang": "en",
+     "title": "Discos seek quarterly FCA, NEPRA reserves decision",
+     "link": "https://example.com/brecorder/en/discos-seek-fca",
+     "published": "2026-11-09T09:00:00+00:00"
+    },
+    {
+     "id": "ac9c9ca0422",
+     "outlet_id": "express",
+     "outlet": "Express",
+     "lang": "ur",
+     "title": "بجلی صارفین پر فیول ایڈجسٹمنٹ کی درخواست، نیپرا نے فیصلہ محفوظ کر لیا",
+     "link": "https://example.com/express/ur/nepra-faisla-mehfooz",
+     "published": "2026-11-09T10:00:00+00:00"
+    }
+   ]
+  },
+  {
+   "id": "s94cc9bdd33",
+   "rank": 8,
+   "score": 2.0,
+   "score_parts": {
+    "outlets": 2,
+    "city": 0,
+    "topics": 0
+   },
+   "outlet_count": 2,
+   "coverage": {
+    "en": "Reported by 2 outlets",
+    "ur": "۲ اداروں نے رپورٹ کیا"
+   },
+   "outlets": [
+    "DW",
+    "The News International"
+   ],
+   "topics": [
+    {
+     "id": "health",
+     "en": "Health",
+     "ur": "صحت",
+     "term": "Dengue"
+    }
+   ],
+   "cities": [
+    {
+     "id": "rawalpindi",
+     "en": "Rawalpindi",
+     "ur": "راولپنڈی",
+     "term": "Rawalpindi"
+    }
+   ],
+   "for_you": [],
+   "summary_status": "fallback",
+   "summary_note": "AI turned off (SUBAH_AI=off)",
+   "summary": null,
+   "used_sources": [],
+   "headline": {
+    "en": "Dengue cases decline in Rawalpindi as temperatures drop",
+    "ur": "راولپنڈی میں ڈینگی کے کیسز میں کمی"
+   },
+   "headline_from": {
+    "en": "The News International",
+    "ur": "DW"
+   },
+   "latest": "2026-11-09T07:00:00+00:00",
+   "sources": [
+    {
+     "id": "a5607cafde5",
+     "outlet_id": "thenews",
+     "outlet": "The News International",
+     "lang": "en",
+     "title": "Dengue cases decline in Rawalpindi as temperatures drop",
+     "link": "https://example.com/thenews/en/dengue-rawalpindi",
+     "published": "2026-11-09T06:00:00+00:00"
+    },
+    {
+     "id": "a6bc4a6a613",
+     "outlet_id": "dw",
+     "outlet": "DW",
+     "lang": "ur",
+     "title": "راولپنڈی میں ڈینگی کے کیسز میں کمی",
+     "link": "https://example.com/dw/ur/dengue-kami",
+     "published": "2026-11-09T07:00:00+00:00"
+    }
+   ]
+  },
+  {
+   "id": "s78eea9880c",
+   "rank": 9,
+   "score": 2.0,
+   "score_parts": {
+    "outlets": 2,
+    "city": 0,
+    "topics": 0
+   },
+   "outlet_count": 2,
+   "coverage": {
+    "en": "Reported by 2 outlets",
+    "ur": "۲ اداروں نے رپورٹ کیا"
+   },
+   "outlets": [
+    "Al Jazeera",
+    "Arab News Pakistan"
+   ],
+   "topics": [
+    {
+     "id": "world",
+     "en": "World and Gulf",
+     "ur": "دنیا اور خلیج",
+     "term": "UAE"
+    }
+   ],
+   "cities": [],
+   "for_you": [],
+   "summary_status": "fallback",
+   "summary_note": "AI turned off (SUBAH_AI=off)",
+   "summary": null,
+   "used_sources": [],
+   "headline": {
+    "en": "UAE simplifies work visa renewals for residents",
+    "ur": "UAE simplifies work visa renewals for residents"
+   },
+   "headline_from": {
+    "en": "Al Jazeera",
+    "ur": "Al Jazeera"
+   },
+   "latest": "2026-11-09T05:00:00+00:00",
+   "sources": [
+    {
+     "id": "a5a1ed8366a",
+     "outlet_id": "aljazeera",
+     "outlet": "Al Jazeera",
+     "lang": "en",
+     "title": "UAE simplifies work visa renewals for residents",
+     "link": "https://example.com/aljazeera/en/uae-visa-renewals",
+     "published": "2026-11-09T04:00:00+00:00"
+    },
+    {
+     "id": "a913447a5b5",
+     "outlet_id": "arabnews",
+     "outlet": "Arab News Pakistan",
+     "lang": "en",
+     "title": "UAE eases work visa renewal process, removing in-person medical test",
+     "link": "https://example.com/arabnews/en/uae-eases-renewal",
+     "published": "2026-11-09T05:00:00+00:00"
+    }
+   ]
+  },
+  {
+   "id": "sfbb80f0771",
+   "rank": 10,
+   "score": 1.0,
+   "score_parts": {
+    "outlets": 1,
+    "city": 0,
+    "topics": 0
+   },
+   "outlet_count": 1,
+   "coverage": {
+    "en": "Reported by 1 outlet",
+    "ur": "۱ ادارے نے رپورٹ کیا"
+   },
+   "outlets": [
+    "Dawn"
+   ],
+   "topics": [
+    {
+     "id": "politics",
+     "en": "Politics",
+     "ur": "سیاست",
+     "term": "Cabinet"
+    }
+   ],
+   "cities": [],
+   "for_you": [],
+   "summary_status": "fallback",
+   "summary_note": "AI turned off (SUBAH_AI=off)",
+   "summary": null,
+   "used_sources": [],
+   "headline": {
+    "en": "Cabinet approves & notifies new holiday schedule",
+    "ur": "Cabinet approves & notifies new holiday schedule"
+   },
+   "headline_from": {
+    "en": "Dawn",
+    "ur": "Dawn"
+   },
+   "latest": "2026-11-09T22:00:00+00:00",
+   "sources": [
+    {
+     "id": "aed05ab6a9e",
+     "outlet_id": "dawn",
+     "outlet": "Dawn",
+     "lang": "en",
+     "title": "Cabinet approves & notifies new holiday schedule",
+     "link": "https://example.com/dawn/en/holiday-schedule",
+     "published": "2026-11-09T22:00:00+00:00"
+    }
+   ]
+  }
+ ],
+ "stats": {
+  "stories_grouped": 13,
+  "stories_in_paper": 10,
+  "outlets_read": 14,
+  "articles": 33,
+  "feeds_ok": 16,
+  "feeds_failed": 4,
+  "timings_ms": {
+   "collect": 65,
+   "group_and_tag": 6026,
+   "summaries": 0,
+   "total": 6092
+  }
+ },
+ "ai": {
+  "enabled": false,
+  "model": null,
+  "calls": 0,
+  "call_budget": 3,
+  "cache_hits": 0,
+  "summarised": 0,
+  "fallback": 10,
+  "note": "AI turned off (SUBAH_AI=off)"
+ },
+ "grouping": {
+  "name": "sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
+  "cross_language": true,
+  "load_error": null
+ },
+ "report": {
+  "source": "fixtures",
+  "as_of": "2026-11-10T02:00:00+00:00",
+  "note": "Synthetic fixture feeds for tests and offline demos. Not real reports.",
+  "feeds_total": 20,
+  "feeds_ok": 16,
+  "feeds_failed": 4,
+  "items_seen": 36,
+  "articles_kept": 33,
+  "dropped": {
+   "too_old": 1,
+   "no_title": 1,
+   "duplicate": 1
+  },
+  "feeds": [
+   {
+    "outlet_id": "dawn",
+    "outlet": "Dawn",
+    "url": "https://www.dawn.com/feeds/home",
+    "lang": "en",
+    "status": "ok",
+    "error": null,
+    "items": 8,
+    "kept": 6,
+    "dropped": {
+     "too_old": 1,
+     "no_title": 1
+    }
+   },
+   {
+    "outlet_id": "express",
+    "outlet": "Express",
+    "url": "https://tribune.com.pk/feed/home",
+    "lang": "en",
+    "status": "ok",
+    "error": null,
+    "items": 1,
+    "kept": 1,
+    "dropped": {}
+   },
+   {
+    "outlet_id": "express",
+    "outlet": "Express",
+    "url": "https://www.express.pk/feed/",
+    "lang": "ur",
+    "status": "ok",
+    "error": null,
+    "items": 4,
+    "kept": 4,
+    "dropped": {}
+   },
+   {
+    "outlet_id": "geo",
+    "outlet": "Geo News",
+    "url": "https://www.geo.tv/rss/1/1",
+    "lang": "en",
+    "status": "ok",
+    "error": null,
+    "items": 1,
+    "kept": 1,
+    "dropped": {}
+   },
+   {
+    "outlet_id": "geo",
+    "outlet": "Geo News",
+    "url": "https://urdu.geo.tv/rss/1/0",
+    "lang": "ur",
+    "status": "ok",
+    "error": null,
+    "items": 2,
+    "kept": 2,
+    "dropped": {}
+   },
+   {
+    "outlet_id": "thenews",
+    "outlet": "The News International",
+    "url": "https://www.thenews.com.pk/rss/1/1",
+    "lang": "en",
+    "status": "ok",
+    "error": null,
+    "items": 3,
+    "kept": 3,
+    "dropped": {}
+   },
+   {
+    "outlet_id": "brecorder",
+    "outlet": "Business Recorder",
+    "url": "https://www.brecorder.com/feeds/latest-news",
+    "lang": "en",
+    "status": "ok",
+    "error": null,
+    "items": 3,
+    "kept": 3,
+    "dropped": {}
+   },
+   {
+    "outlet_id": "arabnews",
+    "outlet": "Arab News Pakistan",
+    "url": "https://www.arabnews.pk/rss.xml",
+    "lang": "en",
+    "status": "ok",
+    "error": null,
+    "items": 2,
+    "kept": 2,
+    "dropped": {}
+   },
+   {
+    "outlet_id": "ary",
+    "outlet": "ARY News",
+    "url": "https://arynews.tv/feed/",
+    "lang": "en",
+    "status": "ok",
+    "error": null,
+    "items": 2,
+    "kept": 2,
+    "dropped": {}
+   },
+   {
+    "outlet_id": "pakistantoday",
+    "outlet": "Pakistan Today",
+    "url": "https://www.pakistantoday.com.pk/feed/",
+    "lang": "en",
+    "status": "ok",
+    "error": null,
+    "items": 2,
+    "kept": 2,
+    "dropped": {}
+   },
+   {
+    "outlet_id": "profit",
+    "outlet": "Profit",
+    "url": "https://profit.pakistantoday.com.pk/feed/",
+    "lang": "en",
+    "status": "ok",
+    "error": null,
+    "items": 2,
+    "kept": 2,
+    "dropped": {}
+   },
+   {
+    "outlet_id": "propakistani",
+    "outlet": "ProPakistani",
+    "url": "https://propakistani.pk/feed/",
+    "lang": "en",
+    "status": "ok",
+    "error": null,
+    "items": 2,
+    "kept": 2,
+    "dropped": {}
+   },
+   {
+    "outlet_id": "independenturdu",
+    "outlet": "Independent Urdu",
+    "url": "https://www.independenturdu.com/rss.xml",
+    "lang": "ur",
+    "status": "ok",
+    "error": null,
+    "items": 1,
+    "kept": 1,
+    "dropped": {}
+   },
+   {
+    "outlet_id": "bbc",
+    "outlet": "BBC",
+    "url": "https://feeds.bbci.co.uk/urdu/rss.xml",
+    "lang": "ur",
+    "status": "ok",
+    "error": null,
+    "items": 1,
+    "kept": 1,
+    "dropped": {}
+   },
+   {
+    "outlet_id": "dw",
+    "outlet": "DW",
+    "url": "https://rss.dw.com/rdf/rss-urdu-all",
+    "lang": "ur",
+    "status": "ok",
+    "error": null,
+    "items": 1,
+    "kept": 1,
+    "dropped": {}
+   },
+   {
+    "outlet_id": "aljazeera",
+    "outlet": "Al Jazeera",
+    "url": "https://www.aljazeera.com/xml/rss/all.xml",
+    "lang": "en",
+    "status": "ok",
+    "error": null,
+    "items": 1,
+    "kept": 1,
+    "dropped": {}
+   },
+   {
+    "outlet_id": "fridaytimes",
+    "outlet": "The Friday Times",
+    "url": "https://thefridaytimes.com/feed/",
+    "lang": "en",
+    "status": "malformed",
+    "error": "not a readable feed: SAXParseException",
+    "items": 0,
+    "kept": 0,
+    "dropped": {}
+   },
+   {
+    "outlet_id": "guardian",
+    "outlet": "The Guardian",
+    "url": "https://www.theguardian.com/world/pakistan/rss",
+    "lang": "en",
+    "status": "empty",
+    "error": "feed has no items",
+    "items": 0,
+    "kept": 0,
+    "dropped": {}
+   },
+   {
+    "outlet_id": "dw",
+    "outlet": "DW",
+    "url": "https://rss.dw.com/rdf/rss-en-asia",
+    "lang": "en",
+    "status": "empty",
+    "error": "feed body was empty",
+    "items": 0,
+    "kept": 0,
+    "dropped": {}
+   },
+   {
+    "outlet_id": "bbc",
+    "outlet": "BBC",
+    "url": "https://feeds.bbci.co.uk/news/world/asia/rss.xml",
+    "lang": "en",
+    "status": "error",
+    "error": "ReadTimeout",
+    "items": 0,
+    "kept": 0,
+    "dropped": {}
+   }
+  ]
+ },
+ "sample": true
+}

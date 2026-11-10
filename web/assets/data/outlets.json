@@ -1,0 +1,273 @@
+{
+ "definition": "An outlet is one newsroom brand. Its English and Urdu editions count once.",
+ "outlets": [
+  {
+   "id": "dawn",
+   "name": "Dawn",
+   "country": "PK",
+   "site": "https://www.dawn.com",
+   "note": null,
+   "feeds": [
+    {
+     "url": "https://www.dawn.com/feeds/home",
+     "lang": "en",
+     "enabled": true,
+     "status": "answered with items (checked 2026-11-10)"
+    }
+   ]
+  },
+  {
+   "id": "express",
+   "name": "Express",
+   "country": "PK",
+   "site": "https://tribune.com.pk",
+   "note": "The Express Tribune (English) and Daily Express (Urdu)",
+   "feeds": [
+    {
+     "url": "https://tribune.com.pk/feed/home",
+     "lang": "en",
+     "enabled": true,
+     "status": "answered with items (checked 2026-11-10)"
+    },
+    {
+     "url": "https://www.express.pk/feed/",
+     "lang": "ur",
+     "enabled": true,
+     "status": "answered with items (checked 2026-11-10)"
+    }
+   ]
+  },
+  {
+   "id": "geo",
+   "name": "Geo News",
+   "country": "PK",
+   "site": "https://www.geo.tv",
+   "note": null,
+   "feeds": [
+    {
+     "url": "https://www.geo.tv/rss/1/1",
+     "lang": "en",
+     "enabled": true,
+     "status": "answered with items (checked 2026-11-10)"
+    },
+    {
+     "url": "https://urdu.geo.tv/rss/1/0",
+     "lang": "ur",
+     "enabled": false,
+     "status": "not a readable feed (checked 2026-11-10)"
+    }
+   ]
+  },
+  {
+   "id": "thenews",
+   "name": "The News International",
+   "country": "PK",
+   "site": "https://www.thenews.com.pk",
+   "note": null,
+   "feeds": [
+    {
+     "url": "https://www.thenews.com.pk/rss/1/1",
+     "lang": "en",
+     "enabled": true,
+     "status": "answered with items (checked 2026-11-10)"
+    }
+   ]
+  },
+  {
+   "id": "brecorder",
+   "name": "Business Recorder",
+   "country": "PK",
+   "site": "https://www.brecorder.com",
+   "note": null,
+   "feeds": [
+    {
+     "url": "https://www.brecorder.com/feeds/latest-news",
+     "lang": "en",
+     "enabled": true,
+     "status": "answered with items (checked 2026-11-10)"
+    }
+   ]
+  },
+  {
+   "id": "arabnews",
+   "name": "Arab News Pakistan",
+   "country": "SA",
+   "site": "https://www.arabnews.pk",
+   "note": null,
+   "feeds": [
+    {
+     "url": "https://www.arabnews.pk/rss.xml",
+     "lang": "en",
+     "enabled": true,
+     "status": "answered with items (checked 2026-11-10)"
+    }
+   ]
+  },
+  {
+   "id": "ary",
+   "name": "ARY News",
+   "country": "PK",
+   "site": "https://arynews.tv",
+   "note": null,
+   "feeds": [
+    {
+     "url": "https://arynews.tv/feed/",
+     "lang": "en",
+     "enabled": true,
+     "status": "answered with items (checked 2026-11-10)"
+    }
+   ]
+  },
+  {
+   "id": "pakistantoday",
+   "name": "Pakistan Today",
+   "country": "PK",
+   "site": "https://www.pakistantoday.com.pk",
+   "note": null,
+   "feeds": [
+    {
+     "url": "https://www.pakistantoday.com.pk/feed/",
+     "lang": "en",
+     "enabled": false,
+     "status": "HTTP 404 (checked 2026-11-10)"
+    }
+   ]
+  },
+  {
+   "id": "profit",
+   "name": "Profit",
+   "country": "PK",
+   "site": "https://profit.pakistantoday.com.pk",
+   "note": null,
+   "feeds": [
+    {
+     "url": "https://profit.pakistantoday.com.pk/feed/",
+     "lang": "en",
+     "enabled": false,
+     "status": "HTTP 404 (checked 2026-11-10)"
+    }
+   ]
+  },
+  {
+   "id": "propakistani",
+   "name": "ProPakistani",
+   "country": "PK",
+   "site": "https://propakistani.pk",
+   "note": null,
+   "feeds": [
+    {
+     "url": "https://propakistani.pk/feed/",
+     "lang": "en",
+     "enabled": true,
+     "status": "answered with items (checked 2026-11-10)"
+    }
+   ]
+  },
+  {
+   "id": "fridaytimes",
+   "name": "The Friday Times",
+   "country": "PK",
+   "site": "https://thefridaytimes.com",
+   "note": null,
+   "feeds": [
+    {
+     "url": "https://thefridaytimes.com/feed/",
+     "lang": "en",
+     "enabled": false,
+     "status": "HTTP 404 (checked 2026-11-10)"
+    }
+   ]
+  },
+  {
+   "id": "independenturdu",
+   "name": "Independent Urdu",
+   "country": "PK",
+   "site": "https://www.independenturdu.com",
+   "note": null,
+   "feeds": [
+    {
+     "url": "https://www.independenturdu.com/rss.xml",
+     "lang": "ur",
+     "enabled": true,
+     "status": "answered with items (checked 2026-11-10)"
+    }
+   ]
+  },
+  {
+   "id": "bbc",
+   "name": "BBC",
+   "country": "GB",
+   "site": "https://www.bbc.com",
+   "note": "BBC News (Asia) and BBC Urdu",
+   "feeds": [
+    {
+     "url": "https://feeds.bbci.co.uk/news/world/asia/rss.xml",
+     "lang": "en",
+     "enabled": true,
+     "status": "answered with items (checked 2026-11-10)"
+    },
+    {
+     "url": "https://feeds.bbci.co.uk/urdu/rss.xml",
+     "lang": "ur",
+     "enabled": true,
+     "status": "answered with items (checked 2026-11-10)"
+    }
+   ]
+  },
+  {
+   "id": "dw",
+   "name": "DW",
+   "country": "DE",
+   "site": "https://www.dw.com",
+   "note": "DW Asia (English) and DW Urdu",
+   "feeds": [
+    {
+     "url": "https://rss.dw.com/rdf/rss-en-asia",
+     "lang": "en",
+     "enabled": true,
+     "status": "answered with items (checked 2026-11-10)"
+    },
+    {
+     "url": "https://rss.dw.com/rdf/rss-urdu-all",
+     "lang": "ur",
+     "enabled": false,
+     "status": "not a readable feed (checked 2026-11-10)"
+    }
+   ]
+  },
+  {
+   "id": "aljazeera",
+   "name": "Al Jazeera",
+   "country": "QA",
+   "site": "https://www.aljazeera.com",
+   "note": null,
+   "feeds": [
+    {
+     "url": "https://www.aljazeera.com/xml/rss/all.xml",
+     "lang": "en",
+     "enabled": true,
+     "status": "could not connect from the build network (checked 2026-11-10); recheck"
+    }
+   ]
+  },
+  {
+   "id": "guardian",
+   "name": "The Guardian",
+   "country": "GB",
+   "site": "https://www.theguardian.com",
+   "note": null,
+   "feeds": [
+    {
+     "url": "https://www.theguardian.com/world/pakistan/rss",
+     "lang": "en",
+     "enabled": true,
+     "status": "answered with items (checked 2026-11-10)"
+    }
+   ]
+  }
+ ],
+ "ranking": {
+  "en": "Score = outlets reporting the story, plus 2 if it names your city, plus 1 per matching topic (at most 2). Ties go to the newest report.",
+  "ur": "اسکور = خبر رپورٹ کرنے والے اداروں کی تعداد، آپ کے شہر کا ذکر ہو تو ۲ مزید، اور ہر ملتے موضوع کا ۱ (زیادہ سے زیادہ ۲)۔ برابری پر تازہ ترین رپورٹ پہلے۔"
+ }
+}

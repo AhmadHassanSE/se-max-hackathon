@@ -4,14 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Make your Subah</title>
-  <meta name="description" content="One sentence about you and twelve swipes. Your first Subah prints in about ten seconds.">
+  <meta name="description" content="Choose your city, your topics, English or Urdu, and large print. Then generate today’s paper.">
   <meta name="theme-color" content="#0f1424">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:wght@400;500;700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/base.css">
   <link rel="stylesheet" href="assets/css/onboard.css">
-  <script src="assets/js/data.js" defer></script>
   <script src="assets/js/common.js" defer></script>
   <script src="assets/js/onboard.js" defer></script>
 </head>
@@ -24,50 +23,47 @@
       <span data-sunmark></span><span class="wordmark__en">Subah</span><span class="wordmark__ur" lang="ur">صبح</span>
     </a>
     <ol class="ob-steps" aria-label="Steps">
-      <li class="is-active" data-s="1"><span class="ob-steps__n">1</span><span class="ob-steps__t">About you</span></li>
-      <li data-s="2"><span class="ob-steps__n">2</span><span class="ob-steps__t">Twelve headlines</span></li>
+      <li class="is-active" data-s="1"><span class="ob-steps__n">1</span><span class="ob-steps__t">Your settings</span></li>
+      <li data-s="2"><span class="ob-steps__n">2</span><span class="ob-steps__t">Topics</span></li>
       <li data-s="3"><span class="ob-steps__n">3</span><span class="ob-steps__t">Print</span></li>
     </ol>
-    <a class="ob-skip" href="paper.html">See a sample paper</a>
+    <a class="ob-skip" href="paper.html">See the sample paper</a>
   </header>
 
   <main class="ob-main" id="ob-main">
-
     <!-- STEP 1 -->
     <section class="ob-step is-active" data-step="1" aria-labelledby="s1-title">
       <div class="ob-step__grid">
         <div class="ob-copy">
-          <h1 id="s1-title">Tell us who you are, in one sentence.</h1>
-          <p class="ob-lede">Your city, your work, who you worry about. Your editor reads it every night and writes each “For you” line from it.</p>
+          <h1 id="s1-title">Set up your paper.</h1>
+          <p class="ob-lede">Pick a city and a language. Stories that name your city get a “For you” tag, and nothing is stored on our server.</p>
+          <div class="presets">
+            <p class="presets__title">For the demo, start from a test reader:</p>
+            <div class="presets__row" id="presets"></div>
+          </div>
         </div>
         <form class="ob-form" id="ob-form" novalidate>
           <div class="field">
-            <label class="field__label" for="ob-name">Your name</label>
-            <input class="input input--night" id="ob-name" name="given-name" autocomplete="given-name" maxlength="24" placeholder="Ayesha">
+            <label class="field__label" for="ob-name">Name on the masthead</label>
+            <input class="input input--night" id="ob-name" name="masthead" autocomplete="off" maxlength="24" placeholder="Test A">
+            <span class="field__hint field__hint--night">Use a test name. It stays in this browser.</span>
           </div>
           <div class="field">
-            <label class="field__label" for="ob-sentence">About you</label>
-            <textarea class="sentence" id="ob-sentence" name="about" rows="3" maxlength="240" aria-describedby="ob-heard"></textarea>
-            <div class="heard" id="ob-heard" aria-live="polite">
-              <span class="heard__label">What your editor heard:</span>
-              <span class="heard__chips" id="ob-chips"><span class="heard__empty">nothing yet</span></span>
-            </div>
+            <label class="field__label" for="ob-city">Your city</label>
+            <select class="select select--night" id="ob-city" name="city"><option value="">No city (all of Pakistan)</option></select>
           </div>
           <fieldset class="choices">
             <legend class="field__label">Print it in</legend>
-            <label class="choice"><input type="radio" name="lang" value="en" checked><span class="choice__body"><b>English</b><span>Petrol held for two weeks</span></span></label>
-            <label class="choice"><input type="radio" name="lang" value="ur"><span class="choice__body"><b lang="ur">اردو</b><span lang="ur">پیٹرول کی قیمت برقرار</span></span></label>
-            <label class="choice"><input type="radio" name="lang" value="ro"><span class="choice__body"><b>Roman Urdu</b><span>Petrol ki qeemat barqarar</span></span></label>
+            <label class="choice"><input type="radio" name="lang" value="en" checked><span class="choice__body"><b>English</b><span>Reported by 5 outlets</span></span></label>
+            <label class="choice"><input type="radio" name="lang" value="ur"><span class="choice__body"><b lang="ur">اردو</b><span lang="ur">۵ اداروں نے رپورٹ کیا</span></span></label>
           </fieldset>
-          <fieldset class="choices choices--size">
+          <fieldset class="choices">
             <legend class="field__label">Type size</legend>
-            <label class="choice"><input type="radio" name="size" value="1" checked><span class="choice__body"><b>Regular</b></span></label>
-            <label class="choice"><input type="radio" name="size" value="1.22"><span class="choice__body"><b class="big">Large</b></span></label>
-            <label class="choice"><input type="radio" name="size" value="1.45"><span class="choice__body"><b class="bigger">Extra large</b></span></label>
+            <label class="choice"><input type="radio" name="large" value="0" checked><span class="choice__body"><b>Regular</b></span></label>
+            <label class="choice"><input type="radio" name="large" value="1"><span class="choice__body"><b class="big">Large print</b></span></label>
           </fieldset>
           <div class="ob-actions">
-            <button class="btn btn--primary" type="submit" data-magnetic="0.15"><span>Next: twelve headlines</span><span class="btn__orb" data-icon="arrow"></span></button>
-            <p class="ob-hint" id="ob-hint"></p>
+            <button class="btn btn--primary" type="submit" data-magnetic="0.15"><span>Next: topics</span><span class="btn__orb" data-icon="arrow"></span></button>
           </div>
         </form>
       </div>
@@ -75,25 +71,21 @@
 
     <!-- STEP 2 -->
     <section class="ob-step" data-step="2" aria-labelledby="s2-title" hidden>
-      <div class="ob-step__grid ob-step__grid--swipe">
+      <div class="ob-step__grid">
         <div class="ob-copy">
-          <h2 id="s2-title">Swipe twelve of today’s headlines.</h2>
-          <p class="ob-lede">Keep what you would read, pass on what you wouldn’t, love what you never want to miss.</p>
-          <div class="bars bars--full">
-            <p class="bars__title">Your editor, learning</p>
-            <ul class="bars__list" id="ob-bars"></ul>
-          </div>
+          <h2 id="s2-title">Choose up to five topics.</h2>
+          <p class="ob-lede">A story about a topic you chose gets a tag and moves up one place per topic, at most two. The tag shows the word that matched, so you can see why.</p>
         </div>
-        <div class="ob-deck-wrap">
-          <p class="ob-count tabular" id="ob-count" aria-live="polite">1 of 12</p>
-          <div class="deck deck--big" id="ob-deck" aria-label="Headline cards. Left arrow passes, right arrow keeps, up arrow loves."></div>
-          <div class="deck-actions">
-            <button class="deck-btn deck-btn--pass" type="button" data-act="pass" aria-label="Pass"><span data-icon="x"></span></button>
-            <button class="deck-btn deck-btn--love" type="button" data-act="love" aria-label="Love"><span data-icon="heart"></span></button>
-            <button class="deck-btn deck-btn--keep" type="button" data-act="keep" aria-label="Keep"><span data-icon="keep"></span></button>
+        <div class="ob-form">
+          <fieldset class="topic-pick">
+            <legend class="sr-only">Topics</legend>
+            <div class="topic-pick__grid" id="topics"></div>
+            <p class="ob-hint" id="topic-hint" aria-live="polite">0 of 5 chosen</p>
+          </fieldset>
+          <div class="ob-actions">
+            <button class="btn btn--ghost" type="button" id="back-1">Back</button>
+            <button class="btn btn--primary" type="button" id="to-print" data-magnetic="0.15"><span>Generate today’s paper</span><span class="btn__orb" data-icon="arrow"></span></button>
           </div>
-          <p class="ob-keys"><kbd>←</kbd> pass <kbd>→</kbd> keep <kbd>↑</kbd> love</p>
-          <button class="ob-finish" type="button" id="ob-finish">That’s enough, print my paper</button>
         </div>
       </div>
     </section>
@@ -108,21 +100,22 @@
           </div>
           <div class="press__out">
             <div class="press__sheet" id="press-sheet">
-              <span class="ps__meta"><span>Edition No. 1</span><span data-today="en"></span></span>
+              <span class="ps__meta"><span>Today</span><span data-today="en"></span></span>
               <span class="ps__title" id="ps-title">Your Subah</span>
               <span class="ps__title-ur" id="ps-title-ur" lang="ur">آپ کی صبح</span>
               <span class="ps__rule"></span>
               <span class="ps__cols">
-                <span class="ps__col"><b class="ps__h" id="ps-h1">Petrol price held for two weeks</b><i></i><i></i><i class="s"></i></span>
-                <span class="ps__col"><b class="ps__h" id="ps-h2">Lahore schools online on Mondays</b><i></i><i></i><i></i><i class="s"></i></span>
+                <span class="ps__col"><b class="ps__h" id="ps-h1"> </b><i></i><i></i><i class="s"></i></span>
+                <span class="ps__col"><b class="ps__h" id="ps-h2"> </b><i></i><i></i><i></i><i class="s"></i></span>
               </span>
             </div>
           </div>
         </div>
         <div class="ob-print__copy">
-          <h2 id="s3-title"><span id="print-title">Printing your first paper</span></h2>
+          <h2 id="s3-title"><span id="print-title">Printing today’s paper</span></h2>
           <ol class="press-log" id="press-log" aria-live="polite"></ol>
           <div class="press-bar" aria-hidden="true"><span id="press-bar"></span></div>
+          <p class="ob-hint" id="print-note"></p>
           <div class="ob-ready" id="ob-ready" hidden>
             <a class="btn btn--primary" href="paper.html" data-magnetic="0.15" id="ob-read"><span>Read my paper</span><span class="btn__orb" data-icon="arrow"></span></a>
             <a class="link-arrow" href="gift.html">Make one for someone you love</a>

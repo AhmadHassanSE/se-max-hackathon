@@ -1,200 +1,178 @@
-/* The paper: ten stories, three languages, three type sizes, read aloud on request. */
-document.addEventListener("DOMContentLoaded", () => {
-  const D = window.SUBAH_DATA;
+/* The paper: renders an edition from the API (or the bundled sample), English or Urdu, regular or large print. */
+document.addEventListener("DOMContentLoaded", async () => {
   const S = window.Subah;
   const $ = (s, r) => (r || document).querySelector(s);
   const $$ = (s, r) => [...(r || document).querySelectorAll(s)];
+  const esc = S.esc;
 
-  const profile = S.store.get();
-  let lang = ["en", "ur", "ro"].includes(profile.lang) ? profile.lang : "en";
-  let size = [1, 1.22, 1.45].includes(profile.size) ? profile.size : 1;
-  const name = S.cleanName(profile.name || "");
-  const weights = profile.weights || {};
-
-  /* order: what the reader cares about first, the viral check fifth, everything else after */
-  const scored = D.STORIES.map((s, i) => ({ s, i, score: s.topics.reduce((a, t) => a + (weights[t] || 0), 0) }));
-  const viral = scored.find((x) => x.s.id === "viral");
-  const rest = scored.filter((x) => x !== viral).sort((a, b) => b.score - a.score || a.i - b.i);
-  const ORDER = [...rest.slice(0, 4), viral, ...rest.slice(4)].map((x) => x.s);
-  const TOTAL_MIN = ORDER.reduce((a, s) => a + s.minutes, 0);
+  let profile = S.store.get();
+  let lang = profile.lang === "ur" ? "ur" : "en";
+  let large = !!profile.large;
+  let edition = null;
 
   const T = {
     en: {
-      why: "Why it matters", unknown: "What we don’t know yet", fy: "For you.", more: "Why it matters", less: "Show less",
-      sources: "Reported by", none: "No outlet has reported this claim. It is circulating as a forward.", cover: "How it was covered",
-      edition: "Edition No. 1", city: "Lahore", count: "10 stories, about 6 minutes", compiled: "Compiled at 5:12 am from 24 newsrooms",
-      of: "of", left: "min left", done: "Done", endHead: "That’s all ten.",
-      endBody: "Nothing else is waiting. Three things to remember and a short quiz are on the last page.",
-      endBtn: "Finish today’s paper", share: "Copy this check for the family group", copied: "Copied. Paste it in the group.",
-      forSample: "Today’s For you lines are written for this sample reader:", forYours: "You told us:",
-      forYoursNote: "In this demo the lines are pre-written for a sample reader; the live paper writes each one from your sentence.",
-      make: "Make it yours", listen: "Listen", stop: "Stop", noUrdu: "No Urdu voice on this device, so it reads the Roman Urdu edition. The live audio edition is a recorded Urdu voice note.",
-      noSpeech: "This browser has no speech voice. The live audio edition is a recorded Urdu voice note."
+      edition: "Edition", city: (c) => c, noCity: "All of Pakistan", stories: (n) => `${n} stories`,
+      summaryAI: "Summary written by AI from the linked reports only.",
+      fallback: "No summary today for this story. The headlines below are as each outlet published them.",
+      why: "Why it is here", score: (p) => `${p.outlets} outlets` + (p.city ? `, +${p.city} your city` : "") + (p.topics ? `, +${p.topics} your topics` : ""),
+      sources: (n) => `Sources (${n})`, from: "Headline from", read: "of", readLabel: (n) => `of ${n} read`, done: "All read",
+      made: "How this paper was made", reader: "Your settings", change: "Change",
+      topicsNone: "no topics chosen", endHead: "That’s the paper.", endBody: "Nothing else is waiting. The last page shows today’s top three again, with their sources.",
+      endBtn: "Finish today’s paper", generate: "Generate today’s paper now", generating: "Generating…",
+      offline: "The paper server isn’t running, so this is the bundled sample paper built from test feeds.",
+      sample: "Sample paper built from the synthetic test feeds.",
+      sourceLine: (ed) => ed.source === "live" ? "Built from live feeds" : ed.source === "snapshot" ? "Built from a saved snapshot of the feeds" : "Built from the synthetic test feeds",
+      statFeeds: "feeds answered", statArticles: "reports read", statGrouped: "stories after grouping", statAI: "AI summaries", statFallback: "headline fallbacks", statCalls: "AI calls"
     },
     ur: {
-      why: "یہ کیوں اہم ہے", unknown: "جو ابھی معلوم نہیں", fy: "آپ کے لیے:", more: "یہ کیوں اہم ہے", less: "کم دکھائیں",
-      sources: "رپورٹ کرنے والے ادارے:", none: "کسی ادارے نے یہ دعویٰ رپورٹ نہیں کیا۔ یہ صرف فارورڈ ہو رہا ہے۔", cover: "اداروں نے اسے کیسے پیش کیا",
-      edition: "شمارہ ۱", city: "لاہور", count: "۱۰ خبریں، تقریباً ۶ منٹ", compiled: "صبح ۵:۱۲ بجے ۲۴ اداروں سے مرتب",
-      of: "میں سے", left: "منٹ باقی", done: "مکمل", endHead: "بس، یہ تھیں دسوں خبریں۔",
-      endBody: "آگے کچھ انتظار نہیں کر رہا۔ یاد رکھنے کی تین باتیں اور ایک مختصر کوئز آخری صفحے پر ہیں۔",
-      endBtn: "آج کا اخبار مکمل کریں", share: "فیملی گروپ کے لیے کاپی کریں", copied: "کاپی ہو گیا۔ گروپ میں بھیج دیں۔",
-      forSample: "آج کی ’آپ کے لیے‘ سطریں اس قاری کے لیے لکھی گئی ہیں:", forYours: "آپ نے بتایا:",
-      forYoursNote: "اس ڈیمو میں سطریں ایک نمونہ قاری کے لیے پہلے سے لکھی گئی ہیں؛ اصل اخبار ہر سطر آپ کے جملے سے لکھے گا۔",
-      make: "اپنا بنائیں", listen: "سنیں", stop: "روکیں", noUrdu: "اس آلے پر اردو آواز موجود نہیں، اس لیے رومن اردو پڑھی جا رہی ہے۔",
-      noSpeech: "اس براؤزر میں آواز کی سہولت نہیں۔"
-    },
-    ro: {
-      why: "Yeh kyun aham hai", unknown: "Jo abhi maloom nahin", fy: "Aap ke liye:", more: "Yeh kyun aham hai", less: "Kam dikhayein",
-      sources: "Report karne walay idaray:", none: "Kisi idaray ne yeh daawa report nahin kiya. Yeh sirf forward ho raha hai.", cover: "Idaron ne ise kaise pesh kiya",
-      edition: "Shumara 1", city: "Lahore", count: "10 khabrein, taqreeban 6 minute", compiled: "Subah 5:12 baje 24 idaron se murattab",
-      of: "mein se", left: "minute baaqi", done: "Mukammal", endHead: "Bas, yeh theen das khabrein.",
-      endBody: "Aagay kuch intezar nahin kar raha. Yaad rakhne ki teen baatein aur aik mukhtasar quiz aakhri safhay par hain.",
-      endBtn: "Aaj ka akhbar mukammal karein", share: "Family group ke liye copy karein", copied: "Copy ho gaya. Group mein bhej dein.",
-      forSample: "Aaj ki 'Aap ke liye' lines is namoona qari ke liye likhi gayi hain:", forYours: "Aap ne bataya:",
-      forYoursNote: "Is demo mein lines aik namoona qari ke liye pehle se likhi gayi hain; asal akhbar har line aap ke jumlay se likhega.",
-      make: "Apna banayein", listen: "Sunein", stop: "Rokein", noUrdu: "", noSpeech: "Is browser mein awaaz ki sahulat nahin."
+      edition: "شمارہ", city: (c) => c, noCity: "پورا پاکستان", stories: (n) => `${S.toUrduDigits(n)} خبریں`,
+      summaryAI: "خلاصہ مصنوعی ذہانت نے صرف منسلک رپورٹس سے لکھا ہے۔",
+      fallback: "آج اس خبر کا خلاصہ دستیاب نہیں۔ نیچے ہر ادارے کی سرخی ویسی ہی ہے جیسی شائع ہوئی۔",
+      why: "یہ خبر یہاں کیوں ہے", score: (p) => `${S.toUrduDigits(p.outlets)} ادارے` + (p.city ? `، آپ کا شہر +${S.toUrduDigits(p.city)}` : "") + (p.topics ? `، آپ کے موضوعات +${S.toUrduDigits(p.topics)}` : ""),
+      sources: (n) => `ذرائع (${S.toUrduDigits(n)})`, from: "سرخی بشکریہ", readLabel: (n) => `میں سے ${S.toUrduDigits(n)} پڑھی`, done: "سب پڑھ لیں",
+      made: "یہ اخبار کیسے بنا", reader: "آپ کی ترتیبات", change: "تبدیل کریں",
+      topicsNone: "کوئی موضوع منتخب نہیں", endHead: "بس، یہی تھا آج کا اخبار۔", endBody: "آگے کچھ انتظار نہیں کر رہا۔ آخری صفحے پر آج کی تین بڑی خبریں ذرائع کے ساتھ دوبارہ ہیں۔",
+      endBtn: "آج کا اخبار مکمل کریں", generate: "آج کا اخبار ابھی بنائیں", generating: "بن رہا ہے…",
+      offline: "اخبار کا سرور نہیں چل رہا، اس لیے یہ آزمائشی فیڈز سے بنا نمونہ اخبار ہے۔",
+      sample: "آزمائشی فیڈز سے بنا نمونہ اخبار۔",
+      sourceLine: (ed) => ed.source === "live" ? "تازہ فیڈز سے بنا" : ed.source === "snapshot" ? "فیڈز کے محفوظ شدہ نسخے سے بنا" : "آزمائشی فیڈز سے بنا",
+      statFeeds: "فیڈز نے جواب دیا", statArticles: "رپورٹس پڑھی گئیں", statGrouped: "گروپ بندی کے بعد خبریں", statAI: "AI خلاصے", statFallback: "صرف سرخیاں", statCalls: "AI کالز"
     }
   };
   const num = (n) => (lang === "ur" ? S.toUrduDigits(n) : String(n));
-  const CHEV = '<svg class="pp-more__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
+  let catalog = { topics: [], cities: [] };
 
   const paper = $("#paper");
+  const note = $("#pp-note");
 
-  function facts(t, L) {
-    return `<dl class="pp-facts"><div><dt>${L.why}</dt><dd>${t.why}</dd></div><div><dt>${L.unknown}</dt><dd>${t.unknown}</dd></div></dl>`;
+  /* ---------------------------------------------------------------- rendering */
+  function sectionOf(st) {
+    const t = st.topics && st.topics[0];
+    return t ? (lang === "ur" ? t.ur : t.en) : (lang === "ur" ? "خبر" : "News");
   }
-  function sources(st, L) {
-    return st.outlets.length
-      ? `<p class="pp-sources"><b>${L.sources}</b> ${st.outlets.join(", ")}</p>`
-      : `<p class="pp-sources">${L.none}</p>`;
+  function sourcesList(st, open) {
+    const L = T[lang];
+    const items = st.sources.map((s) => `
+      <li class="pp-src${st.used_sources.includes(s.id) ? " is-used" : ""}">
+        <span class="pp-src__meta"><b>${esc(s.outlet)}</b><span>${s.lang === "ur" ? "اردو" : "English"}</span><span>${esc(S.ago(s.published, lang))}</span></span>
+        <a href="${esc(s.link)}" target="_blank" rel="noopener noreferrer"${s.lang === "ur" ? ' lang="ur" dir="rtl"' : ' lang="en" dir="ltr"'}>${esc(s.title)}</a>
+      </li>`).join("");
+    return `<details class="pp-sources"${open ? " open" : ""}><summary>${L.sources(st.sources.length)}</summary><ul>${items}</ul></details>`;
   }
-  function leadHTML(st, i, L) {
-    const t = st[lang];
-    const cover = st.coverage ? `
-      <div class="pp-cover"><h3>${L.cover}</h3><ul>${st.coverage.map(([o, a]) => `<li><b>${o}</b><span>${a[lang]}</span></li>`).join("")}</ul></div>` : "";
+  function body(st) {
+    const L = T[lang];
+    if (st.summary) {
+      return `<p class="pp-dek">${esc(st.summary[lang].text)}</p><p class="pp-ai">${L.summaryAI}</p>`;
+    }
+    return `<p class="pp-fallback">${L.fallback}</p>`;
+  }
+  function storyHTML(st, lead) {
+    const L = T[lang];
+    const head = S.headlineOf(st, lang);
+    const headLang = !st.summary && /[؀-ۿ]/.test(head) ? "ur" : (st.summary ? lang : "en");
+    const tag = lead ? "h2" : "h3";
     return `
-      <section class="pp-lead" id="s-${st.id}" data-i="${i}" aria-labelledby="h-${st.id}">
-        <div class="pp-lead__main">
-          <p class="pp-sec"><span>${t.section}</span><span class="pp-num">${num(i + 1)} ${L.of} ${num(ORDER.length)}</span></p>
-          <h2 class="pp-head" id="h-${st.id}">${t.headline}</h2>
-          <p class="pp-dek">${t.dek}</p>
-          <div class="pp-badge-row">${S.badgeHTML(st, lang)}</div>
-          <p class="pp-foryou"><b>${L.fy}</b> ${t.forYou}</p>
+      <article class="${lead ? "pp-lead" : "pp-story"}" id="${esc(st.id)}" data-i="${st.rank - 1}" aria-labelledby="h-${esc(st.id)}">
+        <div class="${lead ? "pp-lead__main" : "pp-story__main"}">
+          <p class="pp-sec"><span>${esc(sectionOf(st))}</span><span class="pp-num">${num(st.rank)}</span></p>
+          <${tag} class="pp-head" id="h-${esc(st.id)}"${headLang !== lang ? ` lang="${headLang}" dir="${headLang === "ur" ? "rtl" : "ltr"}"` : ""}>${esc(head)}</${tag}>
+          ${!st.summary ? `<p class="pp-from">${L.from} ${esc(st.headline_from[headLang === "ur" ? "ur" : "en"])}</p>` : ""}
+          ${body(st)}
+          <div class="pp-badge-row">${S.coverageHTML(st, lang)}</div>
+          ${S.forYouHTML(st.for_you, lang)}
+          <p class="pp-why"><span>${L.why}:</span> ${L.score(st.score_parts)}</p>
         </div>
-        <div class="pp-lead__side">
-          ${facts(t, L)}
-          ${cover}
-          ${sources(st, L)}
-        </div>
-      </section>`;
-  }
-  function storyHTML(st, i, L) {
-    const t = st[lang];
-    const isViral = st.id === "viral";
-    return `
-      <article class="pp-story${isViral ? " pp-story--viral" : ""}" id="${isViral ? "viral" : "s-" + st.id}" data-i="${i}" aria-labelledby="h-${st.id}">
-        <p class="pp-sec"><span>${t.section}</span><span class="pp-num">${num(i + 1)} ${L.of} ${num(ORDER.length)}</span></p>
-        <h2 class="pp-head" id="h-${st.id}">${t.headline}</h2>
-        <p class="pp-dek">${t.dek}</p>
-        <div class="pp-badge-row">${S.badgeHTML(st, lang)}</div>
-        <p class="pp-foryou"><b>${L.fy}</b> ${t.forYou}</p>
-        <button class="pp-more" type="button" aria-expanded="false" aria-controls="d-${st.id}"><span>${L.more}</span>${CHEV}</button>
-        <div class="pp-drawer" id="d-${st.id}"><div inert>${facts(t, L)}${sources(st, L)}</div></div>
-        ${isViral ? `<button class="btn btn--ink btn--sm pp-share" type="button" data-share>${L.share}</button>` : ""}
+        <div class="${lead ? "pp-lead__side" : "pp-story__side"}">${sourcesList(st, lead)}</div>
       </article>`;
   }
-  function forNote(L) {
-    const sentence = (profile.sentence || "").trim();
-    if (sentence) {
-      return `<p class="pp-for"><span>${L.forYours}</span> <q>${sentence.replace(/[<>]/g, "")}</q> <span>${L.forYoursNote}</span></p>`;
-    }
-    return `<p class="pp-for"><span>${L.forSample}</span> <q>${D.PROFILE_SAMPLE[lang]}</q> <a href="onboard.html">${L.make}</a></p>`;
+  function cityName(id) {
+    const c = catalog.cities.find((x) => x.id === id);
+    return c ? (lang === "ur" ? c.ur : c.en) : null;
   }
-
+  function topicName(id) {
+    const t = catalog.topics.find((x) => x.id === id);
+    return t ? (lang === "ur" ? t.ur : t.en) : id;
+  }
+  function madeHTML(ed) {
+    const L = T[lang];
+    const st = ed.stats, ai = ed.ai;
+    const cells = [
+      [st.feeds_ok, L.statFeeds], [st.articles, L.statArticles], [st.stories_grouped, L.statGrouped],
+      [ai.summarised || 0, L.statAI], [ai.fallback || 0, L.statFallback], [ai.calls || 0, L.statCalls]
+    ];
+    const aiNote = ai.enabled ? "" : `<p class="pp-made__note">${esc(ai.note || "")}</p>`;
+    return `
+      <section class="pp-made" aria-labelledby="made-title">
+        <h2 id="made-title">${L.made}</h2>
+        <p class="pp-made__src">${L.sourceLine(ed)}. ${esc(S.dates[lang](new Date(ed.as_of)))}</p>
+        <dl class="pp-made__stats">${cells.map(([v, k]) => `<div><dt>${k}</dt><dd class="tabular">${num(v)}</dd></div>`).join("")}</dl>
+        <p class="pp-made__rank">${esc(ed.ranking[lang])}</p>
+        ${aiNote}
+        <a class="link-arrow" href="sources.html">${lang === "ur" ? "ہمارے ذرائع اور درجہ بندی" : "Our sources and how we rank"}</a>
+      </section>`;
+  }
   function render() {
+    if (!edition) return;
     const L = T[lang];
     paper.setAttribute("lang", lang === "ur" ? "ur" : "en");
     paper.setAttribute("dir", lang === "ur" ? "rtl" : "ltr");
-    const title = S.paperTitle(name, lang);
-    const alt = lang === "ur" ? S.paperTitle(name, "en") : S.paperTitle(name, "ur");
-    document.title = `${S.paperTitle(name, "en")}, today’s paper`;
+    paper.setAttribute("aria-busy", "false");
+    const stories = edition.stories;
+    const city = cityName(edition.profile.city);
+    const topics = (edition.profile.topics || []).map(topicName);
+    document.title = `${S.paperTitle(profile.name, "en")}, today’s paper`;
     paper.innerHTML = `
       <header class="pp-mast">
-        <div class="pp-mast__top"><span>${L.edition}</span><span>${L.city}</span><span>${lang === "ur" ? S.dates.hijriUr() : S.dates.hijriEn()}</span><span>${L.compiled}</span></div>
-        <h1 class="pp-title">${title}</h1>
-        <p class="pp-title-alt" ${lang === "ur" ? 'lang="en" dir="ltr"' : 'lang="ur" dir="rtl"'}>${alt}</p>
-        <div class="pp-mast__bar"><span>${S.dates[lang]()}</span><span>${L.count}</span></div>
-        ${forNote(L)}
+        <div class="pp-mast__top"><span>${L.edition} ${esc(edition.edition_id.slice(0, 8))}</span><span>${esc(city || L.noCity)}</span><span>${lang === "ur" ? S.dates.hijriUr(new Date(edition.as_of)) : S.dates.hijriEn(new Date(edition.as_of))}</span></div>
+        <h1 class="pp-title">${esc(S.paperTitle(profile.name, lang))}</h1>
+        <p class="pp-title-alt" ${lang === "ur" ? 'lang="en" dir="ltr"' : 'lang="ur" dir="rtl"'}>${esc(S.paperTitle(profile.name, lang === "ur" ? "en" : "ur"))}</p>
+        <div class="pp-mast__bar"><span>${S.dates[lang](new Date(edition.as_of))}</span><span>${L.stories(stories.length)}</span></div>
+        <p class="pp-for"><span>${L.reader}:</span> <b>${esc(city || L.noCity)}</b><span>${esc(topics.length ? topics.join(lang === "ur" ? "، " : ", ") : L.topicsNone)}</span><a href="onboard.html">${L.change}</a></p>
       </header>
-      ${leadHTML(ORDER[0], 0, L)}
-      <div class="pp-grid">${ORDER.slice(1).map((st, k) => storyHTML(st, k + 1, L)).join("")}</div>
+      ${stories.length ? storyHTML(stories[0], true) : ""}
+      <div class="pp-grid">${stories.slice(1).map((s) => storyHTML(s, false)).join("")}</div>
+      ${madeHTML(edition)}
       <footer class="pp-end">
         <div class="pp-end__rule"></div>
-        <svg class="pp-end__mark" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="19" r="8" fill="var(--kesar)"/><path d="M3 21.5h26" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path d="M16 4.5v3.2M6.6 8.4l2.2 2.2M25.4 8.4l-2.2 2.2" stroke="var(--kesar)" stroke-width="2.2" stroke-linecap="round"/></svg>
         <h2>${L.endHead}</h2>
         <p>${L.endBody}</p>
         <a class="btn btn--primary" href="end.html" data-magnetic="0.18"><span>${L.endBtn}</span><span class="btn__orb">${S.ICONS.arrow}</span></a>
       </footer>`;
-    paper.style.setProperty("--scale", size);
-    paper.classList.toggle("is-large", size >= 1.2);
-    paper.classList.toggle("is-larger", size >= 1.4);
-    bindStories();
+    paper.style.setProperty("--scale", large ? 1.25 : 1);
+    paper.classList.toggle("is-large", large);
     S.magnetic(paper);
-    paintListen();
-    $("#pp-left-label").textContent = L.left;
+    $("#pp-generate .pp-generate__label").textContent = L.generate;
+    dots.innerHTML = stories.map((s, i) => `<li><span class="sr-only">Story ${i + 1}</span></li>`).join("");
+    read.clear();
     updateProgress();
-  }
-
-  function bindStories() {
-    $$(".pp-more", paper).forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const open = btn.getAttribute("aria-expanded") === "true";
-        const drawer = document.getElementById(btn.getAttribute("aria-controls"));
-        btn.setAttribute("aria-expanded", String(!open));
-        drawer.classList.toggle("is-open", !open);
-        drawer.firstElementChild.inert = open;
-        btn.querySelector("span").textContent = open ? T[lang].more : T[lang].less;
-      });
-    });
-    const share = $("[data-share]", paper);
-    if (share) {
-      share.addEventListener("click", async () => {
-        const st = D.STORIES.find((s) => s.id === "viral")[lang];
-        const text = `${st.headline}\n${st.forYou}\nSubah viral check`;
-        const label = share.textContent;
-        try { await navigator.clipboard.writeText(text); share.textContent = T[lang].copied; }
-        catch (e) { share.textContent = T[lang].copied; }
-        setTimeout(() => { share.textContent = label; }, 2500);
-      });
-    }
+    note.textContent = edition.sample ? (S.api.online === false ? L.offline : L.sample) : "";
   }
 
   /* ---------------------------------------------------------------- reading progress */
   const dots = $("#pp-dots");
-  dots.innerHTML = ORDER.map((s, i) => `<li title="${s.en.section}"><span class="sr-only">Story ${i + 1}</span></li>`).join("");
   const ring = $("#pp-ring");
-  const leftEl = $("#pp-left");
   const read = new Set();
   const bar = $(".read-progress span");
   let ticking = false;
   function updateProgress() {
-    const blocks = $$("[data-i]", paper);
+    if (!edition) return;
+    const n = edition.stories.length;
     const vh = window.innerHeight;
     let current = -1;
-    blocks.forEach((b) => {
+    $$("[data-i]", paper).forEach((b) => {
       const r = b.getBoundingClientRect();
       const i = +b.dataset.i;
       if (r.bottom < vh * 0.55) read.add(i);
       if (current < 0 && r.bottom > 160) current = i;
     });
     $$("li", dots).forEach((li, i) => { li.classList.toggle("is-read", read.has(i)); li.classList.toggle("is-current", i === current && !read.has(i)); });
-    const readMin = ORDER.reduce((a, s, i) => a + (read.has(i) ? s.minutes : 0), 0);
-    const left = Math.max(0, Math.ceil(TOTAL_MIN - readMin - 0.001));
-    leftEl.textContent = read.size === ORDER.length ? T[lang].done : num(left);
-    $("#pp-left-label").hidden = read.size === ORDER.length;
-    ring.style.strokeDashoffset = String(100.53 * (1 - read.size / ORDER.length));
-    const doc = document.documentElement;
-    bar.style.setProperty("--p", Math.min(1, window.scrollY / Math.max(1, doc.scrollHeight - vh)));
+    const L = T[lang];
+    $("#pp-read").textContent = read.size === n ? L.done : num(read.size);
+    $("#pp-read-label").textContent = read.size === n ? "" : L.readLabel(n);
+    ring.style.strokeDashoffset = String(100.53 * (1 - read.size / Math.max(1, n)));
+    const d = document.documentElement;
+    bar.style.setProperty("--p", Math.min(1, window.scrollY / Math.max(1, d.scrollHeight - vh)));
   }
   window.addEventListener("scroll", () => {
     if (ticking) return;
@@ -203,75 +181,67 @@ document.addEventListener("DOMContentLoaded", () => {
   }, { passive: true });
   window.addEventListener("resize", updateProgress);
 
-  /* ---------------------------------------------------------------- language */
+  /* ---------------------------------------------------------------- language and size */
   const langSeg = $("#pp-lang");
-  function paintLang() { $$("button", langSeg).forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.lang === lang))); }
-  paintLang();
+  const sizeSeg = $("#pp-size");
+  const paintSegs = () => {
+    $$("button", langSeg).forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
+    $$("button", sizeSeg).forEach((b) => b.setAttribute("aria-pressed", String((b.dataset.large === "1") === large)));
+  };
+  paintSegs();
   langSeg.addEventListener("click", (e) => {
     const b = e.target.closest("button");
     if (!b || b.dataset.lang === lang) return;
-    stopAudio();
-    const go = () => { lang = b.dataset.lang; S.store.set({ lang }); paintLang(); render(); };
-    if (document.startViewTransition && !S.reduceMotion) document.startViewTransition(go);
-    else go();
+    const go = () => { lang = b.dataset.lang; profile = S.store.set({ lang }); paintSegs(); render(); };
+    if (document.startViewTransition && !S.reduceMotion) document.startViewTransition(go); else go();
   });
-
-  /* ---------------------------------------------------------------- type size */
-  const sizeSeg = $("#pp-size");
-  function paintSize() { $$("button", sizeSeg).forEach((b) => b.setAttribute("aria-pressed", String(parseFloat(b.dataset.size) === size))); }
-  paintSize();
   sizeSeg.addEventListener("click", (e) => {
     const b = e.target.closest("button");
     if (!b) return;
-    size = parseFloat(b.dataset.size);
-    S.store.set({ size });
-    paintSize();
-    paper.style.setProperty("--scale", size);
-    paper.classList.toggle("is-large", size >= 1.2);
-    paper.classList.toggle("is-larger", size >= 1.4);
+    large = b.dataset.large === "1";
+    profile = S.store.set({ large });
+    paintSegs();
+    paper.style.setProperty("--scale", large ? 1.25 : 1);
+    paper.classList.toggle("is-large", large);
     updateProgress();
   });
 
-  /* ---------------------------------------------------------------- audio edition */
-  const listen = $("#pp-listen");
-  const note = $("#pp-note");
-  function paintListen() {
-    const on = listen.classList.contains("is-speaking");
-    $(".pp-listen__label", listen).textContent = on ? T[lang].stop : T[lang].listen;
-  }
-  function stopAudio() {
-    S.speech.stop();
-    listen.classList.remove("is-speaking");
-    listen.setAttribute("aria-pressed", "false");
-    $(".pp-listen__icon", listen).innerHTML = S.ICONS.play;
-    $$(".is-reading", paper).forEach((el) => el.classList.remove("is-reading"));
-    paintListen();
-  }
-  listen.addEventListener("click", () => {
-    if (listen.classList.contains("is-speaking")) { stopAudio(); note.textContent = ""; return; }
-    if (!S.speech.supported) { note.textContent = T[lang].noSpeech; return; }
-    let readLang = lang;
-    const v = S.speech.voiceFor("ur");
-    if (lang === "ur" && !(v && v.lang.toLowerCase().startsWith("ur"))) { readLang = "ro"; note.textContent = T.en.noUrdu; }
-    else note.textContent = "";
-    const items = ORDER.map((st, i) => {
-      const t = st[readLang];
-      return {
-        text: `${t.headline}. ${T[readLang].fy.replace(/[.:]$/, "")}: ${t.forYou}`,
-        onStart: () => {
-          $$("[data-i]", paper).forEach((b) => b.classList.toggle("is-reading", +b.dataset.i === i));
-          const el = $(`[data-i="${i}"]`, paper);
-          if (el) el.scrollIntoView({ behavior: S.reduceMotion ? "auto" : "smooth", block: "center" });
-        }
-      };
-    });
-    listen.classList.add("is-speaking");
-    listen.setAttribute("aria-pressed", "true");
-    $(".pp-listen__icon", listen).innerHTML = S.ICONS.pause;
-    paintListen();
-    S.speech.play(items, readLang, { onEnd: stopAudio });
+  /* ---------------------------------------------------------------- generate now */
+  const genBtn = $("#pp-generate");
+  genBtn.addEventListener("click", async () => {
+    if (genBtn.disabled) return;
+    genBtn.disabled = true;
+    genBtn.classList.add("is-busy");
+    $(".pp-generate__label", genBtn).textContent = T[lang].generating;
+    paper.setAttribute("aria-busy", "true");
+    try {
+      edition = await S.api.generate(profile);
+      S.api.online = true;
+      render();
+      window.scrollTo({ top: 0, behavior: S.reduceMotion ? "auto" : "smooth" });
+      const ai = edition.ai;
+      S.toast(ai.enabled
+        ? `Paper ready: ${ai.summarised} AI summaries, ${ai.fallback} headline fallbacks, ${ai.calls} AI calls.`
+        : `Paper ready with headlines and links only (${ai.note}).`);
+    } catch (err) {
+      S.toast(err.status ? `Could not generate: ${err.message}` : "The paper server isn’t running. Start it to generate a live paper.");
+      paper.setAttribute("aria-busy", "false");
+    } finally {
+      genBtn.disabled = false;
+      genBtn.classList.remove("is-busy");
+      $(".pp-generate__label", genBtn).textContent = T[lang].generate;
+    }
   });
 
+  /* ---------------------------------------------------------------- load */
+  await S.api.health();
+  try { catalog = await S.api.catalog(); } catch (e) { /* names fall back to ids */ }
+  try {
+    edition = await S.api.edition();
+  } catch (e) {
+    paper.innerHTML = `<p class="pp-loading">Couldn’t load a paper. Start the server and use “Generate today’s paper now”.</p>`;
+    return;
+  }
   render();
   if (location.hash) {
     const el = document.querySelector(location.hash);
