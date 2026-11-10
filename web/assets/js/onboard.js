@@ -176,13 +176,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     const topic = t ? (lang === "ur" ? t.ur : t.en) : (lang === "ur" ? "خبر" : "News");
     const head = S.headlineOf(st, lang);
     const headUr = /[؀-ۿ]/.test(head);
-    const dek = st.summary ? st.summary[lang].text : (lang === "ur" ? `سرخی بشکریہ ${st.headline_from.ur}` : `Headline from ${st.headline_from.en}`);
+    const own = st.brief ? (st.brief[lang] || st.brief.en || st.brief.ur) : null;
+    const dek = st.summary ? st.summary[lang].text : own ? own.text : (lang === "ur" ? `سرخی بشکریہ ${st.headline_from.ur}` : `Headline from ${st.headline_from.en}`);
     const outlets = lang === "ur" ? `${S.toUrduDigits(st.outlet_count)} ادارے` : `${st.outlet_count} outlet${st.outlet_count === 1 ? "" : "s"}`;
     const ui = lang === "ur" ? { pass: "چھوڑیں", love: "پسندیدہ", keep: "رکھیں" } : { pass: "Pass", love: "Love", keep: "Keep" };
     return `
       <div class="pcard__top"><span class="pcard__topic"${lang === "ur" ? ' lang="ur"' : ""}>${S.esc(topic)}</span><span class="pcard__outlets"${lang === "ur" ? ' lang="ur"' : ""}>${outlets}</span></div>
       <h3 class="pcard__head"${headUr ? ' lang="ur" dir="rtl"' : ""}>${S.esc(head)}</h3>
-      <p class="pcard__dek"${lang === "ur" ? ' lang="ur" dir="rtl"' : ""}>${S.esc(dek)}</p>
+      <p class="pcard__dek"${(own && !st.summary ? own.lang : lang) === "ur" ? ' lang="ur" dir="rtl"' : ""}>${S.esc(dek)}</p>
       ${S.forYouHTML(st.for_you, lang)}
       <div class="pcard__actions">
         <button type="button" class="pcard__btn pcard__btn--pass" data-act="pass">${ui.pass}</button>

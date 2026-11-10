@@ -158,6 +158,7 @@ class SummaryRun:
     cache_hits: int = 0
     enabled: bool = False
     note: str = ""
+    retried: int = 0
 
     def stats(self) -> dict:
         statuses = [r["status"] for r in self.results.values()]
@@ -167,6 +168,7 @@ class SummaryRun:
             "calls": self.calls,
             "call_budget": MAX_CALLS,
             "cache_hits": self.cache_hits,
+            "retried": self.retried,
             "summarised": statuses.count("ai"),
             "fallback": statuses.count("fallback"),
             "note": self.note,
@@ -202,19 +204,19 @@ def summarize(items: list[dict], client=None, cache_path: Path | None = CACHE_PA
             run.note = f"AI client unavailable: {type(exc).__name__}"
             client = None
 
-    for start in range(0, len(todo), batch_size):
-        batch = todo[start:start + batch_size]
-        if client is None:
-            reason = run.note or "AI client unavailable"
-        elif run.calls >= max_calls:
-            reason = "AI call budget for this paper used up"
-        else:
-            reason = None
-        if reason:
-            for it in batch:
-                run.results[it["id"]] = {"status": "fallback", "reason": reason}
-            continue
-        payload = json.dumps({"stories": [{"id": it["id"], "sources": it["sources"]} for it in batch]}, ensure_ascii=False)
+    def run_batch(batch: list[dict], problems: dict | None = None) -> None:
+        stories = []
+        for it in batch:
+            entry = {"id": it["id"], "sources": it["sources"]}
+            if problems and problems.get(it["id"]):
+                entry["rejected_because"] = problems[it["id"]]
+            stories.append(entry)
+        body = {"stories": stories}
+        if problems:
+            body["note"] = ("A previous summary for each of these stories was rejected for the reasons in rejected_because. "
+                            "Write it again using only names and numbers that appear, spelled the same way, in that story's "
+                            "sources. Leave out anything else.")
+        payload = json.dumps(body, ensure_ascii=False)
         run.calls += 1
         try:
             raw = client.complete(payload)
@@ -233,12 +235,35 @@ def summarize(items: list[dict], client=None, cache_path: Path | None = CACHE_PA
             if out is None:
                 run.results[it["id"]] = {"status": "fallback", "reason": err}
                 continue
-            problems = check(out, it["sources"])
-            if problems:
-                run.results[it["id"]] = {"status": "fallback", "reason": "grounding check failed: " + "; ".join(problems[:3])}
+            found = check(out, it["sources"])
+            if found:
+                run.results[it["id"]] = {"status": "fallback", "reason": "grounding check failed: " + "; ".join(found[:3]),
+                                         "problems": found[:5]}
                 continue
             cache[_signature(it)] = out
-            run.results[it["id"]] = {"status": "ai", "reason": "summarised", **_public(out)}
+            run.results[it["id"]] = {"status": "ai", "reason": "summarised" if not problems else "summarised on retry", **_public(out)}
+
+    for start in range(0, len(todo), batch_size):
+        batch = todo[start:start + batch_size]
+        if client is None:
+            reason = run.note or "AI client unavailable"
+        elif run.calls >= max_calls:
+            reason = "AI call budget for this paper used up"
+        else:
+            reason = None
+        if reason:
+            for it in batch:
+                run.results[it["id"]] = {"status": "fallback", "reason": reason}
+            continue
+        run_batch(batch)
+
+    # one retry for stories whose summary failed the source check, told exactly what was rejected
+    retry = [it for it in todo if run.results.get(it["id"], {}).get("problems")]
+    if retry and client is not None and run.calls < max_calls:
+        run_batch(retry[:batch_size * 2], {it["id"]: run.results[it["id"]]["problems"] for it in retry})
+        run.retried = len(retry[:batch_size * 2])
+    for r in run.results.values():
+        r.pop("problems", None)
     if cache_path:
         _save_cache(cache_path, cache)
     return run

@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import time
 from datetime import datetime, timezone
 from pathlib import Path
@@ -43,6 +44,35 @@ def clean_profile(raw: dict | None) -> dict:
     if lang not in ("en", "ur"):
         raise ProfileError("lang must be 'en' or 'ur'")
     return {"city": city, "topics": topics, "lang": lang}
+
+
+_BOILER = re.compile(r"(The post .*? appeared first on .*?\.?$|Continue reading.*$|Read more.*$|\[…\]|\[\.\.\.\])", re.I)
+_SENT = re.compile(r"(?<=[.!?۔])\s+")
+
+
+def brief(story, lang: str, max_words: int = 50) -> dict | None:
+    """The outlet's own words, used when no AI summary passed the source check: the opening sentences of a
+    report's feed description, quoted as published and credited. Prefers a report in the reader's language,
+    then the earliest report. No AI, so it cannot add a claim the sources do not make."""
+    def candidates(lng):
+        return [a for a in story.articles if a.summary and (lng is None or a.lang == lng)]
+    pool = candidates(lang) or candidates(None)
+    for a in pool:
+        text = _BOILER.sub("", a.summary).strip()
+        if len(text.split()) < 6:
+            continue
+        out, words = [], 0
+        for sentence in _SENT.split(text):
+            n = len(sentence.split())
+            if out and words + n > max_words:
+                break
+            out.append(sentence)
+            words += n
+        quote = " ".join(out).strip()
+        if len(quote.split()) > max_words + 15:
+            quote = " ".join(quote.split()[:max_words]).rstrip(",;:") + "…"
+        return {"text": quote, "outlet": a.outlet_name, "link": a.link, "lang": a.lang}
+    return None
 
 
 def latest_snapshot() -> Path | None:
@@ -129,6 +159,7 @@ def build_edition(profile: dict | None, source: str = "fixtures", client=None, c
             "summary": {"en": res["en"], "ur": res["ur"]} if res["status"] == "ai" else None,
             "used_sources": res.get("used_sources", []),
             "headline": {"en": en_first.title, "ur": ur_first.title},
+            "brief": None if res["status"] == "ai" else {"en": brief(s, "en"), "ur": brief(s, "ur")},
             "headline_from": {"en": en_first.outlet_name, "ur": ur_first.outlet_name},
             "latest": s.latest.isoformat(),
             "sources": [a.to_source() for a in s.articles],

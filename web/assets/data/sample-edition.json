@@ -1,6 +1,6 @@
 {
  "edition_id": "202611100200-10",
- "generated_at": "2026-11-10T06:28:59.227322+00:00",
+ "generated_at": "2026-11-10T08:36:44.423727+00:00",
  "as_of": "2026-11-10T02:00:00+00:00",
  "source": "fixtures",
  "profile": {
@@ -81,6 +81,20 @@
    "headline": {
     "en": "Lahore schools to hold online classes on Mondays as smog worsens",
     "ur": "سموگ کے باعث لاہور کے اسکولوں میں پیر کو آن لائن تدریس"
+   },
+   "brief": {
+    "en": {
+     "text": "The Punjab government extended its smog plan, moving Monday classes at Lahore schools online and pausing outdoor sports.",
+     "outlet": "Dawn",
+     "link": "https://example.com/dawn/en/lahore-smog-schools",
+     "lang": "en"
+    },
+    "ur": {
+     "text": "لاہور میں سموگ کی صورتحال کے پیش نظر اسکول پیر کو آن لائن تدریس کریں گے اور کھلے میدان میں کھیلوں پر پابندی ہوگی۔",
+     "outlet": "Independent Urdu",
+     "link": "https://example.com/independenturdu/ur/smog-online-tadrees",
+     "lang": "ur"
+    }
    },
    "headline_from": {
     "en": "Dawn",
@@ -172,6 +186,20 @@
    "headline": {
     "en": "Govt keeps petrol price unchanged, raises diesel by Rs3 per litre",
     "ur": "پیٹرول کی قیمت برقرار، ڈیزل 3 روپے مہنگا"
+   },
+   "brief": {
+    "en": {
+     "text": "The federal government kept the price of petrol unchanged for the next fortnight and increased the price of high-speed diesel by Rs3 per litre, the finance division said in a notification.",
+     "outlet": "Dawn",
+     "link": "https://example.com/dawn/en/petrol-unchanged",
+     "lang": "en"
+    },
+    "ur": {
+     "text": "وفاقی حکومت نے آئندہ پندرہ روز کے لیے پیٹرول کی قیمت برقرار رکھی ہے جبکہ ہائی اسپیڈ ڈیزل کی قیمت میں 3 روپے فی لیٹر اضافہ کر دیا گیا ہے۔",
+     "outlet": "Express",
+     "link": "https://example.com/express/ur/petrol-qeemat",
+     "lang": "ur"
+    }
    },
    "headline_from": {
     "en": "Dawn",
@@ -280,6 +308,20 @@
     "en": "Three uncapped players named in Pakistan Test squad",
     "ur": "ٹیسٹ سیریز کے لیے قومی اسکواڈ کا اعلان، تین نئے کھلاڑی شامل"
    },
+   "brief": {
+    "en": {
+     "text": "The PCB named a squad for the home Test series that includes three uncapped players, while two senior pacers have been rested.",
+     "outlet": "Geo News",
+     "link": "https://example.com/geo/en/uncapped-test-squad",
+     "lang": "en"
+    },
+    "ur": {
+     "text": "پی سی بی نے ہوم ٹیسٹ سیریز کے لیے قومی اسکواڈ کا اعلان کر دیا جس میں تین نئے کھلاڑی شامل ہیں۔",
+     "outlet": "Express",
+     "link": "https://example.com/express/ur/test-squad-urdu",
+     "lang": "ur"
+    }
+   },
    "headline_from": {
     "en": "Geo News",
     "ur": "Express"
@@ -367,6 +409,20 @@
    "headline": {
     "en": "Rupee stable against dollar as remittances rise",
     "ur": "ترسیلات زر میں اضافہ، روپیہ مستحکم"
+   },
+   "brief": {
+    "en": {
+     "text": "The rupee held steady against the US dollar as workers' remittances rose compared with a year earlier, State Bank of Pakistan data showed.",
+     "outlet": "Business Recorder",
+     "link": "https://example.com/brecorder/en/rupee-stable-remittances",
+     "lang": "en"
+    },
+    "ur": {
+     "text": "اسٹیٹ بینک کے مطابق بیرون ملک پاکستانیوں کی جانب سے بھیجی گئی رقوم میں گزشتہ سال کے مقابلے میں اضافہ ہوا، جبکہ روپیہ ڈالر کے مقابلے میں مستحکم رہا۔",
+     "outlet": "Geo News",
+     "link": "https://example.com/geo/ur/tarseelat-izafa",
+     "lang": "ur"
+    }
    },
    "headline_from": {
     "en": "Business Recorder",
@@ -462,6 +518,20 @@
     "en": "Lahore board to announce intermediate supplementary results next week",
     "ur": "Lahore board to announce intermediate supplementary results next week"
    },
+   "brief": {
+    "en": {
+     "text": "The Board of Intermediate and Secondary Education Lahore said in a notice that supplementary results are expected next week.",
+     "outlet": "Pakistan Today",
+     "link": "https://example.com/pakistantoday/en/lahore-board-results",
+     "lang": "en"
+    },
+    "ur": {
+     "text": "The Board of Intermediate and Secondary Education Lahore said in a notice that supplementary results are expected next week.",
+     "outlet": "Pakistan Today",
+     "link": "https://example.com/pakistantoday/en/lahore-board-results",
+     "lang": "en"
+    }
+   },
    "headline_from": {
     "en": "Pakistan Today",
     "ur": "Pakistan Today"
@@ -521,6 +591,20 @@
    "headline": {
     "en": "SBP directs banks to credit freelancers' export proceeds within one day",
     "ur": "فری لانسرز کو ادائیگیاں ایک دن میں ملیں گی، اسٹیٹ بینک"
+   },
+   "brief": {
+    "en": {
+     "text": "The State Bank of Pakistan asked banks to credit IT and freelance export earnings within one working day.",
+     "outlet": "ProPakistani",
+     "link": "https://example.com/propakistani/en/sbp-freelancers",
+     "lang": "en"
+    },
+    "ur": {
+     "text": "اسٹیٹ بینک نے بینکوں کو ہدایت کی ہے کہ فری لانسرز کی برآمدی آمدنی ایک کاروباری دن میں کھاتوں میں منتقل کی جائے۔",
+     "outlet": "Express",
+     "link": "https://example.com/express/ur/freelancers-adaigi",
+     "lang": "ur"
+    }
    },
    "headline_from": {
     "en": "ProPakistani",
@@ -600,6 +684,20 @@
     "en": "NEPRA hears plea for fuel charge adjustment on electricity bills",
     "ur": "بجلی صارفین پر فیول ایڈجسٹمنٹ کی درخواست، نیپرا نے فیصلہ محفوظ کر لیا"
    },
+   "brief": {
+    "en": {
+     "text": "The power regulator heard a request from distribution companies to pass last quarter's fuel costs on to consumers and reserved its decision.",
+     "outlet": "Dawn",
+     "link": "https://example.com/dawn/en/nepra-fca-hearing",
+     "lang": "en"
+    },
+    "ur": {
+     "text": "تقسیم کار کمپنیوں نے گزشتہ سہ ماہی کی فیول ایڈجسٹمنٹ صارفین سے وصول کرنے کی درخواست کی، نیپرا نے سماعت کے بعد فیصلہ محفوظ کر لیا۔",
+     "outlet": "Express",
+     "link": "https://example.com/express/ur/nepra-faisla-mehfooz",
+     "lang": "ur"
+    }
+   },
    "headline_from": {
     "en": "Dawn",
     "ur": "Express"
@@ -678,6 +776,20 @@
     "en": "Dengue cases decline in Rawalpindi as temperatures drop",
     "ur": "راولپنڈی میں ڈینگی کے کیسز میں کمی"
    },
+   "brief": {
+    "en": {
+     "text": "Health officials in Rawalpindi reported fewer new dengue cases this week as night temperatures fell.",
+     "outlet": "The News International",
+     "link": "https://example.com/thenews/en/dengue-rawalpindi",
+     "lang": "en"
+    },
+    "ur": {
+     "text": "محکمہ صحت کے مطابق درجہ حرارت میں کمی کے بعد راولپنڈی میں ڈینگی کے نئے کیسز کم ہو گئے ہیں۔",
+     "outlet": "DW",
+     "link": "https://example.com/dw/ur/dengue-kami",
+     "lang": "ur"
+    }
+   },
    "headline_from": {
     "en": "The News International",
     "ur": "DW"
@@ -740,6 +852,20 @@
     "en": "UAE simplifies work visa renewals for residents",
     "ur": "UAE simplifies work visa renewals for residents"
    },
+   "brief": {
+    "en": {
+     "text": "Residents with a clean record can renew work visas online without an in-person medical test, UAE officials said.",
+     "outlet": "Al Jazeera",
+     "link": "https://example.com/aljazeera/en/uae-visa-renewals",
+     "lang": "en"
+    },
+    "ur": {
+     "text": "Residents with a clean record can renew work visas online without an in-person medical test, UAE officials said.",
+     "outlet": "Al Jazeera",
+     "link": "https://example.com/aljazeera/en/uae-visa-renewals",
+     "lang": "en"
+    }
+   },
    "headline_from": {
     "en": "Al Jazeera",
     "ur": "Al Jazeera"
@@ -801,6 +927,20 @@
     "en": "Cabinet approves & notifies new holiday schedule",
     "ur": "Cabinet approves & notifies new holiday schedule"
    },
+   "brief": {
+    "en": {
+     "text": "The federal cabinet approved the schedule.",
+     "outlet": "Dawn",
+     "link": "https://example.com/dawn/en/holiday-schedule",
+     "lang": "en"
+    },
+    "ur": {
+     "text": "The federal cabinet approved the schedule.",
+     "outlet": "Dawn",
+     "link": "https://example.com/dawn/en/holiday-schedule",
+     "lang": "en"
+    }
+   },
    "headline_from": {
     "en": "Dawn",
     "ur": "Dawn"
@@ -827,10 +967,10 @@
   "feeds_ok": 16,
   "feeds_failed": 4,
   "timings_ms": {
-   "collect": 65,
-   "group_and_tag": 6026,
+   "collect": 60,
+   "group_and_tag": 6012,
    "summaries": 0,
-   "total": 6092
+   "total": 6074
   }
  },
  "ai": {
@@ -839,6 +979,7 @@
   "calls": 0,
   "call_budget": 3,
   "cache_hits": 0,
+  "retried": 0,
   "summarised": 0,
   "fallback": 10,
   "note": "AI turned off (SUBAH_AI=off)"

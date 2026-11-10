@@ -108,6 +108,36 @@ def test_ungrounded_story_falls_back_alone():
     assert run.results["s1"]["status"] == run.results["s2"]["status"] == "ai"
 
 
+def test_rejected_story_is_retried_with_the_reasons():
+    seen = []
+
+    def reply(payload):
+        seen.append(payload)
+        data = json.loads(echo_good(payload))
+        if "note" not in payload:  # first attempt: make s0 ungrounded
+            data["stories"][0]["summary_en"] = "Prices rose by 40 percent, officials in Karachi said."
+        return json.dumps(data)
+
+    client = FakeClient(reply)
+    run = summarize(ITEMS[:3], client=client, cache_path=None)
+    assert client.calls == 2 and run.retried == 1
+    assert run.results["s0"]["status"] == "ai" and run.results["s0"]["reason"] == "summarised on retry"
+    retry_payload = seen[1]
+    assert [s["id"] for s in retry_payload["stories"]] == ["s0"]
+    assert any("40" in p for p in retry_payload["stories"][0]["rejected_because"])
+
+
+def test_retry_respects_the_call_budget():
+    def reply(payload):
+        data = json.loads(echo_good(payload))
+        data["stories"][0]["summary_en"] = "Prices rose by 40 percent."
+        return json.dumps(data)
+
+    client = FakeClient(reply)
+    run = summarize(ITEMS[:3], client=client, cache_path=None, max_calls=1)
+    assert client.calls == 1 and run.results["s0"]["status"] == "fallback"
+
+
 PROFILE = {"city": "lahore", "topics": ["prices", "cricket"], "lang": "en"}
 
 
@@ -125,6 +155,12 @@ def test_paper_generates_without_ai(monkeypatch, collection):
     assert_complete_paper(ed)
     assert ed["ai"]["enabled"] is False
     assert all(s["summary_status"] == "fallback" and s["summary"] is None for s in ed["stories"])
+    # no story is left without text: each quotes an outlet's own feed description, credited and linked
+    for s in ed["stories"]:
+        own = s["brief"]["en"] or s["brief"]["ur"]
+        assert own and own["text"] and own["outlet"] and own["link"].startswith("http")
+        corpus = " ".join(src_desc for src_desc in (a.summary for a in collection.articles if a.link == own["link"]))
+        assert own["text"].rstrip("…") in corpus or own["text"].rstrip("…")[:60] in corpus
 
 
 def test_paper_generates_when_ai_errors(collection):

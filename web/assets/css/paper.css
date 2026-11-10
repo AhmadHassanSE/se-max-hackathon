@@ -266,3 +266,24 @@ html.motion .cst:not(.is-drawn) .cst__line { stroke-dashoffset: 220; }
 html.motion .cst:not(.is-drawn) .cst__node { opacity: 0; transform: scale(0.4); }
 html.motion .cst .cst__node { transform-box: fill-box; transform-origin: center; transition: opacity 420ms var(--ease-out), transform 520ms cubic-bezier(0.34, 1.5, 0.64, 1); transition-delay: calc(300ms + var(--i) * 70ms); }
 html.motion .cst .cst__line { transition: stroke-dashoffset 700ms var(--ease-out); transition-delay: calc(var(--i) * 70ms); }
+
+/* the outlet's own words, read aloud */
+.pp-dek--quote { border-inline-start: 3px solid var(--rule); padding-inline-start: 12px; }
+.pp-dek--quote[lang="ur"] { font-family: var(--font-urdu); line-height: 2.2; text-align: right; }
+.pp-lead .pp-dek--quote::first-letter { float: none; font: inherit; padding: 0; color: inherit; }
+.pp-ai a { color: inherit; font-weight: 500; }
+.pp-listen { gap: 8px; }
+.pp-listen [data-icon] svg { width: 16px; height: 16px; }
+.pp-listen .wave { height: 18px; color: var(--kesar-deep); }
+.pp-say {
+  justify-self: start; display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 0 12px 0 10px;
+  border-radius: var(--radius-pill); border: 1px solid var(--rule); background: transparent; color: var(--ink-2);
+  font-size: calc(0.86rem * var(--scale)); font-weight: 500;
+  transition: border-color var(--dur-short) var(--ease-out), background-color var(--dur-short) var(--ease-out);
+}
+.pp-say svg { width: 15px; height: 15px; }
+.pp-say:hover { border-color: var(--ink); }
+.pp-say.is-on { background: var(--kesar-soft); border-color: var(--kesar); color: var(--ink); }
+.paper[lang="ur"] .pp-say { font-family: var(--font-urdu); }
+.pp-lead.is-reading, .pp-story.is-reading { background: color-mix(in oklab, var(--kesar-soft) 70%, transparent); }
+@media (max-width: 680px) { .pp-listen .pp-listen__label { display: none; } }

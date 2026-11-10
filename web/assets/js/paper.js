@@ -14,7 +14,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     en: {
       edition: "Edition", city: (c) => c, noCity: "All of Pakistan", stories: (n) => `${n} stories`,
       summaryAI: "Summary written by AI from the linked reports only.",
-      fallback: "No summary today for this story. The headlines below are as each outlet published them.",
+      inWords: (o) => `In ${o}’s own words, from its report.`, listen: "Listen", stop: "Stop", listenStory: "Listen to this story",
+      noUrduVoice: "This device has no Urdu voice, so the English text is read instead.", noSpeech: "This browser cannot read aloud.",
       why: "Why it is here", score: (p) => `${p.outlets} outlets` + (p.city ? `, +${p.city} your city` : "") + (p.topics ? `, +${p.topics} your topics` : ""),
       sources: (n) => `Sources (${n})`, from: "Headline from", read: "of", readLabel: (n) => `of ${n} read`, done: "All read",
       made: "How this paper was made", reader: "Your settings", change: "Change",
@@ -29,7 +30,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     ur: {
       edition: "شمارہ", city: (c) => c, noCity: "پورا پاکستان", stories: (n) => `${S.toUrduDigits(n)} خبریں`,
       summaryAI: "خلاصہ مصنوعی ذہانت نے صرف منسلک رپورٹس سے لکھا ہے۔",
-      fallback: "آج اس خبر کا خلاصہ دستیاب نہیں۔ نیچے ہر ادارے کی سرخی ویسی ہی ہے جیسی شائع ہوئی۔",
+      inWords: (o) => `${o} کے اپنے الفاظ میں، اس کی رپورٹ سے۔`, listen: "سنیں", stop: "روکیں", listenStory: "یہ خبر سنیں",
+      noUrduVoice: "اس آلے پر اردو آواز موجود نہیں، اس لیے انگریزی متن پڑھا جا رہا ہے۔", noSpeech: "یہ براؤزر پڑھ کر نہیں سنا سکتا۔",
       why: "یہ خبر یہاں کیوں ہے", score: (p) => `${S.toUrduDigits(p.outlets)} ادارے` + (p.city ? `، آپ کا شہر +${S.toUrduDigits(p.city)}` : "") + (p.topics ? `، آپ کے موضوعات +${S.toUrduDigits(p.topics)}` : ""),
       sources: (n) => `ذرائع (${S.toUrduDigits(n)})`, from: "سرخی بشکریہ", readLabel: (n) => `میں سے ${S.toUrduDigits(n)} پڑھی`, done: "سب پڑھ لیں",
       made: "یہ اخبار کیسے بنا", reader: "آپ کی ترتیبات", change: "تبدیل کریں",
@@ -67,7 +69,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (st.summary) {
       return `<p class="pp-dek">${esc(st.summary[lang].text)}</p><p class="pp-ai">${L.summaryAI}</p>`;
     }
-    return `<p class="pp-fallback">${L.fallback}</p>`;
+    const b = briefOf(st);
+    if (!b) return "";
+    const ur = b.lang === "ur";
+    return `<p class="pp-dek pp-dek--quote"${ur ? ' lang="ur" dir="rtl"' : ' lang="en" dir="ltr"'}>${esc(b.text)}</p>
+      <p class="pp-ai">${L.inWords(`<a href="${esc(b.link)}" target="_blank" rel="noopener noreferrer">${esc(b.outlet)}</a>`)}</p>`;
+  }
+  function briefOf(st) {
+    return st.brief ? (st.brief[lang] || st.brief.en || st.brief.ur) : null;
   }
   function storyHTML(st, lead, pos) {
     const L = T[lang];
@@ -84,8 +93,9 @@ document.addEventListener("DOMContentLoaded", async () => {
           <div class="pp-badge-row">${S.coverageHTML(st, lang)}</div>
           ${S.forYouHTML(st.for_you, lang)}
           <p class="pp-why"><span>${L.why}:</span> ${L.score(st.score_parts)}</p>
+          <button class="pp-say" type="button" data-say="${pos}" aria-label="${esc(L.listenStory)}">${S.ICONS.speaker}<span>${esc(L.listen)}</span></button>
         </div>
-        <div class="${lead ? "pp-lead__side" : "pp-story__side"}">${st.outlet_count > 1 ? S.constellationHTML(st, { big: lead, lang }) : ""}${sourcesList(st, lead)}</div>
+        <div class="${lead ? "pp-lead__side" : "pp-story__side"}">${st.outlet_count > 1 ? S.constellationHTML(st, { big: lead, lang }) : ""}${sourcesList(st, false)}</div>
       </article>`;
   }
   function pickHTML(st) {
@@ -151,6 +161,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     paper.classList.toggle("is-large", large);
     S.magnetic(paper);
     observeConstellations();
+    stopSpeaking();
+    $$(".pp-say", paper).forEach((b) => b.addEventListener("click", () => {
+      const i = +b.dataset.say;
+      if (speakingFrom === i) stopSpeaking(); else speakFrom(i, true);
+    }));
+    $("#pp-listen .pp-listen__label").textContent = T[lang].listen;
     $("#pp-generate .pp-generate__label").textContent = L.generate;
     dots.innerHTML = stories.map((s, i) => `<li><span class="sr-only">Story ${i + 1}</span></li>`).join("");
     read.clear();
@@ -167,6 +183,68 @@ document.addEventListener("DOMContentLoaded", async () => {
     }), { rootMargin: "0px 0px -10% 0px" });
     figs.forEach((f) => io.observe(f));
   }
+
+  /* ---------------------------------------------------------------- read aloud (the browser's own voices) */
+  const synth = window.speechSynthesis;
+  let speakingFrom = -1;
+  function pickVoice(l) {
+    const voices = synth ? synth.getVoices() : [];
+    const want = l === "ur" ? ["ur"] : ["en-PK", "en-IN", "en-GB", "en"];
+    for (const w of want) {
+      const v = voices.find((x) => (x.lang || "").toLowerCase().startsWith(w.toLowerCase()));
+      if (v) return v;
+    }
+    return null;
+  }
+  function spoken(st, l) {
+    const head = st.summary ? st.summary[l].headline : (st.headline[l] || st.headline.en);
+    const text = st.summary ? st.summary[l].text : ((st.brief && st.brief[l]) || {}).text || "";
+    return `${head}. ${text}`;
+  }
+  function stopSpeaking() {
+    if (synth) synth.cancel();
+    speakingFrom = -1;
+    $$(".is-reading", paper).forEach((el) => el.classList.remove("is-reading"));
+    $$(".pp-say", paper).forEach((b) => { b.classList.remove("is-on"); b.querySelector("span").textContent = T[lang].listen; });
+    const tb = $("#pp-listen");
+    if (tb) { tb.classList.remove("is-speaking"); tb.setAttribute("aria-pressed", "false"); $(".pp-listen__label", tb).textContent = T[lang].listen; }
+  }
+  function speakFrom(start, onlyOne) {
+    if (!synth) { S.toast(T[lang].noSpeech); return; }
+    stopSpeaking();
+    const stories = S.pickedStories(edition);
+    let l = lang;
+    let voice = pickVoice(l);
+    if (l === "ur" && !voice) { l = "en"; voice = pickVoice("en"); S.toast(T[lang].noUrduVoice); }
+    speakingFrom = start;
+    const tb = $("#pp-listen");
+    tb.classList.add("is-speaking");
+    tb.setAttribute("aria-pressed", "true");
+    $(".pp-listen__label", tb).textContent = T[lang].stop;
+    const list = onlyOne ? [start] : stories.map((_, i) => i).filter((i) => i >= start);
+    list.forEach((i, k) => {
+      const u = new SpeechSynthesisUtterance(spoken(stories[i], l));
+      if (voice) { u.voice = voice; u.lang = voice.lang; } else u.lang = l === "ur" ? "ur-PK" : "en-GB";
+      u.rate = 0.97;
+      u.onstart = () => {
+        $$("[data-i]", paper).forEach((el) => el.classList.toggle("is-reading", +el.dataset.i === i));
+        $$(".pp-say", paper).forEach((b) => {
+          const on = +b.dataset.say === i;
+          b.classList.toggle("is-on", on);
+          b.querySelector("span").textContent = on ? T[lang].stop : T[lang].listen;
+        });
+        const el = $(`[data-i="${i}"]`, paper);
+        if (el && !onlyOne) el.scrollIntoView({ behavior: S.reduceMotion ? "auto" : "smooth", block: "center" });
+      };
+      if (k === list.length - 1) u.onend = () => { if (speakingFrom === start) stopSpeaking(); };
+      synth.speak(u);
+    });
+  }
+  if (synth) { synth.getVoices(); synth.onvoiceschanged = () => synth.getVoices(); }
+  $("#pp-listen").addEventListener("click", () => {
+    if ($("#pp-listen").classList.contains("is-speaking")) stopSpeaking(); else speakFrom(0, false);
+  });
+  window.addEventListener("pagehide", () => { if (synth) synth.cancel(); });
 
   /* ---------------------------------------------------------------- reading progress */
   const dots = $("#pp-dots");
