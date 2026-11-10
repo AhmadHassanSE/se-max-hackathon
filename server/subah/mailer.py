@@ -188,6 +188,19 @@ def send(to: str, subject: str, html: str, text: str, from_name: str, reply_to: 
         msg["Reply-To"] = reply_to
     msg.set_content(text)
     msg.add_alternative(html, subtype="html")
-    with smtplib.SMTP_SSL("smtp.gmail.com", 465, timeout=25) as smtp:
+    # Port 465 (SSL) first; some networks block it, so fall back to 587 (STARTTLS). A wrong password is not retried.
+    try:
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465, timeout=20) as smtp:
+            smtp.login(user, password)
+            smtp.send_message(msg)
+        return
+    except smtplib.SMTPAuthenticationError:
+        raise
+    except (OSError, smtplib.SMTPServerDisconnected, smtplib.SMTPConnectError):
+        pass
+    with smtplib.SMTP("smtp.gmail.com", 587, timeout=25) as smtp:
+        smtp.ehlo()
+        smtp.starttls()
+        smtp.ehlo()
         smtp.login(user, password)
         smtp.send_message(msg)

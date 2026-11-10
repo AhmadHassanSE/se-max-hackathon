@@ -161,3 +161,32 @@ def test_unreachable_database_reports_instead_of_crashing(monkeypatch):
         assert r.status_code == 503
     finally:
         accounts.set_store(None)
+
+
+def test_gmail_falls_back_to_port_587(monkeypatch):
+    """Some networks block port 465; sending then goes through 587 with STARTTLS."""
+    import smtplib
+    used = []
+
+    class Blocked:
+        def __init__(self, *a, **k):
+            raise ConnectionResetError("blocked")
+
+    class Plain:
+        def __init__(self, host, port, timeout=None):
+            used.append(port)
+        def __enter__(self): return self
+        def __exit__(self, *a): return False
+        def ehlo(self): pass
+        def starttls(self): used.append("tls")
+        def login(self, u, p): used.append(("login", u))
+        def send_message(self, m): used.append(("to", m["To"]))
+
+    monkeypatch.setattr(smtplib, "SMTP_SSL", Blocked)
+    monkeypatch.setattr(smtplib, "SMTP", Plain)
+    monkeypatch.setenv("GMAIL_USER", "test@example.com")
+    monkeypatch.setenv("GMAIL_APP_PASSWORD", "test test test test")
+    import importlib
+    real = importlib.reload(mailer)  # the client fixture is not used here, so send is the real one
+    real.send("test.parent@example.com", "s", "<p>h</p>", "t", "Test A")
+    assert used == [587, "tls", ("login", "test@example.com"), ("to", "test.parent@example.com")]
