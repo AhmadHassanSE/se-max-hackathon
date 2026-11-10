@@ -4,7 +4,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   const $ = (s, r) => (r || document).querySelector(s);
   const $$ = (s, r) => [...(r || document).querySelectorAll(s)];
   let profile = S.store.get();
-  const POOL = 12;
+  /* stories offered on the pick cards: 12, or 15 with Plus */
+  const me0 = S.cachedMe();
+  const POOL = me0 && me0.plan && me0.plan.id === "plus" ? 15 : 12;
   let catalog = { topics: [], cities: [] };
   try { catalog = await S.api.catalog(); } catch (e) { /* the form still works without names */ }
 

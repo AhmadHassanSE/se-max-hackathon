@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Your Subah account</title>
+  <meta name="description" content="Log in or create a Subah account to save your settings and send gift papers by email.">
+  <meta name="theme-color" content="#f6f1e6">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:wght@400;500;700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/account.css">
+  <script src="assets/js/common.js" defer></script>
+  <script src="assets/js/account.js" defer></script>
+</head>
+<body class="theme-day page-account">
+  <a class="skip-link" href="#acct-main">Skip to the form</a>
+  <p class="demo-strip"><b>Prototype.</b> Use a test name and email. Passwords are stored only as a salted hash.</p>
+
+  <header class="site-header">
+    <nav class="nav" aria-label="Main">
+      <a class="wordmark" href="index.html" aria-label="Subah home">
+        <span data-sunmark></span><span class="wordmark__en">Subah</span><span class="wordmark__ur" lang="ur">صبح</span>
+      </a>
+      <ul class="nav__links" id="nav-links">
+        <li><a href="index.html#how">How it works</a></li>
+        <li><a href="paper.html">Sample paper</a></li>
+        <li><a href="gift.html">For family</a></li>
+        <li><a href="sources.html">Our sources</a></li>
+      </ul>
+      <a class="btn btn--primary btn--nav" href="onboard.html"><span>Make my paper</span><span class="btn__orb" data-icon="arrow"></span></a>
+      <button class="nav__menu-btn" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Menu"></button>
+    </nav>
+  </header>
+
+  <main class="acct container" id="acct-main">
+    <aside class="acct-art" aria-hidden="true">
+      <div class="acct-sun"></div>
+      <div class="acct-paper">
+        <p class="acct-paper__meta"><span data-today="en"></span></p>
+        <p class="acct-paper__title" id="art-title">Your Subah</p>
+        <span class="acct-paper__line"></span><span class="acct-paper__line"></span><span class="acct-paper__line acct-paper__line--short"></span>
+        <span class="acct-paper__line"></span><span class="acct-paper__line acct-paper__line--short"></span>
+      </div>
+      <p class="acct-art__quote" lang="ur">صبح بخیر</p>
+    </aside>
+
+    <section class="acct-panel" id="acct-auth" hidden>
+      <div class="seg acct-tabs" role="tablist" aria-label="Log in or sign up">
+        <button type="button" role="tab" id="tab-login" aria-controls="form-login" aria-selected="true" aria-pressed="true">Log in</button>
+        <button type="button" role="tab" id="tab-signup" aria-controls="form-signup" aria-selected="false" aria-pressed="false">Sign up</button>
+      </div>
+
+      <form class="acct-form" id="form-login" role="tabpanel" aria-labelledby="tab-login" novalidate>
+        <h1 class="acct-title">Good morning again.</h1>
+        <p class="acct-sub">Log in to send gift papers and keep your settings.</p>
+        <div class="field">
+          <label class="field__label" for="li-email">Email</label>
+          <input class="input" id="li-email" name="email" type="email" autocomplete="username" required>
+        </div>
+        <div class="field">
+          <label class="field__label" for="li-pass">Password</label>
+          <div class="pass"><input class="input" id="li-pass" name="password" type="password" autocomplete="current-password" required><button class="pass__eye" type="button" aria-label="Show password" aria-pressed="false">Show</button></div>
+        </div>
+        <p class="form-error" role="alert"></p>
+        <button class="btn btn--primary acct-submit" type="submit"><span>Log in</span><span class="btn__orb" data-icon="arrow"></span></button>
+      </form>
+
+      <form class="acct-form" id="form-signup" role="tabpanel" aria-labelledby="tab-signup" novalidate hidden>
+        <h1 class="acct-title">Start your mornings here.</h1>
+        <p class="acct-sub">An account saves your settings. A plan lets you send the paper by email.</p>
+        <div class="field">
+          <label class="field__label" for="su-name">Your name</label>
+          <input class="input" id="su-name" name="name" autocomplete="name" maxlength="40" required>
+        </div>
+        <div class="field">
+          <label class="field__label" for="su-email">Email</label>
+          <input class="input" id="su-email" name="email" type="email" autocomplete="email" required>
+        </div>
+        <div class="field">
+          <label class="field__label" for="su-pass">Password</label>
+          <div class="pass"><input class="input" id="su-pass" name="password" type="password" autocomplete="new-password" minlength="8" required><button class="pass__eye" type="button" aria-label="Show password" aria-pressed="false">Show</button></div>
+          <span class="meter" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          <span class="field__hint" id="su-hint">At least 8 characters.</span>
+        </div>
+        <p class="form-error" role="alert"></p>
+        <button class="btn btn--primary acct-submit" type="submit"><span>Create my account</span><span class="btn__orb" data-icon="arrow"></span></button>
+      </form>
+    </section>
+
+    <section class="acct-panel" id="acct-home" hidden>
+      <p class="acct-kicker">Your account</p>
+      <h1 class="acct-title" id="home-hello">Good morning.</h1>
+      <p class="acct-sub" id="home-email"></p>
+
+      <div class="acct-card" id="home-plan"></div>
+
+      <div class="acct-actions">
+        <a class="btn btn--primary" href="gift.html"><span>Send a gift paper</span><span class="btn__orb" data-icon="arrow"></span></a>
+        <a class="btn btn--ghost" href="paper.html">Today’s paper</a>
+        <button class="btn btn--ghost" type="button" id="home-logout">Log out</button>
+      </div>
+    </section>
+
+    <p class="acct-loading" id="acct-loading">Checking your account…</p>
+  </main>
+
+  <footer class="site-footer site-footer--slim">
+    <div class="container footer__base">
+      <span>A hackathon prototype. Accounts hold a name, an email, a password hash and your plan.</span>
+      <a href="pricing.html">Pricing</a>
+    </div>
+  </footer>
+</body>
+</html>

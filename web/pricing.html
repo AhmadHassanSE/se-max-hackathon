@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Subah pricing</title>
+  <meta name="description" content="Subah Basic is $3 a month and Plus is $8 a month. Reading today's paper on the site stays free.">
+  <meta name="theme-color" content="#f6f1e6">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:wght@400;500;700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/pricing.css">
+  <script src="assets/js/common.js" defer></script>
+  <script src="assets/js/pricing.js" defer></script>
+</head>
+<body class="theme-day page-pricing">
+  <a class="skip-link" href="#plans">Skip to the plans</a>
+  <p class="demo-strip"><b>Prototype.</b> Choosing a plan activates it for 30 days. No card is asked for and nothing is charged.</p>
+
+  <header class="site-header">
+    <nav class="nav" aria-label="Main">
+      <a class="wordmark" href="index.html" aria-label="Subah home">
+        <span data-sunmark></span><span class="wordmark__en">Subah</span><span class="wordmark__ur" lang="ur">صبح</span>
+      </a>
+      <ul class="nav__links" id="nav-links">
+        <li><a href="index.html#how">How it works</a></li>
+        <li><a href="paper.html">Sample paper</a></li>
+        <li><a href="gift.html">For family</a></li>
+        <li><a href="sources.html">Our sources</a></li>
+        <li><a href="pricing.html" aria-current="page">Pricing</a></li>
+      </ul>
+      <a class="btn btn--primary btn--nav" href="onboard.html"><span>Make my paper</span><span class="btn__orb" data-icon="arrow"></span></a>
+      <button class="nav__menu-btn" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Menu"></button>
+    </nav>
+  </header>
+
+  <main>
+    <section class="pr-hero container" aria-labelledby="pr-title">
+      <p class="pr-kicker">The price of a cup of chai a week</p>
+      <h1 id="pr-title">Pay for the morning, <em>not for the clicks.</em></h1>
+      <p class="pr-lede">Reading today’s paper on this site stays free. A plan saves your settings and lets you send the paper by email to the people you love.</p>
+    </section>
+
+    <section class="container pr-plans" id="plans" aria-label="Plans">
+      <article class="plan" data-plan="basic">
+        <header class="plan__head">
+          <h2 class="plan__name">Basic</h2>
+          <p class="plan__for">For your own mornings, and a few for family.</p>
+        </header>
+        <p class="plan__price"><span class="plan__cur">$</span><span class="plan__amt">3</span><span class="plan__per">a month</span></p>
+        <ul class="plan__list" data-features="basic"></ul>
+        <button class="btn btn--ink plan__cta" type="button" data-choose="basic">Choose Basic</button>
+        <p class="plan__state" data-state="basic"></p>
+      </article>
+
+      <article class="plan plan--plus" data-plan="plus">
+        <span class="plan__ribbon">Most gifted</span>
+        <header class="plan__head">
+          <h2 class="plan__name">Plus</h2>
+          <p class="plan__for">For the family abroad, sending home every week.</p>
+        </header>
+        <p class="plan__price"><span class="plan__cur">$</span><span class="plan__amt">8</span><span class="plan__per">a month</span></p>
+        <ul class="plan__list" data-features="plus"></ul>
+        <button class="btn btn--primary plan__cta" type="button" data-choose="plus"><span>Choose Plus</span><span class="btn__orb" data-icon="arrow"></span></button>
+        <p class="plan__state" data-state="plus"></p>
+      </article>
+    </section>
+
+    <section class="container pr-free" aria-labelledby="free-title">
+      <h2 id="free-title">Always free</h2>
+      <p>Today’s paper on this site, every source link, the outlet list and the ranking formula. Paying never changes which stories you see or how they are ranked.</p>
+    </section>
+
+    <section class="container pr-faq" aria-labelledby="faq-title">
+      <h2 id="faq-title">Questions</h2>
+      <details><summary>What is a gift paper?</summary><p>You choose someone’s city, topics, language and type size. We email them today’s paper, re-ranked for them with the same published formula, signed from you.</p></details>
+      <details><summary>Do they need an account?</summary><p>No. They get an email. If they reply, it comes to you.</p></details>
+      <details><summary>Can I cancel?</summary><p>Yes, from your account page, at any time. In this prototype no money is taken.</p></details>
+      <details><summary>Where do the stories come from?</summary><p>Only from the outlets on <a href="sources.html">our published list</a>. Every story links to the reports it is built from.</p></details>
+    </section>
+  </main>
+
+  <div class="modal" id="checkout" hidden>
+    <div class="modal__scrim" data-close></div>
+    <div class="modal__panel" role="dialog" aria-modal="true" aria-labelledby="co-title">
+      <button class="modal__close" type="button" data-close aria-label="Close"></button>
+      <div class="co" id="co-body">
+        <p class="co__kicker">Confirm your plan</p>
+        <h2 class="co__title" id="co-title">Subah Plus</h2>
+        <div class="co__receipt">
+          <div class="co__row"><span>Plan</span><b id="co-plan">Plus</b></div>
+          <div class="co__row"><span>Billed</span><b>Monthly</b></div>
+          <div class="co__row"><span>Account</span><b id="co-email"></b></div>
+          <div class="co__row co__row--total"><span>Total today</span><b id="co-total">$8.00</b></div>
+          <span class="co__stamp" aria-hidden="true">Active</span>
+        </div>
+        <p class="co__note">Prototype checkout: no card is asked for and nothing is charged. The plan runs for 30 days.</p>
+        <p class="form-error" id="co-error" role="alert"></p>
+        <div class="co__actions">
+          <button class="btn btn--primary" type="button" id="co-confirm"><span>Start my plan</span><span class="btn__orb" data-icon="arrow"></span></button>
+          <button class="btn btn--ghost" type="button" data-close>Not now</button>
+        </div>
+      </div>
+      <div class="co co--done" id="co-done" hidden>
+        <p class="co__kicker">You’re all set</p>
+        <h2 class="co__title" id="co-done-title">Plus is active.</h2>
+        <p id="co-done-text"></p>
+        <div class="co__actions">
+          <a class="btn btn--primary" href="gift.html"><span>Send a gift paper</span><span class="btn__orb" data-icon="arrow"></span></a>
+          <a class="btn btn--ghost" href="account.html">My account</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer site-footer--slim">
+    <div class="container footer__base">
+      <span>A hackathon prototype. Prices in US dollars.</span>
+      <a href="sources.html">Our sources and ranking</a>
+    </div>
+  </footer>
+</body>
+</html>

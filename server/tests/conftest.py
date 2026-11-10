@@ -12,7 +12,8 @@ from server.subah import feeds  # noqa: E402
 # Tests never call the real AI: drop any key loaded from a local .env (tests that need one set a fake).
 import os  # noqa: E402
 
-os.environ.pop("GROQ_API_KEY", None)
+for _k in ("GROQ_API_KEY", "MONGODB_URI", "GMAIL_USER", "GMAIL_APP_PASSWORD"):
+    os.environ.pop(_k, None)
 
 FIXTURES = Path(__file__).resolve().parent / "fixtures"
 

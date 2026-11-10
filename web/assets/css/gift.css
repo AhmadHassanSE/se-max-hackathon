@@ -100,3 +100,16 @@ body.page-gift {
 .gp .fy { margin-top: 2px; }
 .gp__empty { color: var(--muted); padding: 16px 0; }
 .gp-note { font-size: var(--step--1); color: var(--muted); text-align: right; min-height: 1lh; }
+
+/* sending by email */
+.g-plus { display: inline-block; margin-inline-start: 6px; padding: 1px 8px; border-radius: 99px; background: var(--ink); color: var(--paper); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; vertical-align: 2px; }
+.page-gift .textarea { background: var(--paper); resize: vertical; min-height: 84px; }
+.page-gift .textarea:disabled { opacity: 0.55; }
+.gift-acct { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; min-height: 1lh; font-size: 0.95rem; color: var(--ink-2); }
+.gift-acct a { font-weight: 500; }
+.gift-acct .acct-chip__av { width: 26px; height: 26px; font-size: 0.7rem; }
+.gift-status.is-sent { border-color: var(--ok); background: var(--ok-soft); }
+.gift-status.is-error { border-color: var(--bad); background: var(--bad-soft); }
+.mail-from { font-size: 0.9rem; color: var(--muted); padding-right: 44px; overflow-wrap: anywhere; }
+.mail-subject { font-family: var(--font-ui); font-weight: 700; font-size: 1.1rem; letter-spacing: 0; line-height: 1.4; margin: 6px 0 14px; max-width: none; padding-right: 44px; }
+.mail-frame { width: 100%; height: min(70dvh, 720px); border: 1px solid var(--rule); border-radius: 12px; background: #f3eee2; }

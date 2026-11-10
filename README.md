@@ -21,10 +21,11 @@ People in Pakistan, and their families abroad, see the same story many times acr
 2. Click **Make my paper**, choose **Test reader A**, then **Next: topics**, then **Generate today's paper**.
 3. On the paper: each story shows **Reported by N outlets**, its sources with links, **For you** tags with the word that matched, and why it is here. Switch to **اردو** and **large print** in the top bar. **Generate today's paper now** rebuilds it.
 4. Open **Our sources** to see the outlet list and the ranking formula, and **Finish today's paper** for the last page.
+5. Open **Pricing**, choose **Plus** and sign up with a test email. Checkout is a prototype: nothing is charged. Then on **For family**, enter a recipient email you own and **Send their paper**, or **Preview the email** without sending.
 
 ## Test accounts
 
-No accounts. Use the built-in test readers on the setup page:
+Reading the paper needs no account. Use the built-in test readers on the setup page:
 
 | Role | Setting | Notes |
 |------|---------|-------|
@@ -33,6 +34,8 @@ No accounts. Use the built-in test readers on the setup page:
 | Test reader C | Rawalpindi; health, cricket; Urdu; large print | |
 
 Test profiles only. Settings stay in the browser.
+
+To try plans and gift emails, sign up on **Log in > Sign up** with a test name and an email you own. Plans: **Basic $3 a month** (3 gift emails a month) and **Plus $8 a month** (30 gift emails a month, 15 stories to pick from, a personal note on gifts). Checkout activates a plan for 30 days without taking a payment.
 
 ## Run locally
 
@@ -51,7 +54,7 @@ cp .env.example .env        # then add your API key if you have one
 
 ### Environment variables
 
-`GROQ_API_KEY` (optional: without it, stories show source headlines with links; get one at console.groq.com), `SUBAH_SOURCE` (`live`, `snapshot` or `fixtures`), `SUBAH_AI_BATCH`, `SUBAH_MAX_AI_CALLS`, `SUBAH_MODEL`, `SUBAH_AI`. See `.env.example`.
+`GROQ_API_KEY` (optional: without it, stories show source headlines with links; get one at console.groq.com), `SUBAH_SOURCE` (`live`, `snapshot` or `fixtures`), `SUBAH_AI_BATCH`, `SUBAH_MAX_AI_CALLS`, `SUBAH_MODEL`, `SUBAH_AI`, `MONGODB_URI` and `SUBAH_DB` (accounts; without them accounts live in memory), `GMAIL_USER` and `GMAIL_APP_PASSWORD` (gift emails; a Google app password, not the account password), `SUBAH_SITE_URL`. See `.env.example`.
 
 ### Run
 
@@ -69,14 +72,14 @@ Useful tools: `python -m server.tools.check_feeds` checks every feed; `python -m
 bash scripts/test.sh
 ```
 
-51 tests. See [docs/testing.md](docs/testing.md) and [docs/judge-checks.md](docs/judge-checks.md).
+66 tests. See [docs/testing.md](docs/testing.md) and [docs/judge-checks.md](docs/judge-checks.md).
 
 ## Deploy (free, Hugging Face Spaces)
 
 One-time setup, about 10 minutes:
 
 1. Create a free account at huggingface.co, then **New Space**: name `subah`, SDK **Gradio**, template **Blank**, hardware **ZeroGPU (Free)** (free accounts cannot choose CPU basic for new Spaces, and Docker Spaces need PRO), visibility **Public**.
-2. In the Space: **Settings > Variables and secrets > New secret**, name `GROQ_API_KEY`, value your Groq key. The key lives only there.
+2. In the Space: **Settings > Variables and secrets > New secret**, add `GROQ_API_KEY`, `MONGODB_URI`, `GMAIL_USER` and `GMAIL_APP_PASSWORD`. They live only there. In MongoDB Atlas, **Network Access** must allow `0.0.0.0/0`, because the Space has no fixed address.
 3. In your Hugging Face account: **Settings > Access Tokens > Create new token**, type **Write**. Copy it.
 4. Deploy, either way:
    - **From your computer:** `HF_TOKEN=<token> HF_SPACE=<your-username>/subah bash scripts/deploy_space.sh`
@@ -91,7 +94,9 @@ The first start takes a few minutes (it installs packages and downloads the 1.1 
 - Grouping was tuned on one real day of feeds and a fixed test set; ongoing stories can collect several related developments into one group.
 - AI summaries use Groq (`openai/gpt-oss-120b`) on the free tier. On a real day 9 of 10 stories passed the source check in 2 calls; the free tier has per-minute token limits, so very fast repeated generations may fall back to headlines until the minute resets.
 - Urdu AI output still needs review by an Urdu speaker.
-- Gift papers are a preview only; nothing is sent.
+- Payments are a prototype: choosing a plan activates it without charging. A payment provider (for example Stripe) is needed before launch.
+- Gift emails go out from one Gmail account, which Google limits to about 500 messages a day.
+- Approval note: the approved plan cut payments; plans and gift emails were added on request after approval.
 
 ## Documentation
 

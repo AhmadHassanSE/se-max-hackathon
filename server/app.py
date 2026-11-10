@@ -11,12 +11,12 @@ import threading
 from pathlib import Path
 from typing import Literal
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request, Response
 from fastapi.responses import StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
-from .subah import feeds
+from .subah import accounts, feeds, mailer
 from .subah.edition import ProfileError, build_edition, load_latest, save_latest
 from .subah.embed import embedder_status
 from .subah.rank import FORMULA
@@ -80,7 +80,9 @@ class GenerateRequest(BaseModel):
 @app.get("/api/health")
 def health() -> dict:
     ok, why = ai_configured()
-    return {"ok": True, "ai": {"enabled": ok, "note": why}, "grouping": embedder_status(), "default_source": DEFAULT_SOURCE}
+    mail_ok, mail_why = mailer.mail_configured()
+    return {"ok": True, "ai": {"enabled": ok, "note": why}, "grouping": embedder_status(), "default_source": DEFAULT_SOURCE,
+            "accounts": accounts.get_store().status(), "email": {"enabled": mail_ok, "note": mail_why}}
 
 
 @app.get("/api/outlets")
@@ -157,6 +159,184 @@ def latest() -> dict:
     if edition is None:
         raise HTTPException(status_code=404, detail="No paper generated yet.")
     return edition
+
+
+# ---------------------------------------------------------------- accounts, plans and gifts by email
+
+COOKIE = "subah_session"
+
+
+def _secure(request: Request) -> bool:
+    return request.headers.get("x-forwarded-proto", request.url.scheme) == "https"
+
+
+def _set_cookie(response: Response, request: Request, token: str) -> None:
+    secure = _secure(request)
+    # SameSite=None lets the cookie work when the Space is shown inside huggingface.co; it needs Secure
+    response.set_cookie(COOKIE, token, max_age=accounts.SESSION_DAYS * 86400, httponly=True, secure=secure,
+                        samesite="none" if secure else "lax", path="/")
+
+
+def _same_site_only(request: Request) -> None:
+    """State-changing calls must carry the X-Subah header. A form on another site cannot add it, and a script on
+    another site cannot send it without a CORS preflight this server never approves."""
+    if request.headers.get("x-subah") != "1":
+        raise HTTPException(status_code=403, detail="Missing X-Subah header.")
+
+
+def _user(request: Request, required: bool = True) -> dict | None:
+    try:
+        user = accounts.user_for_token(request.cookies.get(COOKIE))
+    except accounts.AccountError as exc:
+        raise HTTPException(status_code=exc.status, detail=str(exc)) from exc
+    if user is None and required:
+        raise HTTPException(status_code=401, detail="Log in first.")
+    return user
+
+
+def _account_call(fn, *args):
+    try:
+        return fn(*args)
+    except accounts.AccountError as exc:
+        raise HTTPException(status_code=exc.status, detail=str(exc)) from exc
+
+
+class SignupRequest(BaseModel):
+    name: str = Field(..., max_length=80)
+    email: str = Field(..., max_length=254)
+    password: str = Field(..., max_length=200)
+
+
+class LoginRequest(BaseModel):
+    email: str = Field(..., max_length=254)
+    password: str = Field(..., max_length=200)
+
+
+class PlanRequest(BaseModel):
+    plan: Literal["basic", "plus"]
+
+
+class GiftRequest(BaseModel):
+    recipient_name: str = Field("", max_length=24)
+    recipient_name_ur: str = Field("", max_length=24)
+    from_name_ur: str = Field("", max_length=24)
+    recipient_email: str = Field(..., max_length=254)
+    city: str | None = None
+    topics: list[str] = Field(default_factory=list, max_length=5)
+    lang: Literal["en", "ur"] = "ur"
+    large: bool = True
+    from_name: str = Field("", max_length=24)
+    note: str = Field("", max_length=280)
+
+
+@app.get("/api/plans")
+def plans() -> dict:
+    return {"plans": list(accounts.PLANS.values()), "currency": "USD",
+            "payments": "prototype: choosing a plan activates it for 30 days without taking a payment"}
+
+
+@app.post("/api/auth/signup")
+def auth_signup(body: SignupRequest, request: Request, response: Response) -> dict:
+    _same_site_only(request)
+    user = _account_call(accounts.signup, body.name, body.email, body.password)
+    _set_cookie(response, request, _account_call(accounts.start_session, user))
+    return {"user": _account_call(accounts.public_user, user)}
+
+
+@app.post("/api/auth/login")
+def auth_login(body: LoginRequest, request: Request, response: Response) -> dict:
+    _same_site_only(request)
+    user = _account_call(accounts.login, body.email, body.password)
+    _set_cookie(response, request, _account_call(accounts.start_session, user))
+    return {"user": _account_call(accounts.public_user, user)}
+
+
+@app.post("/api/auth/logout")
+def auth_logout(request: Request, response: Response) -> dict:
+    _same_site_only(request)
+    _account_call(accounts.end_session, request.cookies.get(COOKIE))
+    response.delete_cookie(COOKIE, path="/")
+    return {"ok": True}
+
+
+@app.get("/api/auth/me")
+def auth_me(request: Request) -> dict:
+    user = _user(request, required=False)
+    return {"user": _account_call(accounts.public_user, user) if user else None}
+
+
+@app.post("/api/subscribe")
+def subscribe(body: PlanRequest, request: Request) -> dict:
+    _same_site_only(request)
+    user = _account_call(accounts.subscribe, _user(request), body.plan)
+    return {"user": _account_call(accounts.public_user, user)}
+
+
+@app.post("/api/subscribe/cancel")
+def subscribe_cancel(request: Request) -> dict:
+    _same_site_only(request)
+    user = _account_call(accounts.cancel, _user(request))
+    return {"user": _account_call(accounts.public_user, user)}
+
+
+@app.post("/api/profile")
+def profile_save(body: Profile, request: Request) -> dict:
+    _same_site_only(request)
+    user = _account_call(accounts.save_profile, _user(request), body.model_dump())
+    return {"user": _account_call(accounts.public_user, user)}
+
+
+def _paper_for_gifts() -> dict:
+    edition = load_latest()
+    if edition is not None:
+        return edition
+    if not _lock.acquire(timeout=300):
+        raise HTTPException(status_code=429, detail="A paper is being generated. Try again in a moment.")
+    try:
+        edition = load_latest() or build_edition({}, source=DEFAULT_SOURCE, pool=15)
+        save_latest(edition)
+        return edition
+    finally:
+        _lock.release()
+
+
+@app.post("/api/gift/preview")
+def gift_preview(body: GiftRequest) -> dict:
+    """The email exactly as it would be sent, without sending it."""
+    gift = body.model_dump()
+    gift["from_name"] = gift["from_name"] or "you"
+    subject, html, _ = mailer.render_gift(_paper_for_gifts(), gift)
+    return {"subject": subject, "html": html}
+
+
+@app.post("/api/gift/send")
+def gift_send(body: GiftRequest, request: Request) -> dict:
+    _same_site_only(request)
+    user = _user(request)
+    plan = accounts.active_plan(user)
+    if plan is None:
+        raise HTTPException(status_code=402, detail="Choose a plan to send gift papers by email.")
+    used = _account_call(lambda: accounts.get_store().count_gifts(user["_id"], accounts.month_start()))
+    if used >= plan["gifts_per_month"]:
+        raise HTTPException(status_code=429, detail=f"You have sent all {plan['gifts_per_month']} gift papers in your "
+                                                    f"{plan['name']} plan this month.")
+    ok, why = mailer.mail_configured()
+    if not ok:
+        raise HTTPException(status_code=503, detail=f"Email is not set up on this server yet ({why}).")
+    to = _account_call(accounts.clean_email, body.recipient_email)
+    gift = body.model_dump()
+    gift["from_name"] = gift["from_name"] or user.get("name") or "a friend"
+    gift["stories"] = 5
+    if plan["id"] != "plus":
+        gift["note"] = ""  # the personal note is a Plus feature
+    subject, html, text = mailer.render_gift(_paper_for_gifts(), gift)
+    try:
+        mailer.send(to, subject, html, text, gift["from_name"], reply_to=user["email"])
+    except Exception as exc:  # report the reason, never the credentials
+        raise HTTPException(status_code=502, detail=f"Gmail did not accept the message ({type(exc).__name__}).") from exc
+    _account_call(accounts.get_store().log_gift, {"user_id": user["_id"], "to": to, "sent_at": accounts.now(),
+                                                  "lang": gift["lang"], "city": gift["city"]})
+    return {"sent": True, "to": to, "subject": subject, "user": _account_call(accounts.public_user, _user(request))}
 
 
 app.mount("/", StaticFiles(directory=WEB_DIR, html=True), name="web")

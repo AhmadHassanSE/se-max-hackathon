@@ -48,7 +48,7 @@
 
   /* ---------------------------------------------------------------- API, with static files when the server is not running */
   async function getJSON(url, opts) {
-    const res = await fetch(url, Object.assign({ headers: { "Content-Type": "application/json" } }, opts || {}));
+    const res = await fetch(url, Object.assign({ credentials: "same-origin", headers: { "Content-Type": "application/json", "X-Subah": "1" } }, opts || {}));
     if (!res.ok) {
       let detail = `HTTP ${res.status}`;
       try { detail = (await res.json()).detail || detail; } catch (e) { /* not json */ }
@@ -117,8 +117,39 @@
       if (mine) return mine;
       try { return await getJSON("/api/edition/latest"); }
       catch (e) { return getJSON("assets/data/sample-edition.json"); }
-    }
+    },
+    /* accounts: the session lives in an HttpOnly cookie; this page only ever sees the public profile */
+    post(url, body) { return getJSON(url, { method: "POST", body: JSON.stringify(body || {}) }); },
+    async me() {
+      try { const r = await getJSON("/api/auth/me"); setMe(r.user); return r.user; }
+      catch (e) { return null; }
+    },
+    async signup(name, email, password) { const r = await api.post("/api/auth/signup", { name, email, password }); setMe(r.user); return r.user; },
+    async login(email, password) { const r = await api.post("/api/auth/login", { email, password }); setMe(r.user); return r.user; },
+    async logout() { try { await api.post("/api/auth/logout"); } finally { setMe(null); } },
+    plans() { return getJSON("/api/plans"); },
+    async subscribe(plan) { const r = await api.post("/api/subscribe", { plan }); setMe(r.user); return r.user; },
+    async cancelPlan() { const r = await api.post("/api/subscribe/cancel"); setMe(r.user); return r.user; },
+    giftPreview(gift) { return api.post("/api/gift/preview", gift); },
+    async giftSend(gift) { const r = await api.post("/api/gift/send", gift); setMe(r.user); return r; }
   };
+  /* a copy of the public profile, so the nav can show who is logged in before the server answers */
+  function cachedMe() { try { return JSON.parse(sessionStorage.getItem("subah.me") || "null"); } catch (e) { return null; } }
+  function setMe(user) {
+    try { user ? sessionStorage.setItem("subah.me", JSON.stringify(user)) : sessionStorage.removeItem("subah.me"); } catch (e) { /* blocked */ }
+    paintAccount(user);
+    document.dispatchEvent(new CustomEvent("subah:me", { detail: user }));
+  }
+  function initials(name) {
+    return (name || "?").trim().split(/\s+/).slice(0, 2).map((w) => w[0]).join("").toUpperCase();
+  }
+  function paintAccount(user) {
+    document.querySelectorAll("[data-account-slot]").forEach((slot) => {
+      slot.innerHTML = user
+        ? `<a class="acct-chip" href="account.html" title="${esc(user.email)}"><span class="acct-chip__av">${esc(initials(user.name))}</span><span class="acct-chip__name">${esc(user.name.split(" ")[0])}</span>${user.plan ? `<span class="acct-chip__plan">${esc(user.plan.name)}</span>` : ""}</a>`
+        : `<a class="acct-chip acct-chip--out" href="account.html">Log in</a>`;
+    });
+  }
 
   /* ---------------------------------------------------------------- the reader's own picks
      Loved stories come first, then kept ones, each group in the published formula order; passed stories leave the paper. */
@@ -278,6 +309,18 @@
   /* ---------------------------------------------------------------- nav */
   function initNav() {
     document.querySelectorAll(".nav").forEach((nav) => {
+      const links = nav.querySelector(".nav__links");
+      if (links && !links.querySelector('a[href="pricing.html"]')) {
+        const here = location.pathname.endsWith("pricing.html");
+        links.insertAdjacentHTML("beforeend", `<li><a href="pricing.html"${here ? ' aria-current="page"' : ""}>Pricing</a></li>`);
+      }
+      if (!nav.querySelector("[data-account-slot]")) {
+        const cta = nav.querySelector(".btn--nav, .btn--nav-plain, .nav__menu-btn");
+        const slot = document.createElement("span");
+        slot.setAttribute("data-account-slot", "");
+        slot.className = "acct-slot";
+        nav.insertBefore(slot, cta);
+      }
       const btn = nav.querySelector(".nav__menu-btn");
       if (!btn) return;
       btn.innerHTML = ICONS.menu;
@@ -395,12 +438,14 @@
   window.Subah = {
     ICONS, store, api, TEST_READERS, urduName, toUrduDigits, esc, cleanName, paperTitle, dates, ago, fillDates,
     nextSevenAm, countdown, pickedStories, savePicks, constellationHTML, coverageHTML, forYouHTML, headlineOf, magnetic, tilt, reveal, countUp, toast,
-    paintMarks, reduceMotion, finePointer
+    paintMarks, reduceMotion, finePointer, cachedMe, initials
   };
 
   document.addEventListener("DOMContentLoaded", () => {
     paintMarks();
     initNav();
+    paintAccount(cachedMe());
+    if (document.querySelector("[data-account-slot]")) api.me();
     fillDates();
     magnetic();
     reveal();

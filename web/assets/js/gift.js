@@ -117,35 +117,133 @@ document.addEventListener("DOMContentLoaded", async () => {
     render();
   });
 
-  /* preview the delivery: nothing is sent */
-  let flying = false;
-  $("#gift-form").addEventListener("submit", (e) => {
+  /* ---------------------------------------------------------------- sending by email */
+  const emailEl = $("#g-email");
+  const noteEl = $("#g-note");
+  const DRAFT = "subah.giftDraft";
+  let me = S.cachedMe();
+
+  function gift() {
+    return {
+      recipient_name: S.cleanName(el.name.value), recipient_email: emailEl.value.trim(), city: el.city.value || null,
+      topics: chosen(), lang, large: size > 1, from_name: S.cleanName(el.from.value), note: noteEl.value.trim().slice(0, 280),
+      recipient_name_ur: S.urduName(S.cleanName(el.name.value)), from_name_ur: S.urduName(S.cleanName(el.from.value))
+    };
+  }
+  /* keep the form across a detour to log in or choose a plan */
+  function saveDraft() { try { sessionStorage.setItem(DRAFT, JSON.stringify(gift())); } catch (e) { /* blocked */ } }
+  function loadDraft() {
+    let d = null;
+    try { d = JSON.parse(sessionStorage.getItem(DRAFT) || "null"); } catch (e) { /* none */ }
+    if (!d) return;
+    el.name.value = d.recipient_name || el.name.value;
+    emailEl.value = d.recipient_email || "";
+    el.city.value = d.city || "";
+    $$("input", el.topics).forEach((i) => { i.checked = (d.topics || []).includes(i.value); });
+    lang = d.lang === "en" ? "en" : "ur";
+    $$("#g-lang button").forEach((x) => x.setAttribute("aria-pressed", String(x.dataset.lang === lang)));
+    size = d.large ? 1.25 : 1;
+    $$("#g-size button").forEach((x) => x.setAttribute("aria-pressed", String(parseFloat(x.dataset.size) === size)));
+    if (d.from_name) el.from.value = d.from_name;
+    noteEl.value = d.note || "";
+  }
+
+  function paintAcct() {
+    const box = $("#gift-acct");
+    const plus = me && me.plan && me.plan.id === "plus";
+    noteEl.disabled = !!(me && me.plan && !plus);
+    $("#g-note-hint").textContent = noteEl.disabled ? "A note is part of Plus. Your Basic plan sends the paper without one." : "Printed at the top of the email. Up to 280 characters.";
+    if (!me) {
+      box.innerHTML = `To send it, <a href="account.html?mode=signup&amp;next=gift.html" data-detour>create an account</a> or <a href="account.html?next=gift.html" data-detour>log in</a>. Preview the email first if you like.`;
+    } else if (!me.plan) {
+      box.innerHTML = `<span class="acct-chip__av">${S.esc(S.initials(me.name))}</span> Sending as ${S.esc(me.name)}. <a href="pricing.html" data-detour>Choose a plan</a> to send gift papers.`;
+    } else {
+      box.innerHTML = `<span class="acct-chip__av">${S.esc(S.initials(me.name))}</span> Sending as ${S.esc(me.name)} · ${S.esc(me.plan.name)} · <b>${me.plan.gifts_left}</b> of ${me.plan.gifts_per_month} gift papers left this month`;
+    }
+    $$("[data-detour]", box).forEach((a) => a.addEventListener("click", saveDraft));
+    if (me && !el.from.value.trim()) el.from.value = me.name.split(" ")[0];
+  }
+  document.addEventListener("subah:me", (e) => { me = e.detail; paintAcct(); });
+
+  function flyPlane() {
+    return new Promise((resolve) => {
+      if (S.reduceMotion) { placePlane(1); resolve(); return; }
+      const t0 = performance.now();
+      const step = (t) => {
+        const p = Math.min(1, (t - t0) / 1700);
+        placePlane(0.5 - 0.5 * Math.cos(Math.PI * p));
+        if (p < 1) requestAnimationFrame(step); else resolve();
+      };
+      requestAnimationFrame(step);
+    });
+  }
+  function status(msg, kind) {
+    el.status.textContent = msg;
+    el.status.className = `gift-status is-shown${kind ? ` is-${kind}` : ""}`;
+  }
+  const validEmail = (v) => /^[^@\s<>"']+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(v);
+
+  let sending = false;
+  $("#gift-form").addEventListener("submit", async (e) => {
     e.preventDefault();
-    if (flying) return;
-    flying = true;
-    const name = S.cleanName(el.name.value) || "They";
-    const city = (catalog.cities.find((c) => c.id === el.city.value) || { en: "Pakistan" }).en;
-    const msg = `Preview only: nothing was sent. In the live version, ${name}’s first paper reaches ${city} tomorrow at 7:00 am, which is ${$("#r-from-time").textContent} in ${el.where.options[el.where.selectedIndex].text}.`;
-    let done = false;
-    const finish = () => {
-      if (done) return;
-      done = true;
-      placePlane(1);
-      el.status.textContent = msg;
-      el.status.classList.add("is-shown");
-      flying = false;
-    };
-    setTimeout(finish, 2000);
-    if (S.reduceMotion) { finish(); return; }
-    const t0 = performance.now();
-    const step = (t) => {
-      const p = Math.min(1, (t - t0) / 1700);
-      placePlane(0.5 - 0.5 * Math.cos(Math.PI * p));
-      if (p < 1 && !done) requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
+    if (sending) return;
+    const g = gift();
+    if (!validEmail(g.recipient_email)) { status("Add their email address so the paper has somewhere to go.", "error"); emailEl.focus(); return; }
+    me = me || await S.api.me();
+    if (!me) { saveDraft(); location.href = "account.html?mode=signup&next=gift.html"; return; }
+    if (!me.plan) { saveDraft(); location.href = "pricing.html"; return; }
+    sending = true;
+    $("#gift-send").disabled = true;
+    status("Sending…");
+    placePlane(0);
+    try {
+      const [r] = await Promise.all([S.api.giftSend(g), flyPlane()]);
+      me = r.user;
+      const name = g.recipient_name || "Their";
+      status(`Sent. ${name === "Their" ? "Their" : `${name}’s`} paper is in ${r.to}’s inbox now, signed from ${g.from_name || me.name}. ${me.plan.gifts_left} of ${me.plan.gifts_per_month} gift papers left this month.`, "sent");
+      S.toast("Gift paper sent");
+      try { sessionStorage.removeItem(DRAFT); } catch (err) { /* fine */ }
+      paintAcct();
+    } catch (err) {
+      placePlane(0.5);
+      if (err.status === 401) { saveDraft(); location.href = "account.html?next=gift.html"; return; }
+      if (err.status === 402) { saveDraft(); location.href = "pricing.html"; return; }
+      status(err.message || "The email could not be sent. Try again.", "error");
+    } finally {
+      sending = false;
+      $("#gift-send").disabled = false;
+    }
   });
 
+  /* the email exactly as it will arrive, in a sandboxed frame */
+  const modal = $("#mail-modal");
+  $$(".modal__close", modal).forEach((b) => { b.innerHTML = S.ICONS.close; });
+  const closeModal = () => { modal.hidden = true; $("#gift-preview-btn").focus(); };
+  $$("[data-close]", modal).forEach((b) => b.addEventListener("click", closeModal));
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !modal.hidden) closeModal(); });
+  $("#gift-preview-btn").addEventListener("click", async () => {
+    const btn = $("#gift-preview-btn");
+    btn.disabled = true;
+    try {
+      const g = gift();
+      if (me && me.plan && me.plan.id !== "plus") g.note = "";
+      if (!g.from_name && me) g.from_name = me.name.split(" ")[0];
+      const r = await S.api.giftPreview(g);
+      $("#mail-from").textContent = g.from_name || "you";
+      $("#mail-to").textContent = g.recipient_email || "their email";
+      $("#mail-subject").textContent = r.subject;
+      $("#mail-frame").srcdoc = r.html;
+      modal.hidden = false;
+    } catch (err) {
+      status(err.message || "The preview could not be made.", "error");
+    } finally {
+      btn.disabled = false;
+    }
+  });
+
+  loadDraft();
   limitTopics();
   render();
+  paintAcct();
+  S.api.me();
 });

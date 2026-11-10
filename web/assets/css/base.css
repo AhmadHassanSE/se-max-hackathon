@@ -459,3 +459,49 @@ html.js.motion [data-reveal].is-seen {
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
   html.js.motion [data-reveal] { opacity: 1; transform: none; }
 }
+
+/* ------------------------------------------------------------------ account chip in the nav */
+.acct-slot { display: inline-flex; }
+.acct-slot:empty { display: none; }
+.acct-chip {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px 0 6px;
+  border-radius: var(--radius-pill); text-decoration: none; font-size: 0.95rem; font-weight: 500; white-space: nowrap;
+  border: 1px solid color-mix(in oklab, currentColor 22%, transparent);
+  transition: background-color var(--dur-short) var(--ease-out), border-color var(--dur-short) var(--ease-out);
+}
+.acct-chip:hover { background: color-mix(in oklab, currentColor 8%, transparent); border-color: currentColor; }
+.acct-chip--out { padding: 0 16px; }
+.acct-chip__av {
+  width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; flex-shrink: 0;
+  background: var(--kesar); color: var(--kesar-ink); font-weight: 700; font-size: 0.8rem; letter-spacing: 0.02em;
+}
+.acct-chip__plan {
+  font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+  padding: 2px 8px; border-radius: var(--radius-pill); background: color-mix(in oklab, var(--kesar) 30%, transparent);
+}
+@media (max-width: 720px) { .acct-chip__plan { display: none; } .btn--nav-plain { display: none; } }
+@media (max-width: 560px) { .acct-chip__name, .acct-chip__plan { display: none; } .acct-chip { padding: 0 6px; } .acct-chip--out { padding: 0 14px; } }
+
+/* ------------------------------------------------------------------ modal */
+.modal { position: fixed; inset: 0; z-index: var(--z-modal); display: grid; place-items: center; padding: 16px; }
+.modal__scrim { position: absolute; inset: 0; background: oklch(18% 0.03 262 / 0.55); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); animation: fade-in var(--dur-short) var(--ease-out); }
+.modal__panel {
+  position: relative; width: min(100%, 520px); max-height: calc(100dvh - 32px); overflow: auto;
+  background: var(--paper); color: var(--ink); border-radius: var(--radius-lg); box-shadow: var(--shadow-paper);
+  padding: clamp(20px, 4vw, 34px); animation: rise-in var(--dur-long) var(--ease-out);
+}
+.modal__panel--wide { width: min(100%, 760px); }
+.modal__close { position: absolute; top: 12px; right: 12px; width: 40px; height: 40px; border-radius: 50%; border: 0; background: color-mix(in oklab, var(--ink) 7%, transparent); display: grid; place-items: center; }
+.modal__close svg { width: 18px; height: 18px; }
+@keyframes fade-in { from { opacity: 0; } }
+@keyframes rise-in { from { opacity: 0; transform: translateY(18px) scale(0.98); } }
+@media (prefers-reduced-motion: reduce) { .modal__scrim, .modal__panel { animation: none; } }
+.form-error { color: var(--bad); background: var(--bad-soft); border-radius: 12px; padding: 10px 14px; font-size: 0.95rem; }
+.form-error:empty { display: none; }
+/* with the account chip, the nav needs room on phones: the main button keeps only its arrow */
+@media (max-width: 520px) {
+  .nav { gap: 8px; padding-left: 14px; }
+  .nav .wordmark__ur { display: none; }
+  .nav:has(.acct-slot:not(:empty)) .btn--nav { padding: 0 4px; }
+  .nav:has(.acct-slot:not(:empty)) .btn--nav > span:first-child { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+}
