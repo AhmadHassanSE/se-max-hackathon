@@ -21,6 +21,11 @@ or, with the virtual environment active, `python -m pytest server/tests -q`. The
 | Unit (feeds, grouping, tags, ranking, grounding, summariser) | 43 | 43 | 0 |
 | Integration / API | 8 | 8 | 0 |
 | End-to-end / manual (browser) | 6 pages | 6 | 0 |
+| Unit / integration added later: summary retry and the outlet's-own-words fallback (`test_summaries.py`) | 2 | 2 | 0 |
+| Unit / integration added later: accounts, plans, gift email (`test_accounts.py`) | 13 | 13 | 0 |
+| End-to-end / manual added later (browser): pricing, sign up, checkout, account page, gift preview, send without Gmail, phone width | 3 pages | 3 | 0 |
+
+Total automated tests now: 66, all passing.
 
 ## Edge cases covered
 
@@ -43,6 +48,16 @@ or, with the virtual environment active, `python -m pytest server/tests -q`. The
 | EC-15 | Ambiguous Urdu word (چینی: sugar or Chinese) | Not a price signal | `test_ambiguous_urdu_word_is_not_a_price_signal` | Pass |
 | EC-16 | Invalid profile (unknown city, six topics) | HTTP 422 | `test_bad_profile_is_rejected` | Pass |
 | EC-17 | Request for server files or `.env` through the web server | 404 | `test_server_files_are_not_served` | Pass |
+| EC-18 | AI summary rejected by the grounding check | One retry with the reasons; if it fails again, the outlet's own words, credited | `test_rejected_story_is_retried_with_the_reasons`, `test_retry_respects_the_call_budget` | Pass |
+| EC-19 | Sign-up with a bad email, a short password, or an email already used | 400, 400, 409 | `test_signup_rules` | Pass |
+| EC-20 | Wrong password; email in a different case or with spaces | 401; the same account logs in | `test_login_logout_and_wrong_password` | Pass |
+| EC-21 | Repeated wrong passwords | Logins for that email paused (429) | `test_repeated_wrong_passwords_are_slowed_down` | Pass |
+| EC-22 | State-changing call without the `X-Subah` header | 403 | `test_state_changing_calls_need_the_header` | Pass |
+| EC-23 | Gift without login; without a plan | 401; 402, nothing sent | `test_gift_needs_login_and_plan` | Pass |
+| EC-24 | Monthly gift allowance used up | 429, nothing sent | `test_gift_is_sent_and_counted` | Pass |
+| EC-25 | Gmail not configured | 503 with the reason, nothing sent | `test_gift_without_gmail_says_so`; browser check | Pass |
+| EC-26 | HTML in the sender's note | Escaped in the email | `test_email_is_built_from_checked_text_with_links` | Pass |
+| EC-27 | MongoDB rejects the login, or cannot be reached | `/api/health` names the problem; account calls answer 503 | Connection test and `/api/health`, by hand | Pass |
 
 ## Measured metrics
 
@@ -68,9 +83,16 @@ or, with the virtual environment active, `python -m pytest server/tests -q`. The
 | D-04 | Small embedding model chained unrelated real stories into one group | Live run, by hand | High | Fixed with the larger model and retuning | e65443e |
 | D-05 | A CSS cleanup broke a combined selector and disabled the rest of the paper's styles | Browser check | Medium | Fixed | e65443e |
 | D-06 | Five feed addresses on the first outlet list did not work | `check_feeds` | Medium | Paused and published | 7c39534 |
+| D-07 | Stories whose summary failed the check showed only "No summary today" | Reading the paper | Medium | Fixed: retry, then the outlet's own words | e071f5a |
+| D-08 | The first MongoDB login supplied was rejected by Atlas (`bad auth`) | Connection test | High | Fixed by using a working database user | configuration |
+| D-09 | With the account chip, the nav overflowed at 375 px and hid the menu button | Browser check at phone width | Medium | Fixed | 27cfa98 |
+| D-10 | The Basic plan promised settings saved to the account before that was wired into the pages | Review | Low | Open (FR-22) | |
 
 ## Known untested areas
 
 - Urdu wording of AI summaries: needs a review by an Urdu speaker.
 - Grouping on several real days: tuned on one day of feeds plus the fixed set.
 - Screen readers: keyboard and focus were checked by hand; no screen-reader pass yet.
+- Gift email through real Gmail: tested with a fake sender; a real send needs the Gmail app password on the server.
+- Payments: the checkout is a prototype and takes no payment, so no payment flow is tested.
+- Read aloud: checked in one desktop browser; voices and Urdu support differ by device.

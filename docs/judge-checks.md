@@ -24,3 +24,15 @@ Each check from the idea approval, with where to see it and the test that proves
 | Scope: no payments, audio, quiz or third language; English + Urdu + large print; generate-now action | Paper page button "Generate today’s paper now" and `POST /api/generate` |
 | Quota: group before AI, summarise only selected stories, keys server-side | `edition.py` order of steps; `SUBAH_AI_BATCH`, `SUBAH_MAX_AI_CALLS`, per-story cache; key read only from server environment; `test_api.py::test_health_has_no_secrets` |
 | Data: event rule on pre-collected data; test profiles only | `SUBAH_SOURCE=live|snapshot|fixtures`; profiles are never stored on the server; test readers A, B and C. Event ruling: **[insert ruling]** |
+
+## Added after approval
+
+These were added on the team's request after the approval; the six checks above are unchanged.
+
+| Feature | Where to see it | Automated test |
+|---------|-----------------|----------------|
+| No story without text: retry, then the outlet's own words, credited and linked | Paper page; `summarize.py` (retry), `brief()` in `edition.py` | `test_rejected_story_is_retried_with_the_reasons`, `test_retry_respects_the_call_budget`, `test_paper_generates_without_ai` |
+| Sign up, log in, log out | `/account.html`; `server/subah/accounts.py` | `test_accounts.py` (sign-up rules, hashing, cookie, wrong password, rate limit, header check) |
+| Plans: Basic $3, Plus $8 (prototype checkout, no payment) | `/pricing.html`, `GET /api/plans` | `test_plans_are_three_and_eight_dollars`, `test_subscribe_needs_login_then_activates` |
+| Gift paper by email, re-ranked for the recipient with the published formula | `/gift.html` (Send their paper, Preview the email); `server/subah/mailer.py` | `test_gift_is_sent_and_counted`, `test_gift_needs_login_and_plan`, `test_email_is_built_from_checked_text_with_links`, `test_preview_needs_no_account` |
+| Read aloud | Paper page: Listen in the top bar and on each story | Manual check |
