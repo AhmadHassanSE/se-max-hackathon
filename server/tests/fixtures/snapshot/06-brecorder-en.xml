@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>brecorder en (synthetic test feed)</title>
+    <link>https://example.com/</link>
+    <description>Synthetic items for Subah tests. Not real reports.</description>
+    <item>
+      <title>HSD price increased by Rs3 per litre, petrol price maintained</title>
+      <link>https://example.com/brecorder/en/hsd-increased</link>
+      <guid isPermaLink="false">brecorder-hsd-increased</guid>
+      <pubDate>Mon, 09 Nov 2026 13:00:00 +0000</pubDate>
+      <description>The government increased the price of high-speed diesel (HSD) by Rs3 per litre and maintained the price of petrol for the next fortnight.</description>
+    </item>
+    <item>
+      <title>Rupee stable against dollar as remittances rise</title>
+      <link>https://example.com/brecorder/en/rupee-stable-remittances</link>
+      <guid isPermaLink="false">brecorder-rupee-stable-remittances</guid>
+      <pubDate>Mon, 09 Nov 2026 10:00:00 +0000</pubDate>
+      <description>The rupee held steady against the US dollar as workers' remittances rose compared with a year earlier, State Bank of Pakistan data showed.</description>
+    </item>
+    <item>
+      <title>Discos seek quarterly FCA, NEPRA reserves decision</title>
+      <link>https://example.com/brecorder/en/discos-seek-fca</link>
+      <guid isPermaLink="false">brecorder-discos-seek-fca</guid>
+      <pubDate>Mon, 09 Nov 2026 09:00:00 +0000</pubDate>
+      <description>Power distribution companies sought a fuel charge adjustment for the previous quarter; NEPRA reserved its decision after the hearing.</description>
+    </item>
+  </channel>
+</rss>

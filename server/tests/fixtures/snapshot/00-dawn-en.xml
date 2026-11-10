@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>dawn en (synthetic test feed)</title>
+    <link>https://example.com/</link>
+    <description>Synthetic items for Subah tests. Not real reports.</description>
+    <item>
+      <title>Govt keeps petrol price unchanged, raises diesel by Rs3 per litre</title>
+      <link>https://example.com/dawn/en/petrol-unchanged</link>
+      <guid isPermaLink="false">dawn-petrol-unchanged</guid>
+      <pubDate>Mon, 09 Nov 2026 12:00:00 +0000</pubDate>
+      <description>The federal government kept the price of petrol unchanged for the next fortnight and increased the price of high-speed diesel by Rs3 per litre, the finance division said in a notification.</description>
+    </item>
+    <item>
+      <title>Lahore schools to hold online classes on Mondays as smog worsens</title>
+      <link>https://example.com/dawn/en/lahore-smog-schools</link>
+      <guid isPermaLink="false">dawn-lahore-smog-schools</guid>
+      <pubDate>Mon, 09 Nov 2026 16:00:00 +0000</pubDate>
+      <description>The Punjab government extended its smog plan, moving Monday classes at Lahore schools online and pausing outdoor sports.</description>
+    </item>
+    <item>
+      <title>Selectors rest two senior pacers, pick three new faces for home Tests</title>
+      <link>https://example.com/dawn/en/selectors-rest-pacers</link>
+      <guid isPermaLink="false">dawn-selectors-rest-pacers</guid>
+      <pubDate>Mon, 09 Nov 2026 16:00:00 +0000</pubDate>
+      <description>Selectors rested two senior fast bowlers and picked three uncapped players for the Test series opener in Rawalpindi.</description>
+    </item>
+    <item>
+      <title>NEPRA hears plea for fuel charge adjustment on electricity bills</title>
+      <link>https://example.com/dawn/en/nepra-fca-hearing</link>
+      <guid isPermaLink="false">dawn-nepra-fca-hearing</guid>
+      <pubDate>Mon, 09 Nov 2026 08:00:00 +0000</pubDate>
+      <description>The power regulator heard a request from distribution companies to pass last quarter's fuel costs on to consumers and reserved its decision.</description>
+    </item>
+    <item>
+      <title>Govt keeps petrol price unchanged, raises diesel by Rs3 per litre</title>
+      <link>https://example.com/dawn/en/petrol-unchanged?utm_source=rss&amp;utm_medium=feed</link>
+      <guid isPermaLink="false">dawn-extra-DUP</guid>
+      <pubDate>Mon, 09 Nov 2026 12:00:00 +0000</pubDate>
+      <description>Duplicate item.</description>
+    </item>
+    <item>
+      <title>Last week: cabinet meets to review budget proposals</title>
+      <link>https://example.com/dawn/en/old-cabinet</link>
+      <guid isPermaLink="false">dawn-extra-OLD</guid>
+      <pubDate>Fri, 06 Nov 2026 18:00:00 +0000</pubDate>
+      <description>An old item.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>https://example.com/dawn/en/no-title</link>
+      <guid isPermaLink="false">dawn-extra-NOTITLE</guid>
+      <pubDate>Mon, 09 Nov 2026 21:00:00 +0000</pubDate>
+      <description>An item with no title.</description>
+    </item>
+    <item>
+      <title>Cabinet approves &amp;amp; notifies new &lt;b&gt;holiday&lt;/b&gt; schedule</title>
+      <link>https://example.com/dawn/en/holiday-schedule</link>
+      <guid isPermaLink="false">dawn-html</guid>
+      <pubDate>Mon, 09 Nov 2026 22:00:00 +0000</pubDate>
+      <description>&lt;p&gt;The federal cabinet approved the schedule.&amp;nbsp;&lt;a href='x'&gt;Read more&lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

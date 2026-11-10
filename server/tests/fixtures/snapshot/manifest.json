@@ -1,0 +1,146 @@
+{
+  "captured_at": "2026-11-10T02:00:00+00:00",
+  "note": "Synthetic fixture feeds for tests and offline demos. Not real reports.",
+  "feeds": [
+    {
+      "outlet_id": "dawn",
+      "url": "https://www.dawn.com/feeds/home",
+      "lang": "en",
+      "file": "00-dawn-en.xml",
+      "error": null
+    },
+    {
+      "outlet_id": "express",
+      "url": "https://tribune.com.pk/feed/home",
+      "lang": "en",
+      "file": "01-express-en.xml",
+      "error": null
+    },
+    {
+      "outlet_id": "express",
+      "url": "https://www.express.pk/feed/",
+      "lang": "ur",
+      "file": "02-express-ur.xml",
+      "error": null
+    },
+    {
+      "outlet_id": "geo",
+      "url": "https://www.geo.tv/rss/1/1",
+      "lang": "en",
+      "file": "03-geo-en.xml",
+      "error": null
+    },
+    {
+      "outlet_id": "geo",
+      "url": "https://urdu.geo.tv/rss/1/0",
+      "lang": "ur",
+      "file": "04-geo-ur.xml",
+      "error": null
+    },
+    {
+      "outlet_id": "thenews",
+      "url": "https://www.thenews.com.pk/rss/1/1",
+      "lang": "en",
+      "file": "05-thenews-en.xml",
+      "error": null
+    },
+    {
+      "outlet_id": "brecorder",
+      "url": "https://www.brecorder.com/feeds/latest-news",
+      "lang": "en",
+      "file": "06-brecorder-en.xml",
+      "error": null
+    },
+    {
+      "outlet_id": "arabnews",
+      "url": "https://www.arabnews.pk/rss.xml",
+      "lang": "en",
+      "file": "07-arabnews-en.xml",
+      "error": null
+    },
+    {
+      "outlet_id": "ary",
+      "url": "https://arynews.tv/feed/",
+      "lang": "en",
+      "file": "08-ary-en.xml",
+      "error": null
+    },
+    {
+      "outlet_id": "pakistantoday",
+      "url": "https://www.pakistantoday.com.pk/feed/",
+      "lang": "en",
+      "file": "09-pakistantoday-en.xml",
+      "error": null
+    },
+    {
+      "outlet_id": "profit",
+      "url": "https://profit.pakistantoday.com.pk/feed/",
+      "lang": "en",
+      "file": "10-profit-en.xml",
+      "error": null
+    },
+    {
+      "outlet_id": "propakistani",
+      "url": "https://propakistani.pk/feed/",
+      "lang": "en",
+      "file": "11-propakistani-en.xml",
+      "error": null
+    },
+    {
+      "outlet_id": "independenturdu",
+      "url": "https://www.independenturdu.com/rss.xml",
+      "lang": "ur",
+      "file": "12-independenturdu-ur.xml",
+      "error": null
+    },
+    {
+      "outlet_id": "bbc",
+      "url": "https://feeds.bbci.co.uk/urdu/rss.xml",
+      "lang": "ur",
+      "file": "13-bbc-ur.xml",
+      "error": null
+    },
+    {
+      "outlet_id": "dw",
+      "url": "https://rss.dw.com/rdf/rss-urdu-all",
+      "lang": "ur",
+      "file": "14-dw-ur.xml",
+      "error": null
+    },
+    {
+      "outlet_id": "aljazeera",
+      "url": "https://www.aljazeera.com/xml/rss/all.xml",
+      "lang": "en",
+      "file": "15-aljazeera-en.xml",
+      "error": null
+    },
+    {
+      "outlet_id": "fridaytimes",
+      "url": "https://thefridaytimes.com/feed/",
+      "lang": "en",
+      "file": "90-fridaytimes-en.xml",
+      "error": null
+    },
+    {
+      "outlet_id": "guardian",
+      "url": "https://www.theguardian.com/world/pakistan/rss",
+      "lang": "en",
+      "file": "91-guardian-en.xml",
+      "error": null
+    },
+    {
+      "outlet_id": "dw",
+      "url": "https://rss.dw.com/rdf/rss-en-asia",
+      "lang": "en",
+      "file": "92-dw-en.xml",
+      "error": null
+    },
+    {
+      "outlet_id": "bbc",
+      "url": "https://feeds.bbci.co.uk/news/world/asia/rss.xml",
+      "lang": "en",
+      "file": null,
+      "error": "ReadTimeout"
+    }
+  ]
+}

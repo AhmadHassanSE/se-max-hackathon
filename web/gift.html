@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Make a gift paper, Subah</title>
+  <meta name="description" content="Set up a morning paper for a parent in Pakistan: their language, their type size, signed from you, on their phone at 7.">
+  <meta name="theme-color" content="#f6f1e6">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:wght@400;500;700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/gift.css">
+  <script src="assets/js/data.js" defer></script>
+  <script src="assets/js/common.js" defer></script>
+  <script src="assets/js/gift.js" defer></script>
+</head>
+<body class="theme-day page-gift">
+  <a class="skip-link" href="#gift-form">Skip to the form</a>
+  <p class="demo-strip"><b>Demo edition.</b> Nothing on this page is sent anywhere yet. The preview shows what the paper will look like.</p>
+
+  <header class="site-header">
+    <nav class="nav" aria-label="Main">
+      <a class="wordmark" href="index.html" aria-label="Subah home">
+        <span data-sunmark></span><span class="wordmark__en">Subah</span><span class="wordmark__ur" lang="ur">صبح</span>
+      </a>
+      <ul class="nav__links" id="nav-links">
+        <li><a href="index.html#how">How it works</a></li>
+        <li><a href="paper.html">Sample paper</a></li>
+        <li><a href="gift.html" aria-current="page">For family</a></li>
+        <li><a href="index.html#pricing">Pricing</a></li>
+      </ul>
+      <a class="btn btn--ghost btn--nav-plain" href="onboard.html">Make my own</a>
+      <button class="nav__menu-btn" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Menu"></button>
+    </nav>
+  </header>
+
+  <main class="gift-main">
+    <section class="gift-hero container" aria-labelledby="gift-title">
+      <h1 id="gift-title">A paper for someone you love.</h1>
+      <p class="gift-hero__lede">You’re abroad. They’re home. Every morning at 7 their paper arrives in their language and type size, signed from you.</p>
+    </section>
+
+    <div class="container gift-grid">
+      <form class="gift-form" id="gift-form" novalidate data-endpoint="">
+        <fieldset class="gift-set">
+          <legend>Who is it for?</legend>
+          <div class="field">
+            <label class="field__label" for="g-name">What you call them</label>
+            <input class="input" id="g-name" name="recipient" value="Ammi" maxlength="24" autocomplete="off">
+          </div>
+          <div class="field">
+            <label class="field__label" for="g-about">Describe them in one sentence</label>
+            <textarea class="textarea" id="g-about" name="about" rows="3" maxlength="240">Retired teacher in Lahore. Loves cooking shows and cricket, worries about prices, needs big type.</textarea>
+            <span class="field__hint">Their editor writes every “For you” line from this.</span>
+          </div>
+          <div class="field">
+            <label class="field__label" for="g-city">Their city</label>
+            <select class="select" id="g-city" name="city">
+              <option>Lahore</option><option>Karachi</option><option>Islamabad</option><option>Multan</option><option>Faisalabad</option><option>Peshawar</option><option>Quetta</option>
+            </select>
+          </div>
+        </fieldset>
+
+        <fieldset class="gift-set">
+          <legend>How it reads</legend>
+          <div class="field">
+            <span class="field__label" id="g-lang-label">Language</span>
+            <div class="seg" role="group" aria-labelledby="g-lang-label" id="g-lang">
+              <button type="button" data-lang="ur" aria-pressed="true" lang="ur">اردو</button>
+              <button type="button" data-lang="en" aria-pressed="false">English</button>
+              <button type="button" data-lang="ro" aria-pressed="false">Roman Urdu</button>
+            </div>
+          </div>
+          <div class="field">
+            <span class="field__label" id="g-size-label">Type size</span>
+            <div class="seg seg--size" role="group" aria-labelledby="g-size-label" id="g-size">
+              <button type="button" data-size="1" aria-pressed="false">Regular</button>
+              <button type="button" data-size="1.22" aria-pressed="true">Large</button>
+              <button type="button" data-size="1.45" aria-pressed="false">Extra large</button>
+            </div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="g-audio" checked>
+            <span class="switch__track" aria-hidden="true"><span class="switch__thumb"></span></span>
+            <span class="switch__text"><b>Audio edition</b><span>A short Urdu voice note with the headlines, for tired eyes.</span></span>
+          </label>
+        </fieldset>
+
+        <fieldset class="gift-set">
+          <legend>From you</legend>
+          <div class="field">
+            <label class="field__label" for="g-from">Signed by</label>
+            <input class="input" id="g-from" name="from" value="Ayesha" maxlength="24" autocomplete="given-name">
+          </div>
+          <div class="field">
+            <label class="field__label" for="g-where">Where are you?</label>
+            <select class="select" id="g-where" name="where">
+              <option value="Asia/Dubai">Dubai</option>
+              <option value="Asia/Riyadh">Riyadh</option>
+              <option value="Asia/Qatar">Doha</option>
+              <option value="Europe/London">London</option>
+              <option value="America/Toronto">Toronto</option>
+              <option value="America/New_York">New York</option>
+              <option value="Australia/Sydney">Sydney</option>
+            </select>
+          </div>
+          <div class="field">
+            <span class="field__label" id="g-via-label">Delivered by</span>
+            <div class="via" role="radiogroup" aria-labelledby="g-via-label">
+              <label class="via__opt"><input type="radio" name="via" value="email" checked><span>Email</span></label>
+              <label class="via__opt is-later"><input type="radio" name="via" value="whatsapp" disabled><span>WhatsApp <small>later</small></span></label>
+              <label class="via__opt is-later"><input type="radio" name="via" value="print" disabled><span>Print <small>later</small></span></label>
+            </div>
+          </div>
+          <div class="field">
+            <label class="field__label" for="g-email">Their email</label>
+            <input class="input" id="g-email" name="email" type="email" inputmode="email" autocomplete="off" placeholder="name@example.com">
+            <span class="field__hint" id="g-email-hint">Optional for the preview.</span>
+          </div>
+        </fieldset>
+
+        <div class="gift-submit">
+          <button class="btn btn--primary" type="submit" data-magnetic="0.15"><span>Preview the first delivery</span><span class="btn__orb" data-icon="arrow"></span></button>
+          <p class="gift-price"><b>$5</b> a month per paper. Cancel any time.</p>
+        </div>
+        <p class="gift-status" id="gift-status" role="status" aria-live="polite"></p>
+      </form>
+
+      <aside class="gift-preview" aria-label="Live preview">
+        <div class="route">
+          <div class="route__end">
+            <span class="route__city" id="r-from-city">Dubai</span>
+            <span class="route__time tabular" id="r-from-time">6:00 am</span>
+            <span class="route__now" id="r-from-now"></span>
+          </div>
+          <svg class="route__arc" viewBox="0 0 300 80" aria-hidden="true">
+            <path id="route-path" d="M10 66 C 90 4, 210 4, 290 66"/>
+            <circle cx="10" cy="66" r="5" class="route__dot"/><circle cx="290" cy="66" r="5" class="route__dot route__dot--to"/>
+            <g id="route-plane"><path d="M-9 0 L7 -1.3 L10 0 L7 1.3 Z M-2 0 L-5 -6.5 L-2 -6.5 L3 0 L-2 6.5 L-5 6.5 Z M-8 0 L-10.5 -3.2 L-9 -3.2 L-5.5 0 L-9 3.2 L-10.5 3.2 Z"/></g>
+          </svg>
+          <div class="route__end route__end--to">
+            <span class="route__city" id="r-to-city">Lahore</span>
+            <span class="route__time tabular">7:00 am</span>
+            <span class="route__now" id="r-to-now"></span>
+          </div>
+        </div>
+
+        <div class="gp-wrap">
+          <article class="gp" id="gift-paper" lang="ur" dir="rtl"></article>
+        </div>
+
+        <div class="voice" id="voice">
+          <button class="voice__play" type="button" id="voice-play" aria-pressed="false" aria-label="Play the voice note"><span data-icon="play"></span></button>
+          <span class="voice__wave wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+          <span class="voice__label" id="voice-label">Voice note in Urdu</span>
+        </div>
+        <p class="voice__note" id="voice-note" aria-live="polite"></p>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="site-footer site-footer--slim">
+    <div class="container footer__base">
+      <span>A hackathon prototype. Gift papers are the paid part: free for readers, paid to give.</span>
+      <a href="index.html">Front page</a>
+    </div>
+  </footer>
+</body>
+</html>

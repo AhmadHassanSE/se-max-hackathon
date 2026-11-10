@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>pakistantoday en (synthetic test feed)</title>
+    <link>https://example.com/</link>
+    <description>Synthetic items for Subah tests. Not real reports.</description>
+    <item>
+      <title>Lahore board to announce intermediate supplementary results next week</title>
+      <link>https://example.com/pakistantoday/en/lahore-board-results</link>
+      <guid isPermaLink="false">pakistantoday-lahore-board-results</guid>
+      <pubDate>Mon, 09 Nov 2026 17:00:00 +0000</pubDate>
+      <description>The Board of Intermediate and Secondary Education Lahore said in a notice that supplementary results are expected next week.</description>
+    </item>
+    <item>
+      <title>Book fair opens in Islamabad with over 100 stalls</title>
+      <link>https://example.com/pakistantoday/en/islamabad-book-fair</link>
+      <guid isPermaLink="false">pakistantoday-islamabad-book-fair</guid>
+      <pubDate>Mon, 09 Nov 2026 21:00:00 +0000</pubDate>
+      <description>A three-day book fair opened in Islamabad with more than 100 stalls from publishers across the country.</description>
+    </item>
+  </channel>
+</rss>

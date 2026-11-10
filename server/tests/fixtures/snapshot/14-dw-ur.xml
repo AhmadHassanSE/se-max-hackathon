@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>dw ur (synthetic test feed)</title>
+    <link>https://example.com/</link>
+    <description>Synthetic items for Subah tests. Not real reports.</description>
+    <item>
+      <title>راولپنڈی میں ڈینگی کے کیسز میں کمی</title>
+      <link>https://example.com/dw/ur/dengue-kami</link>
+      <guid isPermaLink="false">dw-dengue-kami</guid>
+      <pubDate>Mon, 09 Nov 2026 07:00:00 +0000</pubDate>
+      <description>محکمہ صحت کے مطابق درجہ حرارت میں کمی کے بعد راولپنڈی میں ڈینگی کے نئے کیسز کم ہو گئے ہیں۔</description>
+    </item>
+  </channel>
+</rss>

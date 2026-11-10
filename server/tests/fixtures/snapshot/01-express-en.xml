@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>express en (synthetic test feed)</title>
+    <link>https://example.com/</link>
+    <description>Synthetic items for Subah tests. Not real reports.</description>
+    <item>
+      <title>Petrol price unchanged, diesel up Rs3 for next 15 days</title>
+      <link>https://example.com/express/en/petrol-diesel-fortnight</link>
+      <guid isPermaLink="false">express-petrol-diesel-fortnight</guid>
+      <pubDate>Mon, 09 Nov 2026 13:00:00 +0000</pubDate>
+      <description>Petrol will cost the same for the next 15 days while high-speed diesel goes up by Rs3 per litre, according to a finance division notification.</description>
+    </item>
+  </channel>
+</rss>

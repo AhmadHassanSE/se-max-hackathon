@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>arabnews en (synthetic test feed)</title>
+    <link>https://example.com/</link>
+    <description>Synthetic items for Subah tests. Not real reports.</description>
+    <item>
+      <title>Pakistan's remittances from Gulf countries climb, central bank says</title>
+      <link>https://example.com/arabnews/en/gulf-remittances-climb</link>
+      <guid isPermaLink="false">arabnews-gulf-remittances-climb</guid>
+      <pubDate>Mon, 09 Nov 2026 11:00:00 +0000</pubDate>
+      <description>Remittances from Saudi Arabia and the UAE led an increase in money sent home by Pakistanis working abroad, the central bank said.</description>
+    </item>
+    <item>
+      <title>UAE eases work visa renewal process, removing in-person medical test</title>
+      <link>https://example.com/arabnews/en/uae-eases-renewal</link>
+      <guid isPermaLink="false">arabnews-uae-eases-renewal</guid>
+      <pubDate>Mon, 09 Nov 2026 05:00:00 +0000</pubDate>
+      <description>The UAE will let eligible residents renew work visas online, removing the requirement for an in-person medical test.</description>
+    </item>
+  </channel>
+</rss>

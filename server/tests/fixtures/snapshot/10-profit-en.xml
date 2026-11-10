@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>profit en (synthetic test feed)</title>
+    <link>https://example.com/</link>
+    <description>Synthetic items for Subah tests. Not real reports.</description>
+    <item>
+      <title>Workers' remittances rise year-on-year in October, SBP data shows</title>
+      <link>https://example.com/profit/en/remittances-october</link>
+      <guid isPermaLink="false">profit-remittances-october</guid>
+      <pubDate>Mon, 09 Nov 2026 11:00:00 +0000</pubDate>
+      <description>Remittances sent home by overseas Pakistanis rose year-on-year in October, according to State Bank of Pakistan data, with the Gulf the largest source.</description>
+    </item>
+    <item>
+      <title>Freelance export payments to be credited faster, SBP says</title>
+      <link>https://example.com/profit/en/freelance-payments-faster</link>
+      <guid isPermaLink="false">profit-freelance-payments-faster</guid>
+      <pubDate>Mon, 09 Nov 2026 12:00:00 +0000</pubDate>
+      <description>Banks must now credit freelancers' export proceeds within one working day under a new SBP circular.</description>
+    </item>
+  </channel>
+</rss>

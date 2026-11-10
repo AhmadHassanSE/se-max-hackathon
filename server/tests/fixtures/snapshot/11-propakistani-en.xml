@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>propakistani en (synthetic test feed)</title>
+    <link>https://example.com/</link>
+    <description>Synthetic items for Subah tests. Not real reports.</description>
+    <item>
+      <title>Karachi's Green Line adds late evening service</title>
+      <link>https://example.com/propakistani/en/green-line-evening</link>
+      <guid isPermaLink="false">propakistani-green-line-evening</guid>
+      <pubDate>Mon, 09 Nov 2026 19:00:00 +0000</pubDate>
+      <description>The Green Line bus service in Karachi will run later into the evening from next week, the operator said.</description>
+    </item>
+    <item>
+      <title>SBP directs banks to credit freelancers' export proceeds within one day</title>
+      <link>https://example.com/propakistani/en/sbp-freelancers</link>
+      <guid isPermaLink="false">propakistani-sbp-freelancers</guid>
+      <pubDate>Mon, 09 Nov 2026 11:00:00 +0000</pubDate>
+      <description>The State Bank of Pakistan asked banks to credit IT and freelance export earnings within one working day.</description>
+    </item>
+  </channel>
+</rss>

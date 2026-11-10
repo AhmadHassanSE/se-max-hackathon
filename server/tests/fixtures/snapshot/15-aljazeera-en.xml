@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>aljazeera en (synthetic test feed)</title>
+    <link>https://example.com/</link>
+    <description>Synthetic items for Subah tests. Not real reports.</description>
+    <item>
+      <title>UAE simplifies work visa renewals for residents</title>
+      <link>https://example.com/aljazeera/en/uae-visa-renewals</link>
+      <guid isPermaLink="false">aljazeera-uae-visa-renewals</guid>
+      <pubDate>Mon, 09 Nov 2026 04:00:00 +0000</pubDate>
+      <description>Residents with a clean record can renew work visas online without an in-person medical test, UAE officials said.</description>
+    </item>
+  </channel>
+</rss>

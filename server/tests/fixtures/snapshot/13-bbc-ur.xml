@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>bbc ur (synthetic test feed)</title>
+    <link>https://example.com/</link>
+    <description>Synthetic items for Subah tests. Not real reports.</description>
+    <item>
+      <title>لاہور میں سموگ: اسکولوں میں پیر کو آن لائن کلاسیں</title>
+      <link>https://example.com/bbc/ur/lahore-smog-urdu</link>
+      <guid isPermaLink="false">bbc-lahore-smog-urdu</guid>
+      <pubDate>Mon, 09 Nov 2026 18:00:00 +0000</pubDate>
+      <description>پنجاب حکومت نے سموگ پلان میں توسیع کرتے ہوئے لاہور کے اسکولوں میں پیر کے روز آن لائن کلاسوں کا اعلان کیا ہے۔</description>
+    </item>
+  </channel>
+</rss>

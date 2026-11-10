@@ -1,0 +1,462 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Subah, the morning paper that ends</title>
+  <meta name="description" content="A morning paper for one reader: ten stories checked across 24 newsrooms, in English or Urdu, every day at 7. Then it ends.">
+  <meta name="theme-color" content="#0f1424">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:wght@400;500;700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/home.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+  <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js" defer></script>
+  <script src="assets/js/data.js" defer></script>
+  <script src="assets/js/common.js" defer></script>
+  <script src="assets/js/home.js" defer></script>
+</head>
+<body class="home">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- the fixed sky: night, dawn and day layers crossfade as the page scrolls -->
+  <div class="sky" aria-hidden="true">
+    <div class="sky__layer sky__night"></div>
+    <canvas class="sky__stars"></canvas>
+    <div class="sky__moon"></div>
+    <div class="sky__layer sky__dawn"></div>
+    <div class="sky__layer sky__day"></div>
+  </div>
+
+  <p class="demo-strip"><b>Demo edition.</b> Stories on this site are samples written for the prototype; the live paper fills from real feeds.</p>
+
+  <header class="site-header">
+    <nav class="nav" aria-label="Main">
+      <a class="wordmark" href="index.html" aria-label="Subah home">
+        <span data-sunmark></span>
+        <span class="wordmark__en">Subah</span>
+        <span class="wordmark__ur" lang="ur">صبح</span>
+      </a>
+      <ul class="nav__links" id="nav-links">
+        <li><a href="#how">How it works</a></li>
+        <li><a href="paper.html">Sample paper</a></li>
+        <li><a href="#family">For family</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+      </ul>
+      <a class="btn btn--primary btn--nav" href="onboard.html" data-magnetic="0.2">
+        <span><span class="btn__label-long">Print my </span>paper</span>
+        <span class="btn__orb" data-icon="arrow"></span>
+      </a>
+      <button class="nav__menu-btn" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Menu"></button>
+    </nav>
+  </header>
+
+  <div class="clock" aria-hidden="true">
+    <span class="clock__dial"><span class="clock__orb"></span></span>
+    <span class="clock__time tabular">11:58 pm</span>
+    <span class="clock__place">Lahore</span>
+  </div>
+
+  <main id="main">
+
+    <!-- ============================================================ HERO -->
+    <section class="hero is-night" data-clock="1438,1439" aria-labelledby="hero-title">
+      <div class="container hero__grid">
+        <div class="hero__copy">
+          <h1 class="hero__title" id="hero-title">
+            <span class="line"><span>Ten stories</span></span>
+            <span class="line"><span>at seven.</span></span>
+            <span class="line"><span>Then, bas.</span></span>
+          </h1>
+          <p class="gloss" data-hero-fade>
+            <b>bas</b> <span class="ur" lang="ur">بس</span> <i>Urdu</i> <span>enough; that’s all for today.</span>
+          </p>
+          <p class="hero__sub" data-hero-fade>A morning paper for one reader, checked across 24 newsrooms, in English or Urdu.</p>
+          <form class="namebar" id="namebar" data-hero-fade novalidate>
+            <label class="namebar__label" for="hero-name">Whose paper?</label>
+            <input class="namebar__input" id="hero-name" name="given-name" autocomplete="given-name" placeholder="Your name" maxlength="24" spellcheck="false">
+            <button class="btn btn--primary" type="submit" data-magnetic="0.15">
+              <span>Print my paper</span>
+              <span class="btn__orb" data-icon="arrow"></span>
+            </button>
+          </form>
+        </div>
+
+        <div class="hero__stage">
+          <div class="paper-stack" id="paper-stack">
+            <article class="mini-paper" aria-label="Preview of your paper">
+              <header class="mp__mast">
+                <div class="mp__meta"><span>Edition No. 1</span><span>Lahore</span></div>
+                <h2 class="mp__title" id="mp-title" aria-live="polite">Your Subah</h2>
+                <p class="mp__title-ur" lang="ur" dir="rtl" id="mp-title-ur">آپ کی صبح</p>
+                <div class="mp__dateline"><span data-today="en"></span><span>10 stories, 6 min</span></div>
+              </header>
+              <div class="mp__body">
+                <div class="mp__lead">
+                  <p class="mp__sec">Prices</p>
+                  <h3 class="mp__head">Petrol price held for two weeks; diesel up Rs 3 a litre</h3>
+                  <p class="mp__dek">The government kept petrol unchanged in its fortnightly review and raised high-speed diesel.</p>
+                  <span class="badge badge--confirmed"><span class="badge__icon" data-icon="check"></span>Confirmed by 8 outlets</span>
+                  <p class="mp__foryou"><b>For you.</b> Your motorbike commute costs the same this fortnight.</p>
+                </div>
+                <div class="mp__side">
+                  <div class="mp__item">
+                    <p class="mp__sec">Lahore</p>
+                    <h4 class="mp__head mp__head--s">Lahore schools switch to online classes on Mondays</h4>
+                    <span class="badge badge--confirmed"><span class="badge__icon" data-icon="check"></span>6 outlets</span>
+                  </div>
+                  <div class="mp__item">
+                    <p class="mp__sec">Viral check</p>
+                    <h4 class="mp__head mp__head--s">‘Accounts frozen on Friday’: no bank confirms it</h4>
+                    <span class="badge badge--unconfirmed"><span class="badge__icon" data-icon="question"></span>Unconfirmed</span>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+          <p class="hero__caption" data-hero-fade>Type your name. The masthead is already yours, in English and Urdu.</p>
+        </div>
+      </div>
+      <a class="hero__scroll" href="#how" aria-label="Scroll to how it works">
+        <span>Scroll through the night</span>
+        <span class="hero__scroll-line" aria-hidden="true"></span>
+      </a>
+    </section>
+
+    <!-- ============================================================ CLUSTER -->
+    <section class="cluster is-night" id="how" data-clock="0,190" aria-labelledby="cluster-title">
+      <div class="cluster__pin">
+        <div class="container cluster__grid">
+          <div class="cluster__copy">
+            <h2 id="cluster-title">While you slept, we read <span class="cluster__count tabular" data-count="24">24</span> newsrooms.</h2>
+            <ol class="cluster__steps">
+              <li class="is-active" data-step="0"><span><b>Every outlet files its own version.</b> Dawn, Geo, BBC Urdu and the rest, in English and Urdu, all night.</span></li>
+              <li data-step="1"><span><b>We group the versions of each event.</b> Twenty-six headlines, five events. Same event, same story, whatever the wording.</span></li>
+              <li data-step="2"><span><b>The count becomes the proof.</b> Eight outlets agree: confirmed. Only WhatsApp forwards: unconfirmed.</span></li>
+            </ol>
+          </div>
+          <div class="cluster__stage" id="cluster-stage">
+            <!-- chips and merged cards are built from data.js -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ SWIPE / LEARN -->
+    <section class="learn is-night" data-clock="240,300" aria-labelledby="learn-title">
+      <div class="container learn__grid">
+        <div class="learn__copy">
+          <h2 id="learn-title">Then we keep the ten that are yours.</h2>
+          <p class="learn__lede">Tell us who you are in one sentence, then swipe twelve headlines. Try five here: drag right to keep, left to pass, up if you love it.</p>
+          <div class="bars" aria-live="polite">
+            <p class="bars__title">What your editor is learning</p>
+            <ul class="bars__list" id="learn-bars"></ul>
+          </div>
+        </div>
+        <div class="learn__deck-wrap">
+          <div class="deck" id="learn-deck" aria-label="Headline cards. Use left and right arrow keys to pass or keep, up arrow to love."></div>
+          <div class="deck-actions">
+            <button class="deck-btn deck-btn--pass" type="button" data-act="pass" aria-label="Pass"><span data-icon="x"></span></button>
+            <button class="deck-btn deck-btn--love" type="button" data-act="love" aria-label="Love"><span data-icon="heart"></span></button>
+            <button class="deck-btn deck-btn--keep" type="button" data-act="keep" aria-label="Keep"><span data-icon="keep"></span></button>
+          </div>
+          <div class="deck-done" id="learn-done" hidden>
+            <p class="deck-done__head">That’s how your editor learns.</p>
+            <p>The real onboarding has twelve headlines and one sentence about you.</p>
+            <a class="link-arrow" href="onboard.html">Try the full onboarding <span data-icon="arrow" class="link-arrow__i"></span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ FAJR INTERLUDE -->
+    <section class="fajr" id="fajr" data-clock="308,420" aria-label="Sunrise over Lahore">
+      <div class="fajr__pin">
+        <div class="fajr__sun" aria-hidden="true"><span class="fajr__sun-core"></span></div>
+        <div class="fajr__birds" aria-hidden="true">
+          <svg viewBox="0 0 120 40"><path d="M2 20q8-9 16 0q8-9 16 0" /><path d="M48 8q6-7 12 0q6-7 12 0" /><path d="M84 26q5-6 10 0q5-6 10 0" /></svg>
+        </div>
+        <div class="fajr__copy">
+          <p class="fajr__clock tabular" aria-hidden="true"><span class="fajr__hh">5:08</span><span class="fajr__ampm">am</span></p>
+          <div class="fajr__lines">
+            <p class="fajr__line fajr__line--a">Fajr in Lahore. Your paper is being folded.</p>
+            <p class="fajr__line fajr__line--b">Seven o’clock. It’s on your phone.</p>
+          </div>
+        </div>
+        <svg class="skyline" viewBox="0 0 1440 300" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+          <g class="skyline__far">
+            <rect x="0" y="210" width="60" height="90"/><rect x="58" y="190" width="40" height="110"/><rect x="96" y="222" width="70" height="78"/>
+            <rect x="160" y="200" width="34" height="100"/><rect x="190" y="230" width="80" height="70"/>
+            <rect x="680" y="214" width="56" height="86"/><rect x="734" y="196" width="40" height="104"/><rect x="772" y="226" width="62" height="74"/>
+            <rect x="1040" y="206" width="48" height="94"/><rect x="1086" y="186" width="30" height="114"/><rect x="1114" y="220" width="76" height="80"/>
+            <rect x="1188" y="200" width="44" height="100"/><rect x="1230" y="228" width="90" height="72"/><rect x="1318" y="196" width="40" height="104"/><rect x="1356" y="214" width="84" height="86"/>
+          </g>
+          <g class="skyline__near">
+            <!-- a three-domed mosque with four minarets -->
+            <rect x="300" y="226" width="330" height="74"/>
+            <rect x="330" y="206" width="270" height="24"/>
+            <path d="M400 210 a65 58 0 0 1 130 0z"/><rect x="462" y="136" width="6" height="22"/><circle cx="465" cy="134" r="5"/>
+            <path d="M350 212 a36 34 0 0 1 72 0z"/><rect x="383" y="168" width="5" height="14"/>
+            <path d="M508 212 a36 34 0 0 1 72 0z"/><rect x="541" y="168" width="5" height="14"/>
+            <rect x="292" y="120" width="20" height="180"/><path d="M288 124 h28 l-4 -10 h-20z"/><path d="M291 114 a11 13 0 0 1 22 0z"/>
+            <rect x="618" y="120" width="20" height="180"/><path d="M614 124 h28 l-4 -10 h-20z"/><path d="M617 114 a11 13 0 0 1 22 0z"/>
+            <rect x="268" y="196" width="14" height="104"/><path d="M267 198 a8 10 0 0 1 16 0z"/>
+            <rect x="648" y="196" width="14" height="104"/><path d="M647 198 a8 10 0 0 1 16 0z"/>
+            <!-- a tall tapering tower on a flared base -->
+            <path d="M884 300 L900 266 L908 92 L912 74 L918 74 L922 92 L930 266 L946 300z"/>
+            <path d="M860 300 q20 -30 40 -34 h30 q20 4 40 34z"/>
+            <path d="M907 74 a8 10 0 0 1 16 0z"/><rect x="914" y="52" width="2" height="14"/>
+            <!-- trees and low roofs -->
+            <circle cx="230" cy="262" r="26"/><circle cx="256" cy="270" r="20"/><circle cx="700" cy="266" r="24"/><circle cx="1000" cy="262" r="30"/><circle cx="1030" cy="272" r="20"/>
+            <rect x="0" y="262" width="1440" height="38"/>
+            <rect x="1200" y="246" width="120" height="20"/><rect x="760" y="250" width="90" height="16"/>
+            <rect x="1380" y="150" width="4" height="100"/><rect x="1376" y="150" width="12" height="3"/>
+          </g>
+        </svg>
+      </div>
+    </section>
+
+    <!-- ============================================================ FOR YOU + TRUST -->
+    <section class="foryou is-day" data-clock="420,421" aria-labelledby="foryou-title">
+      <div class="container foryou__grid">
+        <div class="foryou__copy">
+          <h2 id="foryou-title">Every story says what it means for you.</h2>
+          <p class="foryou__lede">One line under each story ties it to your city, your work and your money. Same story, four readers:</p>
+          <div class="personas" role="tablist" aria-label="Choose a reader" id="personas"></div>
+        </div>
+        <article class="story-card" aria-labelledby="sc-head" data-reveal>
+          <p class="story-card__sec">Prices</p>
+          <h3 class="story-card__head" id="sc-head">Petrol price held for two weeks; diesel up Rs 3 a litre</h3>
+          <p class="story-card__dek">The government kept petrol unchanged in its fortnightly review and raised high-speed diesel, citing global oil prices.</p>
+          <div class="story-card__badge" id="sc-badge"></div>
+          <div class="foryou-line" role="tabpanel" id="persona-panel" aria-live="polite">
+            <span class="foryou-line__label">For you.</span>
+            <span class="foryou-line__text" id="foryou-text">Your motorbike commute costs the same this fortnight. Watch bus fares and the mess bill, which follow diesel.</span>
+          </div>
+          <dl class="story-card__facts">
+            <div><dt>Why it matters</dt><dd>Diesel moves the trucks that carry food, so a rise usually reaches vegetable and flour prices within weeks.</dd></div>
+            <div><dt>What we don’t know yet</dt><dd>Whether transporters will raise fares this week.</dd></div>
+          </dl>
+        </article>
+      </div>
+
+      <div class="container trust" aria-labelledby="trust-title">
+        <h3 class="trust__title" id="trust-title">Three badges, so you never have to guess.</h3>
+        <div class="trust__grid">
+          <div class="trust__item" data-reveal style="--i:0">
+            <span class="badge badge--confirmed"><span class="badge__icon" data-icon="check"></span>Confirmed by 8 outlets<span class="badge__dots" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span></span>
+            <p>Several newsrooms reported the same event independently. Every one is linked under the story.</p>
+          </div>
+          <div class="trust__item" data-reveal style="--i:1">
+            <span class="badge badge--single"><span class="badge__icon" data-icon="one"></span>Single source</span>
+            <p>Only one outlet has it so far. We print it, and we tell you that it rests on one report.</p>
+          </div>
+          <div class="trust__item" data-reveal style="--i:2">
+            <span class="badge badge--unconfirmed"><span class="badge__icon" data-icon="question"></span>Unconfirmed</span>
+            <p>A viral claim no outlet has reported. We say so plainly, before it reaches the family group.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ SAMPLE PAPER (Urdu, large print, audio) -->
+    <section class="sample is-day" id="sample" data-clock="421,423" aria-labelledby="sample-title">
+      <div class="container">
+        <div class="sample__head">
+          <h2 id="sample-title">Read it in Urdu, in large print, or out loud.</h2>
+          <div class="sample__controls" role="group" aria-label="Paper settings">
+            <div class="seg" role="group" aria-label="Language" id="sample-lang">
+              <button type="button" aria-pressed="true" data-lang="en">English</button>
+              <button type="button" aria-pressed="false" data-lang="ur" lang="ur">اردو</button>
+              <button type="button" aria-pressed="false" data-lang="ro">Roman Urdu</button>
+            </div>
+            <label class="size-ctl">
+              <span class="size-ctl__a" aria-hidden="true">A</span>
+              <input type="range" min="1" max="1.6" step="0.05" value="1" id="sample-size" aria-label="Type size">
+              <span class="size-ctl__a size-ctl__a--big" aria-hidden="true">A</span>
+            </label>
+            <button class="btn btn--ghost listen" type="button" id="sample-listen" aria-pressed="false">
+              <span class="listen__icon" data-icon="play"></span>
+              <span class="listen__label">Listen</span>
+              <span class="wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+            </button>
+          </div>
+        </div>
+        <p class="sample__note" id="sample-note" aria-live="polite"></p>
+        <div class="sample__flip">
+          <article class="sample__paper" id="sample-paper" lang="en" dir="ltr"></article>
+        </div>
+        <div class="sample__foot">
+          <a class="btn btn--ink" href="paper.html">Open the full sample paper <span data-icon="arrow"></span></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ GIFT -->
+    <section class="gift is-day" id="family" data-clock="423,424" aria-labelledby="gift-title">
+      <div class="container gift__grid">
+        <div class="gift__copy">
+          <h2 id="gift-title">Make one for Ammi.</h2>
+          <p class="gift__lede">You’re in Dubai or London. She’s in Lahore. Describe her in a sentence and her paper arrives every morning at 7, in Urdu, in large print, signed from you.</p>
+          <dl class="gift__facts">
+            <div><dt>Languages</dt><dd>Urdu, English and Roman Urdu</dd></div>
+            <div><dt>Type size</dt><dd>Regular, large or extra large</dd></div>
+            <div><dt>Audio edition</dt><dd>A short Urdu voice version for tired eyes</dd></div>
+          </dl>
+          <a class="btn btn--ink" href="gift.html">Make a gift paper <span data-icon="arrow"></span></a>
+        </div>
+
+        <div class="gift__stage" aria-hidden="true">
+          <svg class="flight" viewBox="0 0 560 170">
+            <path class="flight__path" id="flight-path" d="M36 132 C 170 14, 380 4, 524 96" />
+            <circle class="flight__dot" cx="36" cy="132" r="6"/>
+            <circle class="flight__dot flight__dot--to" cx="524" cy="96" r="6"/>
+            <text class="flight__city" x="14" y="160">Dubai, 6:00 am</text>
+            <text class="flight__city" x="428" y="126">Lahore, 7:00 am</text>
+            <g class="flight__plane" id="flight-plane">
+              <path d="M-11 0 L9 -1.6 L13 0 L9 1.6 Z M-2 0 L-6 -8 L-2 -8 L4 0 L-2 8 L-6 8 Z M-10 0 L-13 -4 L-11 -4 L-7 0 L-11 4 L-13 4 Z"/>
+            </g>
+          </svg>
+          <div class="envelope" id="envelope">
+            <div class="envelope__back"></div>
+            <div class="letter" id="letter" lang="ur" dir="rtl">
+              <p class="letter__mast">امی کی صبح</p>
+              <p class="letter__sign">محبت کے ساتھ، عائشہ</p>
+              <p class="letter__head">پیٹرول کی قیمت دو ہفتوں کے لیے برقرار، ڈیزل تین روپے مہنگا</p>
+              <p class="letter__foryou"><b>آپ کے لیے:</b> اس پندرہ دن گھر کے بجٹ پر کوئی اثر نہیں۔</p>
+              <p class="letter__date" data-today="ur"></p>
+            </div>
+            <div class="envelope__front"></div>
+            <div class="envelope__flap"></div>
+            <div class="envelope__stamp"><span>PAK</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="ribbon" aria-hidden="true">
+        <div class="ribbon__track">
+          <span>Make one for someone you love</span><span lang="ur">ان کی زبان میں</span><span>Large print for tired eyes</span><span lang="ur">محبت کے ساتھ</span><span>On their phone at 7</span><span lang="ur">بڑے حروف میں</span>
+          <span>Make one for someone you love</span><span lang="ur">ان کی زبان میں</span><span>Large print for tired eyes</span><span lang="ur">محبت کے ساتھ</span><span>On their phone at 7</span><span lang="ur">بڑے حروف میں</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ PRICING -->
+    <section class="pricing is-day" id="pricing" data-clock="424,425" aria-labelledby="pricing-title">
+      <div class="container">
+        <div class="pricing__head">
+          <h2 id="pricing-title">Free to read. Paid to give.</h2>
+          <p>We earn when you finish a paper you value, never by keeping you scrolling. No ads, so the business and the reader want the same thing.</p>
+        </div>
+        <div class="tiers">
+          <article class="tier" data-tilt>
+            <h3 class="tier__name">Reader</h3>
+            <p class="tier__price">Free</p>
+            <p class="tier__per">every morning, for good</p>
+            <ul class="tier__list">
+              <li>Ten checked stories at 7</li>
+              <li>English, Urdu or Roman Urdu</li>
+              <li>The last page and the Daily 3 quiz</li>
+            </ul>
+            <a class="btn btn--ghost" href="onboard.html">Start reading</a>
+          </article>
+          <article class="tier tier--gift" data-tilt>
+            <h3 class="tier__name">Gift paper</h3>
+            <p class="tier__price">$5</p>
+            <p class="tier__per">a month, per paper</p>
+            <ul class="tier__list">
+              <li>For a parent, in their language</li>
+              <li>Large print and the audio edition</li>
+              <li>Signed from you, every morning</li>
+            </ul>
+            <a class="btn btn--ink" href="gift.html">Make a gift paper</a>
+          </article>
+          <article class="tier" data-tilt>
+            <h3 class="tier__name">Team brief</h3>
+            <p class="tier__price">$8</p>
+            <p class="tier__per">a seat, a month</p>
+            <ul class="tier__list">
+              <li>One shared brief for your company</li>
+              <li>Prices, regulation and competitors</li>
+              <li>In the inbox before the 9 am meeting</li>
+            </ul>
+            <a class="btn btn--ghost" href="#pricing">Ask about teams</a>
+          </article>
+        </div>
+        <p class="pricing__note">The expensive work, reading and grouping the news, happens once per story overnight and is shared by every reader. Your paper only costs the last step.</p>
+      </div>
+    </section>
+
+    <!-- ============================================================ SOURCES -->
+    <section class="sources is-day" data-clock="425,426" aria-labelledby="sources-title">
+      <div class="container sources__head">
+        <h2 id="sources-title">We read them, so you don’t have to.</h2>
+        <p>Pakistani newsrooms first, then the world. Every story links back to the outlets that reported it.</p>
+        <button class="btn btn--ghost btn--sm marquee-toggle" type="button" id="marquee-toggle" aria-pressed="false">Pause</button>
+      </div>
+      <div class="marquee" id="marquee-pk"><div class="marquee__track"></div></div>
+      <div class="marquee marquee--rev" id="marquee-world"><div class="marquee__track"></div></div>
+    </section>
+
+    <!-- ============================================================ THE END -->
+    <section class="ending is-day" data-clock="426,426" aria-labelledby="end-title">
+      <div class="container ending__grid">
+        <div class="fold" id="fold" aria-hidden="true">
+          <div class="fold__sheet">
+            <div class="fold__half fold__half--top">
+              <div class="fold__face">
+                <span class="fold__mast">Your Subah</span>
+                <span class="fold__rule"></span>
+                <span class="fold__line"></span><span class="fold__line"></span><span class="fold__line fold__line--s"></span>
+              </div>
+              <div class="fold__back"><span>See you tomorrow at 7.</span><span class="ur" lang="ur">کل صبح سات بجے</span></div>
+            </div>
+            <div class="fold__half fold__half--bottom">
+              <span class="fold__line"></span><span class="fold__line"></span><span class="fold__line"></span><span class="fold__line fold__line--s"></span>
+              <span class="fold__done">10 of 10 read</span>
+            </div>
+          </div>
+        </div>
+        <div class="ending__copy">
+          <h2 class="ending__bas" id="end-title"><span>Bas.</span> <span class="ur" lang="ur">بس</span></h2>
+          <p class="ending__lede">No feed and no “one more”. The last page gives you three things to remember and a three-question quiz, then lets you go.</p>
+          <p class="ending__next">Your next paper prints in <time class="ending__count tabular" id="home-countdown">00:00:00</time></p>
+          <div class="ending__actions">
+            <a class="btn btn--ink" href="end.html">See today’s last page <span data-icon="arrow"></span></a>
+            <a class="link-arrow" href="onboard.html">Print my first paper</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__brand">
+          <a class="wordmark" href="index.html" aria-label="Subah home"><span data-sunmark></span><span class="wordmark__en">Subah</span><span class="wordmark__ur" lang="ur">صبح</span></a>
+          <p>The news should inform you, not consume you. Ten stories, in your language, and then we let you go.</p>
+        </div>
+        <div class="footer__col">
+          <h3>Read</h3>
+          <ul><li><a href="paper.html">Today’s sample paper</a></li><li><a href="end.html">The last page</a></li><li><a href="onboard.html">Make your paper</a></li></ul>
+        </div>
+        <div class="footer__col">
+          <h3>Give</h3>
+          <ul><li><a href="gift.html">Gift paper</a></li><li><a href="#pricing">Pricing</a></li><li><a href="#family">For family</a></li></ul>
+        </div>
+        <div class="footer__col">
+          <h3>Trust</h3>
+          <ul><li><a href="#how">How we check</a></li><li><a href="#sources-title">Who we read</a></li><li><a href="paper.html#viral">Viral checks</a></li></ul>
+        </div>
+      </div>
+      <p class="footer__mast" aria-hidden="true">Subah <span class="ur" lang="ur">صبح</span></p>
+      <div class="footer__base">
+        <span>A hackathon prototype. Summaries are written in our own words and link to every publisher.</span>
+        <span>Printed in Lahore time.</span>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

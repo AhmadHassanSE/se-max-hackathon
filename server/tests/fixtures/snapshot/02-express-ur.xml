@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>express ur (synthetic test feed)</title>
+    <link>https://example.com/</link>
+    <description>Synthetic items for Subah tests. Not real reports.</description>
+    <item>
+      <title>پیٹرول کی قیمت برقرار، ڈیزل 3 روپے مہنگا</title>
+      <link>https://example.com/express/ur/petrol-qeemat</link>
+      <guid isPermaLink="false">express-petrol-qeemat</guid>
+      <pubDate>Mon, 09 Nov 2026 13:00:00 +0000</pubDate>
+      <description>وفاقی حکومت نے آئندہ پندرہ روز کے لیے پیٹرول کی قیمت برقرار رکھی ہے جبکہ ہائی اسپیڈ ڈیزل کی قیمت میں 3 روپے فی لیٹر اضافہ کر دیا گیا ہے۔</description>
+    </item>
+    <item>
+      <title>ٹیسٹ سیریز کے لیے قومی اسکواڈ کا اعلان، تین نئے کھلاڑی شامل</title>
+      <link>https://example.com/express/ur/test-squad-urdu</link>
+      <guid isPermaLink="false">express-test-squad-urdu</guid>
+      <pubDate>Mon, 09 Nov 2026 16:00:00 +0000</pubDate>
+      <description>پی سی بی نے ہوم ٹیسٹ سیریز کے لیے قومی اسکواڈ کا اعلان کر دیا جس میں تین نئے کھلاڑی شامل ہیں۔</description>
+    </item>
+    <item>
+      <title>بجلی صارفین پر فیول ایڈجسٹمنٹ کی درخواست، نیپرا نے فیصلہ محفوظ کر لیا</title>
+      <link>https://example.com/express/ur/nepra-faisla-mehfooz</link>
+      <guid isPermaLink="false">express-nepra-faisla-mehfooz</guid>
+      <pubDate>Mon, 09 Nov 2026 10:00:00 +0000</pubDate>
+      <description>تقسیم کار کمپنیوں نے گزشتہ سہ ماہی کی فیول ایڈجسٹمنٹ صارفین سے وصول کرنے کی درخواست کی، نیپرا نے سماعت کے بعد فیصلہ محفوظ کر لیا۔</description>
+    </item>
+    <item>
+      <title>فری لانسرز کو ادائیگیاں ایک دن میں ملیں گی، اسٹیٹ بینک</title>
+      <link>https://example.com/express/ur/freelancers-adaigi</link>
+      <guid isPermaLink="false">express-freelancers-adaigi</guid>
+      <pubDate>Mon, 09 Nov 2026 13:00:00 +0000</pubDate>
+      <description>اسٹیٹ بینک نے بینکوں کو ہدایت کی ہے کہ فری لانسرز کی برآمدی آمدنی ایک کاروباری دن میں کھاتوں میں منتقل کی جائے۔</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>thenews en (synthetic test feed)</title>
+    <link>https://example.com/</link>
+    <description>Synthetic items for Subah tests. Not real reports.</description>
+    <item>
+      <title>Punjab extends smog curbs, Lahore schools go online on Mondays</title>
+      <link>https://example.com/thenews/en/punjab-smog-curbs</link>
+      <guid isPermaLink="false">thenews-punjab-smog-curbs</guid>
+      <pubDate>Mon, 09 Nov 2026 17:00:00 +0000</pubDate>
+      <description>Schools in Lahore will teach online on Mondays and markets have been told to close early under the extended smog plan.</description>
+    </item>
+    <item>
+      <title>Dengue cases decline in Rawalpindi as temperatures drop</title>
+      <link>https://example.com/thenews/en/dengue-rawalpindi</link>
+      <guid isPermaLink="false">thenews-dengue-rawalpindi</guid>
+      <pubDate>Mon, 09 Nov 2026 06:00:00 +0000</pubDate>
+      <description>Health officials in Rawalpindi reported fewer new dengue cases this week as night temperatures fell.</description>
+    </item>
+    <item>
+      <title>Peshawar BRT adds a new route to Hayatabad</title>
+      <link>https://example.com/thenews/en/peshawar-brt-route</link>
+      <guid isPermaLink="false">thenews-peshawar-brt-route</guid>
+      <pubDate>Mon, 09 Nov 2026 20:00:00 +0000</pubDate>
+      <description>TransPeshawar said a new feeder route to Hayatabad will start operating on Monday.</description>
+    </item>
+  </channel>
+</rss>

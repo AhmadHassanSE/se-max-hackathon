@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>independenturdu ur (synthetic test feed)</title>
+    <link>https://example.com/</link>
+    <description>Synthetic items for Subah tests. Not real reports.</description>
+    <item>
+      <title>سموگ کے باعث لاہور کے اسکولوں میں پیر کو آن لائن تدریس</title>
+      <link>https://example.com/independenturdu/ur/smog-online-tadrees</link>
+      <guid isPermaLink="false">independenturdu-smog-online-tadrees</guid>
+      <pubDate>Mon, 09 Nov 2026 18:00:00 +0000</pubDate>
+      <description>لاہور میں سموگ کی صورتحال کے پیش نظر اسکول پیر کو آن لائن تدریس کریں گے اور کھلے میدان میں کھیلوں پر پابندی ہوگی۔</description>
+    </item>
+  </channel>
+</rss>

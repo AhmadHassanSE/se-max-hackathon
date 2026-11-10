@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>geo ur (synthetic test feed)</title>
+    <link>https://example.com/</link>
+    <description>Synthetic items for Subah tests. Not real reports.</description>
+    <item>
+      <title>آئندہ پندرہ روز کے لیے پیٹرول کی قیمت میں کوئی تبدیلی نہیں، ڈیزل مہنگا</title>
+      <link>https://example.com/geo/ur/petrol-tabdeeli-nahin</link>
+      <guid isPermaLink="false">geo-petrol-tabdeeli-nahin</guid>
+      <pubDate>Mon, 09 Nov 2026 14:00:00 +0000</pubDate>
+      <description>وزارت خزانہ کے نوٹیفکیشن کے مطابق پیٹرول کی قیمت میں کوئی تبدیلی نہیں کی گئی، ڈیزل 3 روپے فی لیٹر مہنگا ہو گیا۔</description>
+    </item>
+    <item>
+      <title>ترسیلات زر میں اضافہ، روپیہ مستحکم</title>
+      <link>https://example.com/geo/ur/tarseelat-izafa</link>
+      <guid isPermaLink="false">geo-tarseelat-izafa</guid>
+      <pubDate>Mon, 09 Nov 2026 12:00:00 +0000</pubDate>
+      <description>اسٹیٹ بینک کے مطابق بیرون ملک پاکستانیوں کی جانب سے بھیجی گئی رقوم میں گزشتہ سال کے مقابلے میں اضافہ ہوا، جبکہ روپیہ ڈالر کے مقابلے میں مستحکم رہا۔</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>ary en (synthetic test feed)</title>
+    <link>https://example.com/</link>
+    <description>Synthetic items for Subah tests. Not real reports.</description>
+    <item>
+      <title>Diesel price increased, petrol rate kept unchanged</title>
+      <link>https://example.com/ary/en/diesel-increased</link>
+      <guid isPermaLink="false">ary-diesel-increased</guid>
+      <pubDate>Mon, 09 Nov 2026 14:00:00 +0000</pubDate>
+      <description>The price of high-speed diesel has been increased by Rs3 per litre while the petrol rate remains unchanged for the next fortnight.</description>
+    </item>
+    <item>
+      <title>Pakistan announce squad for home Test series</title>
+      <link>https://example.com/ary/en/pakistan-test-squad</link>
+      <guid isPermaLink="false">ary-pakistan-test-squad</guid>
+      <pubDate>Mon, 09 Nov 2026 15:00:00 +0000</pubDate>
+      <description>Pakistan announced their squad for the home Test series, with three uncapped players and two senior pacers rested for the first match in Rawalpindi.</description>
+    </item>
+  </channel>
+</rss>

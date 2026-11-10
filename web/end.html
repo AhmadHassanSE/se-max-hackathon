@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bas, done for today</title>
+  <meta name="description" content="The last page of today’s Subah: three things to remember, a three-question quiz, and the time your next paper prints.">
+  <meta name="theme-color" content="#f6f1e6">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:wght@400;500;700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/end.css">
+  <script src="assets/js/data.js" defer></script>
+  <script src="assets/js/common.js" defer></script>
+  <script src="assets/js/end.js" defer></script>
+</head>
+<body class="theme-day page-end">
+  <a class="skip-link" href="#end-main">Skip to the last page</a>
+  <p class="demo-strip"><b>Demo edition.</b> The takeaways and quiz come from today’s sample stories.</p>
+
+  <header class="end-head">
+    <a class="wordmark" href="index.html" aria-label="Subah home">
+      <span data-sunmark></span><span class="wordmark__en">Subah</span><span class="wordmark__ur" lang="ur">صبح</span>
+    </a>
+    <div class="seg" role="group" aria-label="Language" id="end-lang">
+      <button type="button" data-lang="en" aria-pressed="true">English</button>
+      <button type="button" data-lang="ur" aria-pressed="false" lang="ur">اردو</button>
+      <button type="button" data-lang="ro" aria-pressed="false">Roman</button>
+    </div>
+    <a class="end-back" href="paper.html">Back to today’s paper</a>
+  </header>
+
+  <main id="end-main" class="end-main">
+    <section class="bas" aria-labelledby="bas-title">
+      <div class="bas__sun" aria-hidden="true"></div>
+      <h1 class="bas__title" id="bas-title"><span class="bas__en">Bas.</span><span class="bas__ur" lang="ur">بس</span></h1>
+      <p class="bas__lede" data-t="lede">You’re done for today. Ten stories, about six minutes, and nothing else is waiting.</p>
+      <div class="bas__stats" role="list">
+        <div role="listitem"><b class="tabular" data-t="s1v">10 of 10</b><span data-t="s1">stories read</span></div>
+        <div role="listitem"><b class="tabular" data-t="s2v">8 + 1 + 1</b><span data-t="s2">confirmed, single source, unconfirmed</span></div>
+        <div role="listitem"><b class="tabular" data-t="s3v">0</b><span data-t="s3">feeds to scroll</span></div>
+      </div>
+    </section>
+
+    <section class="remember" aria-labelledby="remember-title">
+      <h2 id="remember-title" data-t="rememberTitle">Three things to remember</h2>
+      <ol class="remember__list" id="remember-list"></ol>
+    </section>
+
+    <section class="quiz" aria-labelledby="quiz-title">
+      <div class="quiz__head">
+        <h2 id="quiz-title" data-t="quizTitle">The Daily 3</h2>
+        <p data-t="quizLede">Three questions from this morning’s paper. No timer, no streak.</p>
+      </div>
+      <div class="quiz__card" id="quiz-card" aria-live="polite"></div>
+    </section>
+
+    <section class="tomorrow" aria-labelledby="tomorrow-title">
+      <div class="chai" aria-hidden="true">
+        <svg viewBox="0 0 200 200" class="chai__svg">
+          <g class="chai__steam">
+            <path d="M82 70 q-10 -16 0 -30 q10 -14 0 -28" />
+            <path d="M102 74 q-10 -18 0 -34 q10 -16 0 -32" />
+            <path d="M122 70 q-10 -16 0 -30 q10 -14 0 -28" />
+          </g>
+          <ellipse cx="102" cy="176" rx="74" ry="12" class="chai__saucer"/>
+          <path d="M44 86 h116 l-10 74 q-2 14 -16 14 h-64 q-14 0 -16 -14z" class="chai__cup"/>
+          <path d="M160 100 q26 0 26 22 q0 22 -30 26" class="chai__handle"/>
+          <ellipse cx="102" cy="88" rx="58" ry="8" class="chai__tea"/>
+          <path d="M58 120 h88" class="chai__band"/>
+        </svg>
+      </div>
+      <div class="tomorrow__copy">
+        <h2 id="tomorrow-title" data-t="nextTitle">Your next paper prints in</h2>
+        <time class="tomorrow__count tabular" id="end-countdown">00:00:00</time>
+        <p class="tomorrow__note" data-t="nextNote">Tomorrow at 7:00 am, Lahore time. Until then, the news can wait.</p>
+        <div class="tomorrow__actions">
+          <button class="btn btn--primary" type="button" id="close-paper" data-magnetic="0.15"><span data-t="close">Close the paper</span><span class="btn__orb" data-icon="arrow"></span></button>
+          <a class="link-arrow" href="gift.html" data-t="gift">Make one for someone you love</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- the closing fold -->
+  <div class="closing" id="closing" hidden>
+    <div class="closing__half closing__half--top"></div>
+    <div class="closing__half closing__half--bottom"></div>
+    <div class="closing__msg" role="dialog" aria-modal="true" aria-labelledby="closing-title">
+      <svg class="closing__mark" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="19" r="8" fill="var(--kesar)"/><path d="M3 21.5h26" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path d="M16 4.5v3.2M6.6 8.4l2.2 2.2M25.4 8.4l-2.2 2.2" stroke="var(--kesar)" stroke-width="2.2" stroke-linecap="round"/></svg>
+      <p class="closing__title" id="closing-title" data-t="seeYou">See you at seven.</p>
+      <p class="closing__ur" lang="ur">کل صبح سات بجے ملتے ہیں</p>
+      <a class="btn btn--ghost" href="index.html" id="closing-home" data-t="home">Back to the front page</a>
+    </div>
+  </div>
+
+  <footer class="site-footer site-footer--slim">
+    <div class="container footer__base">
+      <span>A hackathon prototype. Summaries are written in our own words and credit every publisher.</span>
+      <a href="index.html">Front page</a>
+    </div>
+  </footer>
+</body>
+</html>
