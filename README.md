@@ -12,8 +12,8 @@ People in Pakistan, and their families abroad, see the same story many times acr
 
 ## Live deployment
 
-- **URL / install link:** https://huggingface.co/spaces/<your-username>/subah (fill in after the first deploy)
-- **Platform:** Hugging Face Spaces, Gradio SDK (runs our FastAPI app), free CPU Basic tier (2 vCPU, 16 GB memory). The grouping model needs about 1.5 GB, which rules out 512 MB free tiers.
+- **URL / install link:** https://ranaahmad3048-subah.hf.space (Space page: https://huggingface.co/spaces/RanaAhmad3048/subah)
+- **Platform:** Hugging Face Spaces, Gradio SDK on free ZeroGPU hardware. The site and API are served at the root by our FastAPI app; a small Gradio page at `/gradio` exists only for the Space's hardware check (`server/space_app.py`). The app never uses the GPU.
 
 ## Judge quick start (under 5 minutes)
 
@@ -75,14 +75,14 @@ bash scripts/test.sh
 
 One-time setup, about 10 minutes:
 
-1. Create a free account at huggingface.co, then **New Space**: name `subah`, SDK **Gradio** (template **Blank**; Docker Spaces need the paid PRO plan), hardware **CPU basic (free)**, visibility **Public**.
+1. Create a free account at huggingface.co, then **New Space**: name `subah`, SDK **Gradio**, template **Blank**, hardware **ZeroGPU (Free)** (free accounts cannot choose CPU basic for new Spaces, and Docker Spaces need PRO), visibility **Public**.
 2. In the Space: **Settings > Variables and secrets > New secret**, name `GROQ_API_KEY`, value your Groq key. The key lives only there.
 3. In your Hugging Face account: **Settings > Access Tokens > Create new token**, type **Write**. Copy it.
 4. Deploy, either way:
    - **From your computer:** `HF_TOKEN=<token> HF_SPACE=<your-username>/subah bash scripts/deploy_space.sh`
    - **Automatically from GitHub:** in this repository, **Settings > Secrets and variables > Actions**: add the secret `HF_TOKEN` and the variable `HF_SPACE` = `<your-username>/subah`. Every push to `main` then deploys (`.github/workflows/deploy.yml`); you can also run it from the Actions tab.
 
-The first start takes several minutes (it installs packages and downloads the 1.1 GB grouping model). After a restart, the first paper takes a minute or two while the model warms up; open the site a few minutes before a demo.
+The first start takes a few minutes (it installs packages and downloads the 1.1 GB grouping model). After a restart or a long idle, the first paper takes up to a minute while the model loads; open the site a few minutes before a demo.
 
 ## Known limitations
 

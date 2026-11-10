@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Deploy the app to a free Hugging Face Space (Gradio SDK, CPU Basic: 2 vCPU, 16 GB).
-# The Space runs app.py, which starts our FastAPI server on port 7860; Gradio itself is not used.
+# Deploy the app to a free Hugging Face Space (Gradio SDK on ZeroGPU, the only free hardware for new Spaces).
+# The Space runs app.py: the site and API at the root, plus a small Gradio check page at /gradio.
 # Usage:  HF_TOKEN=<write token> HF_SPACE=<username>/<space> bash scripts/deploy_space.sh
 # The Groq key is never sent from here: set GROQ_API_KEY as a secret in the Space's settings.
 set -euo pipefail
@@ -16,16 +16,15 @@ find "$OUT" -name "__pycache__" -type d -prune -exec rm -r {} +
 grep -v '^pytest' server/requirements.txt > "$OUT/requirements.txt"
 
 cat > "$OUT/app.py" <<'EOF'
-"""Hugging Face Space entry point: serve the Subah FastAPI app on the Space's port."""
+"""Hugging Face runs this file. The real entry point is server/space_app.py."""
 import os
 
 import uvicorn
 
-os.environ.setdefault("SUBAH_SOURCE", "live")
-os.environ.setdefault("HF_HUB_DISABLE_SYMLINKS_WARNING", "1")
+from server.space_app import app
 
 if __name__ == "__main__":
-    uvicorn.run("server.app:app", host="0.0.0.0", port=int(os.environ.get("PORT", "7860")))
+    uvicorn.run(app, host="0.0.0.0", port=int(os.environ.get("PORT", "7860")))
 EOF
 
 cat > "$OUT/README.md" <<EOF
@@ -35,7 +34,7 @@ emoji: 🌅
 colorFrom: yellow
 colorTo: indigo
 sdk: gradio
-sdk_version: 4.44.1
+sdk_version: 6.18.0
 python_version: "3.11"
 app_file: app.py
 pinned: false
